@@ -25,7 +25,13 @@ const MEDIUMS = ["Oil paint","Watercolour","Acrylic","Gouache","Pencil","Charcoa
 const LEVELS = ["Beginner","Developing","Intermediate","Experienced","Advanced"];
 const GOALS = ["Portraiture","Figures","Landscapes","Still life","Abstraction","Urban scenes","Animals","Fantasy / imaginative","En plein air","Character design","Manga panels","Storyboarding","Sequential art","Action & movement","Creature design","Environmental design"];
 
-const API = "/api/chat";
+// Storage helpers using localStorage
+const storage = {
+  get: (key) => { try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; } },
+  set: (key, value) => { try { localStorage.setItem(key, value); return true; } catch { return false; } },
+  delete: (key) => { try { localStorage.removeItem(key); return true; } catch { return false; } },
+  list: (prefix) => { try { const keys = Object.keys(localStorage).filter(k => k.startsWith(prefix)); return { keys }; } catch { return { keys: [] }; } }
+};
 const HEADERS = { "Content-Type": "application/json" };
 
 const MODEL = "claude-sonnet-4-20250514";
@@ -694,11 +700,11 @@ export default function App() {
 
   useEffect(()=>{
     (async()=>{
-      try{const r=await window.storage.get("art-mentor-profile");if(r)setProfile(JSON.parse(r.value));}catch{}
+      try{const r=await storage.get("art-mentor-profile");if(r)setProfile(JSON.parse(r.value));}catch{}
       try{
-        const r=await window.storage.list("session:");
+        const r=await storage.list("session:");
         if(r?.keys?.length){
-          const loaded=await Promise.all(r.keys.map(async k=>{try{const d=await window.storage.get(k);return d?JSON.parse(d.value):null;}catch{return null;}}));
+          const loaded=await Promise.all(r.keys.map(async k=>{try{const d=await storage.get(k);return d?JSON.parse(d.value):null;}catch{return null;}}));
           setSessions(loaded.filter(Boolean).sort((a,b)=>b.date-a.date));
         }
       }catch{}
@@ -706,9 +712,9 @@ export default function App() {
     })();
   },[]);
 
-  const saveProfile=async p=>{await window.storage.set("art-mentor-profile",JSON.stringify(p));setProfile(p);setEditing(false);};
-  const saveSession=async s=>{try{await window.storage.set(s.id,JSON.stringify(s));setSessions(prev=>[s,...prev.filter(x=>x.id!==s.id)].sort((a,b)=>b.date-a.date));}catch{}};
-  const deleteSession=async id=>{try{await window.storage.delete(id);setSessions(prev=>prev.filter(s=>s.id!==id));}catch{}};
+  const saveProfile=async p=>{await storage.set("art-mentor-profile",JSON.stringify(p));setProfile(p);setEditing(false);};
+  const saveSession=async s=>{try{await storage.set(s.id,JSON.stringify(s));setSessions(prev=>[s,...prev.filter(x=>x.id!==s.id)].sort((a,b)=>b.date-a.date));}catch{}};
+  const deleteSession=async id=>{try{await storage.delete(id);setSessions(prev=>prev.filter(s=>s.id!==id));}catch{}};
   const handleAnalyse=async s=>{await saveSession(s);setCurrentSession(s);setPage("response");};
   const handleLoad=s=>{setCurrentSession(s);setPage("response");};
 
