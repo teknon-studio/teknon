@@ -26,8 +26,6 @@ const LEVELS = ["Beginner","Developing","Intermediate","Experienced","Advanced"]
 const GOALS = ["Portraiture","Figures","Landscapes","Still life","Abstraction","Urban scenes","Animals","Fantasy / imaginative","En plein air","Character design","Manga panels","Storyboarding","Sequential art","Action & movement","Creature design","Environmental design"];
 
 // Storage helpers using localStorage
-const API = "/api/chat";
-const HEADERS = { "Content-Type": "application/json" };
 const storage = {
   get: (key) => { try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; } },
   set: (key, value) => { try { localStorage.setItem(key, value); return true; } catch { return false; } },
