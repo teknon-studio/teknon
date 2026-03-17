@@ -155,7 +155,83 @@ function Header({ onEditProfile, onAbout, sessionSaved, sessions, onLoadSession,
   );
 }
 
-function LandingPage({ onStart }) {
+function MentorSelectPage({ onSelect }) {
+  const [name, setName] = useState("");
+  const [focused, setFocused] = useState(false);
+  const inputRef = useRef();
+
+  const suggestions = [
+    "Rembrandt","John Singer Sargent","Georgia O'Keeffe","Leonardo da Vinci",
+    "Claude Monet","Frida Kahlo","Caravaggio","Edgar Degas","Pablo Picasso",
+    "Joaquín Sorolla","Vincent van Gogh","Johannes Vermeer","Anders Zorn","Francis Bacon"
+  ];
+
+  const filtered = name.length > 0
+    ? suggestions.filter(s => s.toLowerCase().startsWith(name.toLowerCase()) && s.toLowerCase() !== name.toLowerCase())
+    : [];
+
+  const proceed = (artist) => {
+    const val = (artist || name).trim();
+    if (val) onSelect(val);
+  };
+
+  useEffect(() => { setTimeout(() => inputRef.current?.focus(), 300); }, []);
+
+  return (
+    <div style={{ width:"100%", height:"100vh", background:"#6b6b69", display:"flex", flexDirection:"column", justifyContent:"space-between", padding:"2.5rem 2.5rem 3rem", boxSizing:"border-box" }}>
+      <TeknonLogo size="md"/>
+      <div style={{ maxWidth:620 }}>
+        <h1 style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"clamp(2rem,6vw,4rem)", fontWeight:300, lineHeight:1.1, color:"#f0ebe3", letterSpacing:"-0.01em", marginBottom:"2.5rem" }}>
+          who would you like<br/>to mentor you today?
+        </h1>
+        <div style={{ position:"relative" }}>
+          <input
+            ref={inputRef}
+            value={name}
+            onChange={e => setName(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && proceed()}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setTimeout(() => setFocused(false), 150)}
+            placeholder="type an artist's name…"
+            style={{
+              width:"100%", boxSizing:"border-box",
+              fontFamily:"'DM Sans',sans-serif", fontSize:"1.2rem", fontWeight:300,
+              color:"#f0ebe3", background:"transparent",
+              border:"none", borderBottom:"1px solid rgba(240,235,227,0.4)",
+              padding:"0.75rem 0", outline:"none", letterSpacing:"0.02em",
+            }}
+          />
+          {focused && filtered.length > 0 && (
+            <div style={{ position:"absolute", top:"100%", left:0, right:0, background:"rgba(60,58,55,0.97)", border:"1px solid rgba(240,235,227,0.15)", borderRadius:8, marginTop:4, overflow:"hidden", zIndex:10 }}>
+              {filtered.slice(0,5).map((s,i) => (
+                <button key={i} onClick={() => proceed(s)} style={{ display:"block", width:"100%", textAlign:"left", padding:"0.75rem 1rem", fontFamily:"'DM Sans',sans-serif", fontSize:"1rem", fontWeight:300, color:"#d6cfc4", background:"transparent", border:"none", cursor:"pointer" }}
+                  onMouseEnter={e => e.target.style.background="rgba(240,235,227,0.08)"}
+                  onMouseLeave={e => e.target.style.background="transparent"}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div style={{ marginTop:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          <button onClick={() => proceed()} disabled={!name.trim()}
+            style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"1rem", fontWeight:400, letterSpacing:"0.12em", color: name.trim() ? "#f0ebe3" : "rgba(240,235,227,0.3)", background:"transparent", border:`1px solid ${name.trim() ? "rgba(240,235,227,0.5)" : "rgba(240,235,227,0.15)"}`, borderRadius:50, padding:"0.85rem 2.2rem", cursor: name.trim() ? "pointer" : "default", transition:"all 0.2s" }}
+            onMouseEnter={e => { if(name.trim()) { e.target.style.background="rgba(240,235,227,0.1)"; e.target.style.borderColor="rgba(240,235,227,0.9)"; }}}
+            onMouseLeave={e => { e.target.style.background="transparent"; e.target.style.borderColor=name.trim()?"rgba(240,235,227,0.5)":"rgba(240,235,227,0.15)"; }}>
+            begin
+          </button>
+          <button onClick={() => onSelect("")}
+            style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"0.8rem", fontWeight:300, color:"rgba(240,235,227,0.35)", background:"transparent", border:"none", cursor:"pointer", letterSpacing:"0.05em" }}>
+            skip for now
+          </button>
+        </div>
+        <p style={{ color:"rgba(240,235,227,0.25)", fontSize:"0.7rem", letterSpacing:"0.06em", marginTop:"1.5rem", lineHeight:1.6 }}>
+          Choose any artist — living or from history. If they are no longer with us, they will speak to you directly in their own voice.
+        </p>
+      </div>
+    </div>
+  );
+}
   return (
     <div style={{ width:"100%", height:"100vh", background:"#6b6b69", display:"flex", flexDirection:"column", justifyContent:"space-between", padding:"2.5rem 2.5rem 3rem", boxSizing:"border-box" }}>
       <TeknonLogo size="md"/>
@@ -514,13 +590,13 @@ function ClassesPanel({ profile }) {
 
 function SessionHistory() { return null; }
 
-function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoadSession, onDeleteSession }) {
+function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoadSession, onDeleteSession, defaultMentor }) {
   const [image, setImage] = useState(null);
   const [imageB64, setImageB64] = useState(null);
   const [imageMime, setImageMime] = useState("image/jpeg");
   const [description, setDescription] = useState("");
   const [struggle, setStruggle] = useState("");
-  const [targetArtist, setTargetArtist] = useState("");
+  const [targetArtist, setTargetArtist] = useState(defaultMentor || "");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState("");
   const [error, setError] = useState(null);
@@ -772,13 +848,19 @@ export default function App() {
   const saveProfile=async p=>{await storage.set("art-mentor-profile",JSON.stringify(p));setProfile(p);setEditing(false);};
   const saveSession=async s=>{try{await storage.set(s.id,JSON.stringify(s));setSessions(prev=>[s,...prev.filter(x=>x.id!==s.id)].sort((a,b)=>b.date-a.date));}catch{}};
   const deleteSession=async id=>{try{await storage.delete(id);setSessions(prev=>prev.filter(s=>s.id!==id));}catch{}};
-  const handleAnalyse=async s=>{await saveSession(s);setCurrentSession(s);setPage("response");};
+  const [selectedMentor, setSelectedMentor] = useState(null);
+
+  const handleMentorSelect = (artist) => {
+    setSelectedMentor(artist);
+    setPage(profile ? "easel" : "profile");
+  };
   const handleLoad=s=>{setCurrentSession(s);setPage("response");};
 
   if(!loaded) return <div className="min-h-screen flex items-center justify-center text-stone-600 text-sm" style={{background:BG}}>Loading…</div>;
-  if(page==="landing") return <LandingPage onStart={()=>setPage(profile?"easel":"profile")}/>;
-  if(page==="about") return <AboutPage onBack={()=>setPage(profile?"easel":"profile")}/>;
+  if(page==="landing") return <LandingPage onStart={()=>setPage("mentor")}/>;
+  if(page==="mentor") return <MentorSelectPage onSelect={handleMentorSelect}/>;
+  if(page==="about") return <AboutPage onBack={()=>setPage(profile?"easel":"mentor")}/>;
   if(!profile||editing) return <ProfileSetup onSave={saveProfile} existing={profile} onAbout={()=>setPage("about")}/>;
-  if(page==="response"&&currentSession) return <ResponsePage session={currentSession} profile={profile} onBack={()=>setPage("easel")} onEditProfile={()=>setEditing(true)} onAbout={()=>setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession}/>;
-  return <EaselPage profile={profile} onEditProfile={()=>setEditing(true)} onAbout={()=>setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession}/>;
+  if(page==="response"&&currentSession) return <ResponsePage session={currentSession} profile={profile} onBack={()=>setPage("mentor")} onEditProfile={()=>setEditing(true)} onAbout={()=>setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession}/>;
+  return <EaselPage profile={profile} onEditProfile={()=>setEditing(true)} onAbout={()=>setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor}/>;
 }
