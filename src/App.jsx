@@ -380,7 +380,41 @@ function VisualAnalysis({ imageSrc, imageB64, imageMime, feedback, targetArtist 
   );
 }
 
-function LostButton({ onSelect }) {
+function ListenButton({ text, artistName }) {
+  const [speaking, setSpeaking] = useState(false);
+  const synth = window.speechSynthesis;
+
+  const getVoice = () => {
+    const voices = synth.getVoices();
+    // Try to find a British English voice for a refined feel
+    return voices.find(v => v.lang === "en-GB" && v.localService) ||
+           voices.find(v => v.lang === "en-GB") ||
+           voices.find(v => v.lang.startsWith("en")) ||
+           voices[0];
+  };
+
+  const speak = () => {
+    if (speaking) { synth.cancel(); setSpeaking(false); return; }
+    const clean = text.replace(/\*\*/g,"").replace(/#+/g,"").replace(/✦/g,"");
+    const utt = new SpeechSynthesisUtterance(clean);
+    utt.voice = getVoice();
+    utt.rate = 0.92;
+    utt.pitch = 1.0;
+    utt.volume = 1;
+    utt.onend = () => setSpeaking(false);
+    utt.onerror = () => setSpeaking(false);
+    synth.speak(utt);
+    setSpeaking(true);
+  };
+
+  if (!window.speechSynthesis) return null;
+  return (
+    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs border transition-all ${speaking ? "bg-amber-800 border-amber-700 text-amber-100" : "border-stone-700 text-stone-400 hover:border-amber-700 hover:text-amber-300"}`}>
+      <span>{speaking ? "◼ Stop" : "▶ Listen"}</span>
+      {artistName && <span className="text-stone-600">— in the spirit of {artistName}</span>}
+    </button>
+  );
+}
   const [open, setOpen] = useState(false);
   const opts = ["It just doesn't look right, but I can't say why","I don't know what to work on next","Something feels off but I can't put my finger on it","I've lost confidence in this piece","I keep making the same mistake and don't know how to fix it","It looks flat or lifeless and I don't know why"];
   return (
@@ -655,7 +689,10 @@ function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSave
           </div>
         </div>
         <div className={`${card} p-7 mb-6`}>
-          <SectionLabel>Studio Analysis</SectionLabel>
+          <div className="flex items-center justify-between mb-4">
+            <SectionLabel>Studio Analysis</SectionLabel>
+            <ListenButton text={feedback} artistName={targetArtist && DECEASED_ARTISTS.has(targetArtist) ? targetArtist : null}/>
+          </div>
           <FeedbackBlock text={feedback}/>
         </div>
         <div className="mb-6"><VisualAnalysis imageSrc={imageSrc} imageB64={imageB64} imageMime={imageMime} feedback={feedback} targetArtist={targetArtist}/></div>
