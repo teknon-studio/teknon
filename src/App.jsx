@@ -58,7 +58,7 @@ const storage = {
 const callAPI = async (messages, tools = true, maxTokens = 4000) => {
   const body = { model: MODEL, max_tokens: maxTokens, messages };
   if (tools) body.tools = [{ type: "web_search_20250305", name: "web_search" }];
-  const res = await fetch(API, { method: "POST", headers: HEADERS, body: JSON.stringify(body) });
+  const res = await fetch("/api/chat", { method: "POST", headers: HEADERS, body: JSON.stringify(body) });
   const data = await res.json();
   if (data.error) throw new Error(`${data.error.type}: ${data.error.message}`);
   return data.content.filter(b => b.type === "text").map(b => b.text).join("\n");
@@ -586,7 +586,7 @@ Provide encouraging, specific feedback:
 
     try {
       setLoadingStep("Consulting the masters…");
-      const res=await fetch(API,{ method:"POST", headers:HEADERS, body:JSON.stringify({ model:MODEL, max_tokens:1200, messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:imageMime,data:imageB64}},{type:"text",text:prompt}]}] }) });
+      const res=await fetch("/api/chat",{ method:"POST", headers:HEADERS, body:JSON.stringify({ model:MODEL, max_tokens:1200, messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:imageMime,data:imageB64}},{type:"text",text:prompt}]}] }) });
       clearTimeout(timeout);
       const data=await res.json();
       if(data.error) throw new Error(`${data.error.type}: ${data.error.message}`);
