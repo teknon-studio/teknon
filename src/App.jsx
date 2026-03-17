@@ -35,7 +35,6 @@ const storage = {
   delete: (key) => { try { localStorage.removeItem(key); return true; } catch { return false; } },
   list: (prefix) => { try { const keys = Object.keys(localStorage).filter(k => k.startsWith(prefix)); return { keys }; } catch { return { keys: [] }; } }
 };
-const HEADERS = { "Content-Type": "application/json" };
 
 const MODEL = "claude-sonnet-4-20250514";
 const BG = "#6b6b69";
