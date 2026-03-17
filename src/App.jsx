@@ -337,6 +337,7 @@ function VisualAnalysis({ imageSrc, imageB64, imageMime, feedback, targetArtist 
   const build = async () => {
     if (annotations) { setOpen(true); return; }
     setOpen(true); setLoading(true); setError(null);
+    await new Promise(r => setTimeout(r, 5000));
     try {
       const at = await callAPI([{role:"user",content:[{type:"image",source:{type:"base64",media_type:imageMime,data:imageB64}},{type:"text",text:`Feedback:\n\n${feedback}\n\nIdentify 3-4 specific areas. Return ONLY valid JSON:\n[{"x":45,"y":30,"note":"max 15 words"}]`}]}],false);
       const ac=at.replace(/```json|```/g,"").trim(); const as=ac.indexOf("["),ae=ac.lastIndexOf("]");
