@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-const API = "/api/chat";
-const HEADERS = { "Content-Type": "application/json" };
-
 const MOVEMENT_ARTISTS = {
   "Impressionism": ["Claude Monet","Edgar Degas","Mary Cassatt","Joaquín Sorolla"],
   "Realism": ["Gustave Courbet","Winslow Homer","Edward Hopper","Andrew Wyeth","Lucian Freud","Jenny Saville","Tim Benson"],
@@ -35,6 +32,7 @@ const storage = {
   delete: (key) => { try { localStorage.removeItem(key); return true; } catch { return false; } },
   list: (prefix) => { try { const keys = Object.keys(localStorage).filter(k => k.startsWith(prefix)); return { keys }; } catch { return { keys: [] }; } }
 };
+const HEADERS = { "Content-Type": "application/json" };
 
 const MODEL = "claude-sonnet-4-20250514";
 const BG = "#6b6b69";
@@ -337,7 +335,6 @@ function VisualAnalysis({ imageSrc, imageB64, imageMime, feedback, targetArtist 
   const build = async () => {
     if (annotations) { setOpen(true); return; }
     setOpen(true); setLoading(true); setError(null);
-    await new Promise(r => setTimeout(r, 5000));
     try {
       const at = await callAPI([{role:"user",content:[{type:"image",source:{type:"base64",media_type:imageMime,data:imageB64}},{type:"text",text:`Feedback:\n\n${feedback}\n\nIdentify 3-4 specific areas. Return ONLY valid JSON:\n[{"x":45,"y":30,"note":"max 15 words"}]`}]}],false);
       const ac=at.replace(/```json|```/g,"").trim(); const as=ac.indexOf("["),ae=ac.lastIndexOf("]");
@@ -436,7 +433,7 @@ function ClassesPanel({ profile }) {
       const styleCtx = [...(profile.artists||[]),...(profile.movements||[])].join(", ");
       const typeLabel = type==="schools"?"art schools":type==="workshops"?"workshops and short courses":"art schools, workshops and short courses";
       // Small delay to avoid rate limit errors
-      await new Promise(r => setTimeout(r, 10000));
+      await new Promise(r => setTimeout(r, 3000));
       const text = await callAPI([{role:"user",content:`Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx||"painting"} at ${profile.level||"developing"} level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]`}]);
       const c=text.replace(/```json|```/g,"").trim(); const s=c.indexOf("["),e=c.lastIndexOf("]");
       if(s!==-1) setResults(JSON.parse(c.slice(s,e+1))); else setError("Couldn't parse results.");
@@ -489,7 +486,12 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
   const cameraRef = useRef();
 
   const handleFile = file => {
-    if (!file||!file.type.startsWith("image/")) return;
+    if (!file) return;
+    // Accept any image type including heic, tiff etc
+    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif)$/i)) {
+      setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar.");
+      return;
+    }
     const reader=new FileReader();
     reader.onload=e=>{
       try {
