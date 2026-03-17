@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 
-const API = "/api/chat";
 const HEADERS = { "Content-Type": "application/json" };
 const MODEL = "claude-sonnet-4-20250514";
 const BG = "#6b6b69";
 const card = "bg-stone-900 border border-stone-800 rounded-2xl";
 const cardInner = "bg-stone-900 border border-stone-800 rounded-xl";
 
-// Deceased artists who can be voiced directly
 const DECEASED_ARTISTS = new Set([
   "John Singer Sargent","Rembrandt","Claude Monet","J.M.W. Turner","Edgar Degas",
   "Vincent van Gogh","Mary Cassatt","Winslow Homer","Caravaggio","Johannes Vermeer",
@@ -47,7 +45,6 @@ const MEDIUMS = ["Oil paint","Watercolour","Acrylic","Gouache","Pencil","Charcoa
 const LEVELS = ["Beginner","Developing","Intermediate","Experienced","Advanced"];
 const GOALS = ["Portraiture","Figures","Landscapes","Still life","Abstraction","Urban scenes","Animals","Fantasy / imaginative","En plein air","Character design","Manga panels","Storyboarding","Sequential art","Action & movement","Creature design","Environmental design"];
 
-// Storage helpers using localStorage
 const storage = {
   get: (key) => { try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; } },
   set: (key, value) => { try { localStorage.setItem(key, value); return true; } catch { return false; } },
@@ -578,7 +575,7 @@ Work in progress: "${description}". ${struggle?`The artist is struggling with: "
 Provide encouraging, specific feedback:
 1. **What's Working** — genuine strengths
 2. **The Most Important Thing to Focus On** — highest priority
-3. **Master Artist Wisdom** — Choose a quote or technique that speaks directly to something visible in this painting. Draw from a wide range of artists across different centuries and traditions. Must be genuinely relevant, not generic. Attribute accurately.
+3. **Master Artist Wisdom** — Choose a quote or documented technique that speaks directly and specifically to something you can see in THIS painting. You must draw from a genuinely wide range of artists — do NOT default to Monet, Van Gogh or other overused names. Consider artists from different centuries, countries and traditions: Velázquez, Chardin, Constable, Whistler, Eakins, Zorn, Fechin, Hawthorne, Hensche, Carlson, and many others. The quote must be directly relevant to a specific issue visible in this work. Never use a generic motivational quote.
 4. **Your Next Steps** — 2-3 concrete actions
 5. **Encouragement** — warm, personalised closing`;
 
@@ -617,7 +614,7 @@ Provide encouraging, specific feedback:
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={e=>handleFile(e.target.files[0])}/>
         <div className="mb-5">
           <label className="text-xs uppercase tracking-widest block mb-2" style={{color:"#e0d8cc"}}>Artist / Style I'm aiming for</label>
-          <input value={targetArtist} onChange={e=>setTargetArtist(e.target.value)} placeholder="e.g. John Singer Sargent, Monet, Rembrandt…" className="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 text-sm text-stone-200 placeholder-stone-600 outline-none focus:border-amber-700 transition-all"/>
+          <input value={targetArtist} onChange={e=>setTargetArtist(e.target.value)} placeholder="e.g. Rembrandt, Sargent, Georgia O'Keeffe — they will speak to you directly" className="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 text-sm text-stone-200 placeholder-stone-600 outline-none focus:border-amber-700 transition-all"/>
         </div>
         <div className="mb-5">
           <label className="text-xs uppercase tracking-widest block mb-2" style={{color:"#e0d8cc"}}>What are you painting / drawing?</label>
