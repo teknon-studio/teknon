@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
+const API = "/api/chat";
+const HEADERS = { "Content-Type": "application/json" };
+
 const MOVEMENT_ARTISTS = {
   "Impressionism": ["Claude Monet","Edgar Degas","Mary Cassatt","Joaquín Sorolla"],
   "Realism": ["Gustave Courbet","Winslow Homer","Edward Hopper","Andrew Wyeth","Lucian Freud","Jenny Saville","Tim Benson"],
