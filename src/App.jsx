@@ -1,5 +1,27 @@
 import { useState, useEffect, useRef } from "react";
 
+const API = "/api/chat";
+const HEADERS = { "Content-Type": "application/json" };
+const MODEL = "claude-sonnet-4-20250514";
+const BG = "#6b6b69";
+const card = "bg-stone-900 border border-stone-800 rounded-2xl";
+const cardInner = "bg-stone-900 border border-stone-800 rounded-xl";
+
+// Deceased artists who can be voiced directly
+const DECEASED_ARTISTS = new Set([
+  "John Singer Sargent","Rembrandt","Claude Monet","J.M.W. Turner","Edgar Degas",
+  "Vincent van Gogh","Mary Cassatt","Winslow Homer","Caravaggio","Johannes Vermeer",
+  "Francisco Goya","Paul Cézanne","Gustav Klimt","Edward Hopper","Andrew Wyeth",
+  "Joaquín Sorolla","Anders Zorn","Lucian Freud","Basquiat","Osamu Tezuka",
+  "Katsuhiro Otomo","Chuck Jones","Richard Williams","Yoshitaka Amano",
+  "Leonardo da Vinci","Michelangelo","Raphael","Titian","Gustave Courbet",
+  "Egon Schiele","Ernst Ludwig Kirchner","Käthe Kollwitz","Jacques-Louis David",
+  "William-Adolphe Bouguereau","Pablo Picasso","Henri Matisse","Paul Gauguin",
+  "Georges Seurat","Jack Kirby","Steve Ditko","Will Eisner","Moebius",
+  "Georgia O'Keeffe","Frida Kahlo","Henri de Toulouse-Lautrec","Paul Klee",
+  "Wassily Kandinsky","Salvador Dali","Francis Bacon","Isao Takahata","Satoshi Kon"
+]);
+
 const MOVEMENT_ARTISTS = {
   "Impressionism": ["Claude Monet","Edgar Degas","Mary Cassatt","Joaquín Sorolla"],
   "Realism": ["Gustave Courbet","Winslow Homer","Edward Hopper","Andrew Wyeth","Lucian Freud","Jenny Saville","Tim Benson"],
@@ -32,12 +54,6 @@ const storage = {
   delete: (key) => { try { localStorage.removeItem(key); return true; } catch { return false; } },
   list: (prefix) => { try { const keys = Object.keys(localStorage).filter(k => k.startsWith(prefix)); return { keys }; } catch { return { keys: [] }; } }
 };
-const HEADERS = { "Content-Type": "application/json" };
-
-const MODEL = "claude-sonnet-4-20250514";
-const BG = "#6b6b69";
-const card = "bg-stone-900 border border-stone-800 rounded-2xl";
-const cardInner = "bg-stone-900 border border-stone-800 rounded-xl";
 
 const callAPI = async (messages, tools = true, maxTokens = 4000) => {
   const body = { model: MODEL, max_tokens: maxTokens, messages };
@@ -290,6 +306,35 @@ function FeedbackBlock({ text }) {
   });
 }
 
+function ListenButton({ text, artistName }) {
+  const [speaking, setSpeaking] = useState(false);
+  const synth = window.speechSynthesis;
+  const getVoice = () => {
+    const voices = synth.getVoices();
+    return voices.find(v=>v.lang==="en-GB"&&v.localService) || voices.find(v=>v.lang==="en-GB") || voices.find(v=>v.lang.startsWith("en")) || voices[0];
+  };
+  const speak = () => {
+    if (speaking) { synth.cancel(); setSpeaking(false); return; }
+    const clean = text.replace(/\*\*/g,"").replace(/#+/g,"").replace(/✦/g,"");
+    const utt = new SpeechSynthesisUtterance(clean);
+    utt.voice = getVoice();
+    utt.rate = 0.92;
+    utt.pitch = 1.0;
+    utt.volume = 1;
+    utt.onend = () => setSpeaking(false);
+    utt.onerror = () => setSpeaking(false);
+    synth.speak(utt);
+    setSpeaking(true);
+  };
+  if (!window.speechSynthesis) return null;
+  return (
+    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs border transition-all ${speaking?"bg-amber-800 border-amber-700 text-amber-100":"border-stone-700 text-stone-400 hover:border-amber-700 hover:text-amber-300"}`}>
+      <span>{speaking?"◼ Stop":"▶ Listen"}</span>
+      {artistName&&<span className="text-stone-600">— in the spirit of {artistName}</span>}
+    </button>
+  );
+}
+
 function ResourceCard({ r }) {
   return (
     <a href={r.url} target="_blank" rel="noopener noreferrer" className={`flex items-start gap-3 p-4 ${cardInner} hover:border-amber-700 transition-all group`}>
@@ -335,6 +380,7 @@ function VisualAnalysis({ imageSrc, imageB64, imageMime, feedback, targetArtist 
   const build = async () => {
     if (annotations) { setOpen(true); return; }
     setOpen(true); setLoading(true); setError(null);
+    await new Promise(r => setTimeout(r, 5000));
     try {
       const at = await callAPI([{role:"user",content:[{type:"image",source:{type:"base64",media_type:imageMime,data:imageB64}},{type:"text",text:`Feedback:\n\n${feedback}\n\nIdentify 3-4 specific areas. Return ONLY valid JSON:\n[{"x":45,"y":30,"note":"max 15 words"}]`}]}],false);
       const ac=at.replace(/```json|```/g,"").trim(); const as=ac.indexOf("["),ae=ac.lastIndexOf("]");
@@ -380,41 +426,7 @@ function VisualAnalysis({ imageSrc, imageB64, imageMime, feedback, targetArtist 
   );
 }
 
-function ListenButton({ text, artistName }) {
-  const [speaking, setSpeaking] = useState(false);
-  const synth = window.speechSynthesis;
-
-  const getVoice = () => {
-    const voices = synth.getVoices();
-    // Try to find a British English voice for a refined feel
-    return voices.find(v => v.lang === "en-GB" && v.localService) ||
-           voices.find(v => v.lang === "en-GB") ||
-           voices.find(v => v.lang.startsWith("en")) ||
-           voices[0];
-  };
-
-  const speak = () => {
-    if (speaking) { synth.cancel(); setSpeaking(false); return; }
-    const clean = text.replace(/\*\*/g,"").replace(/#+/g,"").replace(/✦/g,"");
-    const utt = new SpeechSynthesisUtterance(clean);
-    utt.voice = getVoice();
-    utt.rate = 0.92;
-    utt.pitch = 1.0;
-    utt.volume = 1;
-    utt.onend = () => setSpeaking(false);
-    utt.onerror = () => setSpeaking(false);
-    synth.speak(utt);
-    setSpeaking(true);
-  };
-
-  if (!window.speechSynthesis) return null;
-  return (
-    <button onClick={speak} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs border transition-all ${speaking ? "bg-amber-800 border-amber-700 text-amber-100" : "border-stone-700 text-stone-400 hover:border-amber-700 hover:text-amber-300"}`}>
-      <span>{speaking ? "◼ Stop" : "▶ Listen"}</span>
-      {artistName && <span className="text-stone-600">— in the spirit of {artistName}</span>}
-    </button>
-  );
-}
+function LostButton({ onSelect }) {
   const [open, setOpen] = useState(false);
   const opts = ["It just doesn't look right, but I can't say why","I don't know what to work on next","Something feels off but I can't put my finger on it","I've lost confidence in this piece","I keep making the same mistake and don't know how to fix it","It looks flat or lifeless and I don't know why"];
   return (
@@ -466,8 +478,7 @@ function ClassesPanel({ profile }) {
       setLoc(location);
       const styleCtx = [...(profile.artists||[]),...(profile.movements||[])].join(", ");
       const typeLabel = type==="schools"?"art schools":type==="workshops"?"workshops and short courses":"art schools, workshops and short courses";
-      // Small delay to avoid rate limit errors
-      await new Promise(r => setTimeout(r, 3000));
+      await new Promise(r => setTimeout(r, 10000));
       const text = await callAPI([{role:"user",content:`Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx||"painting"} at ${profile.level||"developing"} level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]`}]);
       const c=text.replace(/```json|```/g,"").trim(); const s=c.indexOf("["),e=c.lastIndexOf("]");
       if(s!==-1) setResults(JSON.parse(c.slice(s,e+1))); else setError("Couldn't parse results.");
@@ -521,7 +532,6 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
 
   const handleFile = file => {
     if (!file) return;
-    // Accept any image type including heic, tiff etc
     if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif)$/i)) {
       setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar.");
       return;
@@ -552,8 +562,14 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
     if (!imageB64||!description) return;
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
     const profileCtx=`User profile — Level: ${profile.level}. Medium: ${profile.mediums.join(", ")}. Inspirations: ${[...profile.artists,...profile.movements].join(", ")}. Subject interests: ${profile.goals.join(", ")}.`;
-    const artistCtx=targetArtist?`The user is specifically trying to paint in the style of ${targetArtist}.`:"";
-    const prompt=`You are a masterful, deeply encouraging art mentor. ${profileCtx} ${artistCtx}
+    const isDeceased = targetArtist && DECEASED_ARTISTS.has(targetArtist);
+    const voiceInstruction = isDeceased
+      ? `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. Write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind.`
+      : targetArtist
+      ? `You are a masterful mentor deeply versed in the work and teachings of ${targetArtist}. Reference their documented techniques and known philosophy, but speak as a knowledgeable mentor rather than in their voice directly.`
+      : `You are a masterful, deeply encouraging art mentor with encyclopaedic knowledge of art history.`;
+
+    const prompt=`${voiceInstruction} ${profileCtx}
 
 This is a safe, private studio. Treat the work with generous respect.
 
@@ -562,7 +578,7 @@ Work in progress: "${description}". ${struggle?`The artist is struggling with: "
 Provide encouraging, specific feedback:
 1. **What's Working** — genuine strengths
 2. **The Most Important Thing to Focus On** — highest priority
-3. **Master Artist Wisdom** — relevant quote or technique from ${targetArtist||"relevant masters"}
+3. **Master Artist Wisdom** — Choose a quote or technique that speaks directly to something visible in this painting. Draw from a wide range of artists across different centuries and traditions. Must be genuinely relevant, not generic. Attribute accurately.
 4. **Your Next Steps** — 2-3 concrete actions
 5. **Encouragement** — warm, personalised closing`;
 
@@ -601,7 +617,7 @@ Provide encouraging, specific feedback:
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={e=>handleFile(e.target.files[0])}/>
         <div className="mb-5">
           <label className="text-xs uppercase tracking-widest block mb-2" style={{color:"#e0d8cc"}}>Artist / Style I'm aiming for</label>
-          <input value={targetArtist} onChange={e=>setTargetArtist(e.target.value)} placeholder="e.g. John Singleton Copley, Sargent, Monet…" className="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 text-sm text-stone-200 placeholder-stone-600 outline-none focus:border-amber-700 transition-all"/>
+          <input value={targetArtist} onChange={e=>setTargetArtist(e.target.value)} placeholder="e.g. John Singer Sargent, Monet, Rembrandt…" className="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 text-sm text-stone-200 placeholder-stone-600 outline-none focus:border-amber-700 transition-all"/>
         </div>
         <div className="mb-5">
           <label className="text-xs uppercase tracking-widest block mb-2" style={{color:"#e0d8cc"}}>What are you painting / drawing?</label>
