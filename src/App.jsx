@@ -541,97 +541,6 @@ function ResourceCard({ r }) {
   );
 }
 
-// ─── Annotated Image ──────────────────────────────────────────────────
-function AnnotatedImage({ imageSrc, annotations }) {
-  const [active, setActive] = useState(null);
-  return (
-    <div style={{ position: "relative", borderRadius: 12, overflow: "hidden", background: "#0d0d0d", border: `1px solid ${T.border}` }}>
-      <img src={imageSrc} alt="artwork" style={{ width: "100%", objectFit: "contain", maxHeight: 380 }} />
-      {annotations.map((a, i) => (
-        <button key={i} onClick={() => setActive(active === i ? null : i)}
-          style={{ position: "absolute", left: `${a.x}%`, top: `${a.y}%`, transform: "translate(-50%,-50%)", width: 32, height: 32, borderRadius: "50%", border: `2px solid ${active === i ? T.cream : T.amber}`, background: active === i ? T.amber : "rgba(15,12,10,0.8)", color: active === i ? "#1a1208" : T.amber, fontSize: "0.75rem", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", transform: `translate(-50%,-50%) scale(${active === i ? 1.2 : 1})`, zIndex: 10 }}>
-          {i + 1}
-        </button>
-      ))}
-      {active !== null && (
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.2rem 1.5rem", borderTop: `1px solid rgba(200,137,58,0.3)`, background: "rgba(12,10,8,0.95)" }}>
-          <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-            <span style={{ width: 22, height: 22, borderRadius: "50%", background: T.amber, color: "#1a1208", fontSize: "0.7rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{active + 1}</span>
-            <p style={{ ...T.body, fontSize: "0.85rem", color: "rgba(240,235,227,0.8)", lineHeight: 1.7 }}>{annotations[active].note}</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Visual Analysis ──────────────────────────────────────────────────
-function VisualAnalysis({ imageSrc, imageB64, imageMime, feedback, targetArtist }) {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [annotations, setAnnotations] = useState(null);
-  const [refs, setRefs] = useState(null);
-  const [error, setError] = useState(null);
-  const build = async () => {
-    if (annotations) { setOpen(true); return; }
-    setOpen(true); setLoading(true); setError(null);
-    await new Promise(r => setTimeout(r, 5000));
-    try {
-      const at = await callAPI([{ role: "user", content: [{ type: "image", source: { type: "base64", media_type: imageMime, data: imageB64 } }, { type: "text", text: `Feedback:\n\n${feedback}\n\nIdentify 3-4 specific areas. Return ONLY valid JSON:\n[{"x":45,"y":30,"note":"max 15 words"}]` }] }], false);
-      const ac = at.replace(/```json|```/g, "").trim(); const as = ac.indexOf("["), ae = ac.lastIndexOf("]");
-      const pa = as !== -1 ? JSON.parse(ac.slice(as, ae + 1)) : [];
-      setAnnotations(pa);
-      const rt = await callAPI([{ role: "user", content: `Feedback:\n\n${feedback}\n\nFind ${pa.length} master examples for:\n${pa.map((a, i) => `${i + 1}. ${a.note}`).join("\n")}\n\nReturn ONLY valid JSON:\n[{"issue":"...","artist":"...","work":"...","what_to_notice":"one sentence","search_query":"artist + work"}]` }]);
-      const rc = rt.replace(/```json|```/g, "").trim(); const rs = rc.indexOf("["), re = rc.lastIndexOf("]");
-      if (rs !== -1) setRefs(JSON.parse(rc.slice(rs, re + 1)));
-    } catch (e) { setError(`Error: ${e.message}`); }
-    setLoading(false);
-  };
-  return (
-    <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: "2rem" }}>
-      <button onClick={build} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "transparent", border: "none", cursor: "pointer", padding: 0 }}>
-        <div style={{ textAlign: "left" }}>
-          <SectionLabel>Visual Annotations & Master References</SectionLabel>
-          <p style={{ ...T.body, fontSize: "0.78rem", color: T.muted, marginTop: "-0.5rem" }}>See exactly where to focus, with examples from the masters</p>
-        </div>
-        <span style={{ color: T.muted, fontSize: "0.75rem", transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▼</span>
-      </button>
-      {open && (
-        <div style={{ marginTop: "1.5rem" }}>
-          {loading && <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted, padding: "2rem 0" }}>Preparing visual analysis…</p>}
-          {error && <p style={{ ...T.body, fontSize: "0.8rem", color: "#f87171" }}>{error}</p>}
-          {annotations && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-              <div>
-                <p style={{ ...T.body, fontSize: "0.7rem", color: T.muted, marginBottom: "0.75rem" }}>Tap a marker to see the note</p>
-                <AnnotatedImage imageSrc={imageSrc} annotations={annotations} />
-              </div>
-              {refs?.length > 0 && <div>
-                <SectionLabel>Study these master works</SectionLabel>
-                {refs.map((r, i) => (
-                  <div key={i} style={{ display: "flex", gap: "0.9rem", padding: "1.2rem 0", borderBottom: `1px solid ${T.border}` }}>
-                    <span style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(200,137,58,0.2)", color: T.amber, fontSize: "0.7rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{i + 1}</span>
-                    <div>
-                      <p style={{ ...T.body, fontSize: "0.72rem", color: T.muted, fontStyle: "italic", marginBottom: "0.3rem" }}>{r.issue}</p>
-                      <p style={{ ...T.body, fontSize: "0.9rem", color: T.amber }}>{r.artist}</p>
-                      <p style={{ ...T.body, fontSize: "0.78rem", color: T.muted, marginBottom: "0.5rem" }}>{r.work}</p>
-                      <p style={{ ...T.body, fontSize: "0.85rem", color: "rgba(240,235,227,0.7)", lineHeight: 1.7, marginBottom: "0.75rem" }}>{r.what_to_notice}</p>
-                      <a href={`https://www.google.com/search?q=${encodeURIComponent(r.search_query)}&tbm=isch`} target="_blank" rel="noopener noreferrer"
-                        style={{ ...T.body, fontSize: "0.72rem", color: T.amber, border: `1px solid rgba(200,137,58,0.4)`, padding: "0.3rem 0.9rem", borderRadius: 50, textDecoration: "none" }}>
-                        Find this work ↗
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ─── Lost Button ──────────────────────────────────────────────────────
 function LostButton({ onSelect }) {
   const [open, setOpen] = useState(false);
@@ -982,13 +891,13 @@ function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSave
         {/* Feedback */}
         <div style={{ marginBottom: "1rem" }}>
           <SectionLabel>Studio Analysis</SectionLabel>
+          {targetArtist && (
+            <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.muted, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
+              Your feedback inspired by the accumulated records of {targetArtist}'s writings and works
+            </p>
+          )}
           <FeedbackBlock text={feedback} />
         </div>
-
-        <Hairline />
-
-        {/* Visual analysis */}
-        <VisualAnalysis imageSrc={imageSrc} imageB64={imageB64} imageMime={imageMime} feedback={feedback} targetArtist={targetArtist} />
 
         <Hairline />
 
