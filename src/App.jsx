@@ -209,7 +209,7 @@ const PORTRAIT_ARTISTS = [
   { file: "Rembrandt.jpg",  name: "Rembrandt" },
   { file: "Sargent.jpg",    name: "John Singer Sargent" },
   { file: "OKeeffe.jpg",    name: "Georgia O'Keeffe" },
-  { file: "DaVici.jpg",    name: "Leonardo da Vinci" },
+  { file: "DaVici.png",    name: "Leonardo da Vinci" },
   { file: "Monet.jpg",      name: "Claude Monet" },
   { file: "Kahlo.jpg",      name: "Frida Kahlo" },
   { file: "Caravaggio.jpg", name: "Caravaggio" },
