@@ -205,52 +205,141 @@ function LandingPage({ onStart }) {
 }
 
 // ─── Mentor Select ────────────────────────────────────────────────────
+const PORTRAIT_ARTISTS = [
+  { file: "Rembrandt.jpg",  name: "Rembrandt" },
+  { file: "Sargent.jpg",    name: "John Singer Sargent" },
+  { file: "OKeeffe.jpg",    name: "Georgia O'Keeffe" },
+  { file: "DaVinci.jpg",    name: "Leonardo da Vinci" },
+  { file: "Monet.jpg",      name: "Claude Monet" },
+  { file: "Kahlo.jpg",      name: "Frida Kahlo" },
+  { file: "Caravaggio.jpg", name: "Caravaggio" },
+  { file: "Degas.jpg",      name: "Edgar Degas" },
+  { file: "Picasso.jpg",    name: "Pablo Picasso" },
+  { file: "Sorolla.jpg",    name: "Joaquín Sorolla" },
+  { file: "VanGogh.jpg",    name: "Vincent van Gogh" },
+  { file: "Vermeer.jpg",    name: "Johannes Vermeer" },
+  { file: "Zronself.jpg",   name: "Anders Zorn" },
+  { file: "Matisse.jpg",    name: "Henri Matisse" },
+  { file: "Klimt.jpg",      name: "Gustav Klimt" },
+  { file: "Cezanne.jpg",    name: "Paul Cézanne" },
+  { file: "Cassatt.jpg",    name: "Mary Cassatt" },
+  { file: "GwenJohn.jpg",   name: "Gwen John" },
+  { file: "Kauffmann.jpg",  name: "Angelica Kauffmann" },
+  { file: "LeBrun.jpg",     name: "Élisabeth Vigée Le Brun" },
+];
+
+const COLLAGE_LAYOUT = [
+  { top:"4%",  left:"2%",  rotate:-4, size:130, zIndex:3 },
+  { top:"2%",  left:"22%", rotate:3,  size:115, zIndex:2 },
+  { top:"1%",  left:"42%", rotate:-2, size:125, zIndex:4 },
+  { top:"3%",  left:"62%", rotate:5,  size:110, zIndex:2 },
+  { top:"3%",  left:"80%", rotate:-3, size:120, zIndex:3 },
+  { top:"26%", left:"5%",  rotate:2,  size:120, zIndex:4 },
+  { top:"25%", left:"24%", rotate:-5, size:130, zIndex:3 },
+  { top:"24%", left:"45%", rotate:4,  size:115, zIndex:2 },
+  { top:"27%", left:"64%", rotate:-2, size:125, zIndex:5 },
+  { top:"25%", left:"82%", rotate:3,  size:110, zIndex:3 },
+  { top:"50%", left:"3%",  rotate:-3, size:125, zIndex:2 },
+  { top:"49%", left:"22%", rotate:5,  size:115, zIndex:4 },
+  { top:"51%", left:"42%", rotate:-4, size:130, zIndex:3 },
+  { top:"50%", left:"63%", rotate:2,  size:120, zIndex:2 },
+  { top:"52%", left:"81%", rotate:-5, size:115, zIndex:4 },
+  { top:"73%", left:"6%",  rotate:4,  size:120, zIndex:3 },
+  { top:"72%", left:"25%", rotate:-2, size:130, zIndex:2 },
+  { top:"74%", left:"44%", rotate:3,  size:115, zIndex:5 },
+  { top:"73%", left:"64%", rotate:-4, size:125, zIndex:3 },
+  { top:"75%", left:"82%", rotate:2,  size:110, zIndex:2 },
+];
+
+function ArtistCollage({ onSelect }) {
+  const [hovered, setHovered] = useState(null);
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 500 }}>
+      {PORTRAIT_ARTISTS.map((artist, i) => {
+        const pos = COLLAGE_LAYOUT[i];
+        const isHov = hovered === i;
+        return (
+          <button key={i} onClick={() => onSelect(artist.name)}
+            onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}
+            style={{
+              position: "absolute", top: pos.top, left: pos.left,
+              width: pos.size, height: pos.size * 1.25,
+              transform: `rotate(${isHov ? 0 : pos.rotate}deg) scale(${isHov ? 1.08 : 1})`,
+              zIndex: isHov ? 20 : pos.zIndex,
+              transition: "transform 0.25s ease, box-shadow 0.25s ease",
+              background: "transparent", border: "none", padding: 0, cursor: "pointer",
+              boxShadow: isHov ? "0 12px 40px rgba(0,0,0,0.5)" : "0 4px 16px rgba(0,0,0,0.35)",
+            }}>
+            <div style={{ width: "100%", height: "100%", background: "#3a3835", overflow: "hidden", borderRadius: 2 }}>
+              <img src={`/artists/${artist.file}`} alt={artist.name}
+                style={{ width: "100%", height: "88%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
+              <div style={{ height: "12%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4px" }}>
+                <p style={{ ...T.body, fontSize: "0.55rem", letterSpacing: "0.08em", color: "rgba(240,235,227,0.6)", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%", margin: 0 }}>{artist.name}</p>
+              </div>
+            </div>
+            {isHov && (
+              <div style={{ position: "absolute", bottom: -28, left: "50%", transform: "translateX(-50%)", whiteSpace: "nowrap", ...T.body, fontSize: "0.7rem", color: T.amber, letterSpacing: "0.06em" }}>
+                {artist.name} →
+              </div>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function MentorSelectPage({ onSelect }) {
   const [name, setName] = useState("");
   const [focused, setFocused] = useState(false);
   const inputRef = useRef();
-  const suggestions = [
-    "Rembrandt","John Singer Sargent","Georgia O'Keeffe","Leonardo da Vinci",
-    "Claude Monet","Frida Kahlo","Caravaggio","Edgar Degas","Pablo Picasso",
-    "Joaquín Sorolla","Vincent van Gogh","Johannes Vermeer","Anders Zorn","Francis Bacon"
-  ];
-  const filtered = name.length > 0 ? suggestions.filter(s => s.toLowerCase().startsWith(name.toLowerCase()) && s.toLowerCase() !== name.toLowerCase()) : [];
+  const suggestions = PORTRAIT_ARTISTS.map(a => a.name);
+  const filtered = name.length > 0 ? suggestions.filter(s => s.toLowerCase().includes(name.toLowerCase()) && s.toLowerCase() !== name.toLowerCase()) : [];
   const proceed = (artist) => { const val = (artist || name).trim(); if (val) onSelect(val); };
   useEffect(() => { setTimeout(() => inputRef.current?.focus(), 300); }, []);
   return (
-    <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
-      <TeknonLogo size="md" />
-      <div style={{ maxWidth: 620 }}>
-        <h1 style={{ ...T.body, fontSize: "clamp(2rem,6vw,4rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2.5rem" }}>
-          who would you like<br />to mentor you today?
-        </h1>
-        <div style={{ position: "relative" }}>
-          <input ref={inputRef} value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && proceed()} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 150)}
-            placeholder="type an artist's name…"
-            style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "1.2rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", letterSpacing: "0.02em" }} />
-          {focused && filtered.length > 0 && (
-            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "rgba(80,78,74,0.97)", border: `1px solid ${T.border}`, borderRadius: 10, marginTop: 4, overflow: "hidden", zIndex: 10 }}>
-              {filtered.slice(0, 5).map((s, i) => (
-                <button key={i} onClick={() => proceed(s)}
-                  style={{ display: "block", width: "100%", textAlign: "left", padding: "0.75rem 1rem", ...T.body, fontSize: "1rem", color: "#d6cfc4", background: "transparent", border: "none", cursor: "pointer" }}
-                  onMouseEnter={e => e.target.style.background = "rgba(240,235,227,0.06)"}
-                  onMouseLeave={e => e.target.style.background = "transparent"}>
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
+    <div style={{ width: "100%", height: "100vh", background: BG, display: "grid", gridTemplateColumns: "1fr 1fr", boxSizing: "border-box", overflow: "hidden" }}>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
+        <TeknonLogo size="md" />
+        <div>
+          <h1 style={{ ...T.body, fontSize: "clamp(1.6rem,3.5vw,3rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2.5rem" }}>
+            who would you like<br />to mentor you today?
+          </h1>
+          <div style={{ position: "relative" }}>
+            <input ref={inputRef} value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && proceed()} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 150)}
+              placeholder="type an artist's name…"
+              style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", letterSpacing: "0.02em" }} />
+            {focused && filtered.length > 0 && (
+              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "rgba(80,78,74,0.97)", border: `1px solid ${T.border}`, borderRadius: 10, marginTop: 4, overflow: "hidden", zIndex: 10 }}>
+                {filtered.slice(0, 5).map((s, i) => (
+                  <button key={i} onClick={() => proceed(s)}
+                    style={{ display: "flex", alignItems: "center", gap: "0.75rem", width: "100%", textAlign: "left", padding: "0.65rem 1rem", ...T.body, fontSize: "0.9rem", color: "#d6cfc4", background: "transparent", border: "none", cursor: "pointer" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "rgba(240,235,227,0.06)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                    {(() => { const p = PORTRAIT_ARTISTS.find(a => a.name === s); return p ? <img src={`/artists/${p.file}`} alt={s} style={{ width: 28, height: 28, objectFit: "cover", objectPosition: "top", borderRadius: 2, flexShrink: 0, filter: "sepia(10%)" }} /> : null; })()}
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <div style={{ marginTop: "2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+            <PillBtn onClick={() => proceed()} disabled={!name.trim()}>begin</PillBtn>
+            <button onClick={() => onSelect("")}
+              style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
+              skip for now
+            </button>
+          </div>
+          <p style={{ ...T.body, fontSize: "0.68rem", letterSpacing: "0.05em", color: "rgba(240,235,227,0.22)", marginTop: "1.5rem", lineHeight: 1.8 }}>
+            Choose any artist — living or from history.<br />If they are no longer with us, they will speak<br />to you directly in their own voice.
+          </p>
         </div>
-        <div style={{ marginTop: "2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
-          <PillBtn onClick={() => proceed()} disabled={!name.trim()}>begin</PillBtn>
-          <button onClick={() => onSelect("")}
-            style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
-            skip for now
-          </button>
+        <div />
+      </div>
+      <div style={{ position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
+        <div style={{ position: "absolute", inset: "1.5rem" }}>
+          <ArtistCollage onSelect={proceed} />
         </div>
-        <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.06em", color: "rgba(240,235,227,0.22)", marginTop: "1.5rem", lineHeight: 1.7 }}>
-          Choose any artist — living or from history. If they are no longer with us, they will speak to you directly in their own voice.
-        </p>
       </div>
     </div>
   );
