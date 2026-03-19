@@ -291,6 +291,7 @@ function ArtistCollage({ onSelect }) {
 
 function MentorSelectPage({ onSelect }) {
   const [name, setName] = useState("");
+  const isMobile = isMobile;
   const [focused, setFocused] = useState(false);
   const inputRef = useRef();
   const suggestions = PORTRAIT_ARTISTS.map(a => a.name);
@@ -298,7 +299,7 @@ function MentorSelectPage({ onSelect }) {
   const proceed = (artist) => { const val = (artist || name).trim(); if (val) onSelect(val); };
   useEffect(() => { setTimeout(() => inputRef.current?.focus(), 300); }, []);
   return (
-    <div style={{ width: "100%", minHeight: "100vh", background: BG, display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gridTemplateRows: window.innerWidth < 768 ? "1fr auto" : "1fr", boxSizing: "border-box", overflow: "hidden" }}>
+    <div style={{ width: "100%", minHeight: "100vh", background: BG, display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gridTemplateRows: isMobile ? "1fr auto" : "1fr", boxSizing: "border-box", overflow: "hidden" }}>
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
         <TeknonLogo size="md" />
         <div>
@@ -336,8 +337,8 @@ function MentorSelectPage({ onSelect }) {
         </div>
         <div />
       </div>
-     <div style={ window.innerWidth < 768 ? { overflowX: "auto", overflowY: "hidden", borderTop: `1px solid ${T.border}`, padding: "1rem 1.5rem", display: "flex", alignItems: "center", WebkitOverflowScrolling: "touch" } : { position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
-  {window.innerWidth < 768 ? (
+     <div style={ isMobile ? { overflowX: "auto", overflowY: "hidden", borderTop: `1px solid ${T.border}`, padding: "1rem 1.5rem", display: "flex", alignItems: "center", WebkitOverflowScrolling: "touch" } : { position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
+  {isMobile ? (
     <div style={{ display: "flex", gap: "0.75rem", paddingBottom: "0.5rem" }}>
       {PORTRAIT_ARTISTS.map((artist, i) => (
         <button key={i} onClick={() => proceed(artist.name)}
