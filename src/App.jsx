@@ -702,12 +702,12 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
     if (!imageB64 || !description) return;
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
     const profileCtx = `User profile — Level: ${profile.level}. Medium: ${profile.mediums.join(", ")}. Inspirations: ${[...profile.artists, ...profile.movements].join(", ")}. Subject interests: ${profile.goals.join(", ")}.`;
-    const isDeceased = targetArtist && DECEASED_ARTISTS.has(targetArtist);
-    const voiceInstruction = isDeceased
-      ? `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. Write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind.`
-      : targetArtist
-        ? `You are a masterful mentor deeply versed in the work and teachings of ${targetArtist}. Reference their documented techniques and known philosophy, but speak as a knowledgeable mentor rather than in their voice directly.`
-        : `You are a masterful, deeply encouraging art mentor with encyclopaedic knowledge of art history.`;
+    const isDeceased = targetArtist && (DECEASED_ARTISTS.has(targetArtist) || !LIVING_ARTISTS.has(targetArtist));
+const voiceInstruction = !targetArtist
+  ? `You are a masterful, deeply encouraging art mentor with encyclopaedic knowledge of art history.`
+  : LIVING_ARTISTS.has(targetArtist)
+  ? `You are a masterful mentor deeply versed in the work and teachings of ${targetArtist}. Reference their documented techniques and known philosophy, but speak as a knowledgeable mentor rather than in their voice directly.`
+  : `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. If ${targetArtist} is a historical artist who is no longer living, write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind. If you are not certain whether ${targetArtist} is living or deceased, default to the spirit voice.`;
 
     const prompt = `${voiceInstruction} ${profileCtx}
 
