@@ -707,7 +707,7 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
             setImage(compressed); setImageB64(compressed.split(",")[1]); setImageMime("image/jpeg"); setError(null);
           } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); }
         };
-        img.onerror = () => { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); };
+        img.onerror = () => { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); };
         img.src = e.target.result;
       } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); }
     };
