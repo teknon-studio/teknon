@@ -336,11 +336,26 @@ function MentorSelectPage({ onSelect }) {
         </div>
         <div />
       </div>
-      <div style={{ position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
-        <div style={{ position: "absolute", inset: "1.5rem" }}>
-          <ArtistCollage onSelect={proceed} />
-        </div>
-      </div>
+     <div style={ window.innerWidth < 768 ? { overflowX: "auto", overflowY: "hidden", borderTop: `1px solid ${T.border}`, padding: "1rem 1.5rem", display: "flex", alignItems: "center", WebkitOverflowScrolling: "touch" } : { position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
+  {window.innerWidth < 768 ? (
+    <div style={{ display: "flex", gap: "0.75rem", paddingBottom: "0.5rem" }}>
+      {PORTRAIT_ARTISTS.map((artist, i) => (
+        <button key={i} onClick={() => proceed(artist.name)}
+          style={{ flexShrink: 0, width: 80, height: 100, background: "#3a3835", border: "none", borderRadius: 4, overflow: "hidden", cursor: "pointer", boxShadow: "0 4px 12px rgba(0,0,0,0.3)", padding: 0 }}>
+          <img src={`/artists/${artist.file}`} alt={artist.name}
+            style={{ width: "100%", height: "82%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
+          <div style={{ height: "18%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 3px" }}>
+            <p style={{ ...T.body, fontSize: "0.45rem", letterSpacing: "0.05em", color: "rgba(240,235,227,0.6)", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%", margin: 0 }}>{artist.name}</p>
+          </div>
+        </button>
+      ))}
+    </div>
+  ) : (
+    <div style={{ position: "absolute", inset: "1.5rem" }}>
+      <ArtistCollage onSelect={proceed} />
+    </div>
+  )}
+</div>
     </div>
   );
 }
