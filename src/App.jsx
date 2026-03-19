@@ -690,9 +690,9 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
 
   const handleFile = file => {
     if (!file) return;
-    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif)$/i)) {
-      setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar."); return;
-    }
+    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif|avif|svg)$/i)) {
+  setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar."); return;
+}
     const reader = new FileReader();
     reader.onload = e => {
       try {
