@@ -17,6 +17,16 @@ const DECEASED_ARTISTS = new Set([
   "Georgia O'Keeffe","Frida Kahlo","Henri de Toulouse-Lautrec","Paul Klee",
   "Wassily Kandinsky","Salvador Dali","Francis Bacon","Isao Takahata","Satoshi Kon"
 ]);
+const LIVING_ARTISTS = new Set([
+  "David Hockney","Gerhard Richter","Cindy Sherman","Jeff Koons",
+  "Damien Hirst","Tracey Emin","Anish Kapoor","Ai Weiwei",
+  "Jenny Saville","Kehinde Wiley","Cecily Brown","Lisa Yuskavage",
+  "Peter Doig","Luc Tuymans","Neo Rauch","Eric Fischl",
+  "Chuck Close","Ellsworth Kelly","Frank Stella",
+  "Hayao Miyazaki","Naoki Urasawa","Rumiko Takahashi",
+  "Glen Keane","Craig McCracken","Bill Sienkiewicz",
+  "Tim Benson","Alan Moore","Frank Miller","Chris Ware",
+]);
 
 const MOVEMENT_ARTISTS = {
   "Impressionism": ["Claude Monet","Edgar Degas","Mary Cassatt","Joaquín Sorolla"],
