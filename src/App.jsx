@@ -298,7 +298,7 @@ function MentorSelectPage({ onSelect }) {
   const proceed = (artist) => { const val = (artist || name).trim(); if (val) onSelect(val); };
   useEffect(() => { setTimeout(() => inputRef.current?.focus(), 300); }, []);
   return (
-    <div style={{ width: "100%", height: "100vh", background: BG, display: "grid", gridTemplateColumns: "1fr 1fr", boxSizing: "border-box", overflow: "hidden" }}>
+    <div style={{ width: "100%", minHeight: "100vh", background: BG, display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gridTemplateRows: window.innerWidth < 768 ? "1fr auto" : "1fr", boxSizing: "border-box", overflow: "hidden" }}>
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
         <TeknonLogo size="md" />
         <div>
