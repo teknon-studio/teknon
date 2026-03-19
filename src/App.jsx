@@ -190,7 +190,7 @@ function LandingPage({ onStart }) {
       <img
         src="/hero.jpg"
         alt=""
-        style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none" }}
+        style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "70vh", width: "auto", opacity: 0.45, pointerEvents: "none", userSelect: "none", maxWidth: "60vw" }}
       />
       <TeknonLogo size="md" />
       <div style={{ maxWidth: 560, position: "relative", zIndex: 1 }}>
