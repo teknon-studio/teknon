@@ -711,8 +711,7 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
         img.src = e.target.result;
       } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); }
     };
-    reader.onerror = () => setError("Could not read the image file. Please try another.");
-    reader.readAsDataURL(file);
+    reader.onerror = () => setError("This image couldn't be read — try saving it as a JPG first and uploading again.");    reader.readAsDataURL(file);
   };
 
   const analyse = async () => {
