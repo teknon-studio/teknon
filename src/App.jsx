@@ -347,9 +347,9 @@ function MentorSelectPage({ onSelect }) {
         </div>
         <div />
       </div>
-     <div style={ isMobile ? { overflowX: "auto", overflowY: "hidden", borderTop: `1px solid ${T.border}`, padding: "1rem 1.5rem", display: "flex", alignItems: "center", WebkitOverflowScrolling: "touch" } : { position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
+     <div style={ isMobile ? { overflowY: "auto", overflowX: "hidden", borderLeft: `1px solid ${T.border}`, padding: "1rem 0.75rem", display: "flex", flexDirection: "column", alignItems: "center", WebkitOverflowScrolling: "touch", width: 100 } : { position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
   {isMobile ? (
-    <div style={{ display: "flex", gap: "0.75rem", paddingBottom: "0.5rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", paddingRight: "0.25rem" }}>
       {PORTRAIT_ARTISTS.map((artist, i) => (
         <button key={i} onClick={() => proceed(artist.name)}
           style={{ flexShrink: 0, width: 80, height: 100, background: "#3a3835", border: "none", borderRadius: 4, overflow: "hidden", cursor: "pointer", boxShadow: "0 4px 12px rgba(0,0,0,0.3)", padding: 0 }}>
