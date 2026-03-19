@@ -291,7 +291,7 @@ function ArtistCollage({ onSelect }) {
 
 function MentorSelectPage({ onSelect }) {
   const [name, setName] = useState("");
-  const isMobile = window.innerWidth < 768;
+  const [isMobile] = useState(window.innerWidth < 768);
   const [focused, setFocused] = useState(false);
   const inputRef = useRef();
   const suggestions = PORTRAIT_ARTISTS.map(a => a.name);
