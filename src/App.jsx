@@ -17,16 +17,6 @@ const DECEASED_ARTISTS = new Set([
   "Georgia O'Keeffe","Frida Kahlo","Henri de Toulouse-Lautrec","Paul Klee",
   "Wassily Kandinsky","Salvador Dali","Francis Bacon","Isao Takahata","Satoshi Kon"
 ]);
-const LIVING_ARTISTS = new Set([
-  "David Hockney","Gerhard Richter","Cindy Sherman","Jeff Koons",
-  "Damien Hirst","Tracey Emin","Anish Kapoor","Ai Weiwei",
-  "Jenny Saville","Kehinde Wiley","Cecily Brown","Lisa Yuskavage",
-  "Peter Doig","Luc Tuymans","Neo Rauch","Eric Fischl",
-  "Chuck Close","Ellsworth Kelly","Frank Stella",
-  "Hayao Miyazaki","Naoki Urasawa","Rumiko Takahashi",
-  "Glen Keane","Craig McCracken","Bill Sienkiewicz",
-  "Tim Benson","Alan Moore","Frank Miller","Chris Ware",
-]);
 
 const MOVEMENT_ARTISTS = {
   "Impressionism": ["Claude Monet","Edgar Degas","Mary Cassatt","Joaquín Sorolla"],
@@ -200,7 +190,7 @@ function LandingPage({ onStart }) {
       <img
         src="/hero.jpg"
         alt=""
-        style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "70vh", width: "auto", opacity: 0.45, pointerEvents: "none", userSelect: "none", maxWidth: "60vw" }}
+        style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none" }}
       />
       <TeknonLogo size="md" />
       <div style={{ maxWidth: 560, position: "relative", zIndex: 1 }}>
@@ -219,7 +209,7 @@ const PORTRAIT_ARTISTS = [
   { file: "Rembrandt.jpg",  name: "Rembrandt" },
   { file: "Sargent.jpg",    name: "John Singer Sargent" },
   { file: "OKeeffe.jpg",    name: "Georgia O'Keeffe" },
-  { file: "DaVici.png",    name: "Leonardo da Vinci" },
+  { file: "DaVinci.jpg",    name: "Leonardo da Vinci" },
   { file: "Monet.jpg",      name: "Claude Monet" },
   { file: "Kahlo.jpg",      name: "Frida Kahlo" },
   { file: "Caravaggio.jpg", name: "Caravaggio" },
@@ -228,7 +218,7 @@ const PORTRAIT_ARTISTS = [
   { file: "Sorolla.jpg",    name: "Joaquín Sorolla" },
   { file: "VanGogh.jpg",    name: "Vincent van Gogh" },
   { file: "Vermeer.jpg",    name: "Johannes Vermeer" },
-  { file: "Zornself.jpg",   name: "Anders Zorn" },
+  { file: "Zronself.jpg",   name: "Anders Zorn" },
   { file: "Matisse.jpg",    name: "Henri Matisse" },
   { file: "Klimt.jpg",      name: "Gustav Klimt" },
   { file: "Cezanne.jpg",    name: "Paul Cézanne" },
@@ -301,19 +291,20 @@ function ArtistCollage({ onSelect }) {
 
 function MentorSelectPage({ onSelect }) {
   const [name, setName] = useState("");
-  const [isMobile] = useState(window.innerWidth < 768);
   const [focused, setFocused] = useState(false);
+  const [isMobile] = useState(window.innerWidth < 768);
   const inputRef = useRef();
   const suggestions = PORTRAIT_ARTISTS.map(a => a.name);
   const filtered = name.length > 0 ? suggestions.filter(s => s.toLowerCase().includes(name.toLowerCase()) && s.toLowerCase() !== name.toLowerCase()) : [];
   const proceed = (artist) => { const val = (artist || name).trim(); if (val) onSelect(val); };
   useEffect(() => { setTimeout(() => inputRef.current?.focus(), 300); }, []);
   return (
-    <div style={{ width: "100%", minHeight: "100vh", background: BG, display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gridTemplateRows: isMobile ? "1fr auto" : "1fr", boxSizing: "border-box", overflow: "hidden" }}>
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
+    <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "row", boxSizing: "border-box", overflow: "hidden" }}>
+      {/* Left — text, same layout as landing page */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box", minWidth: 0 }}>
         <TeknonLogo size="md" />
-        <div>
-          <h1 style={{ ...T.body, fontSize: "clamp(1.6rem,3.5vw,3rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2.5rem" }}>
+        <div style={{ maxWidth: 480 }}>
+          <h1 style={{ ...T.body, fontSize: "clamp(1.6rem,3.5vw,3.5rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2.5rem" }}>
             who would you like<br />to mentor you today?
           </h1>
           <div style={{ position: "relative" }}>
@@ -347,26 +338,27 @@ function MentorSelectPage({ onSelect }) {
         </div>
         <div />
       </div>
-     <div style={ isMobile ? { overflowY: "auto", overflowX: "hidden", borderLeft: `1px solid ${T.border}`, padding: "1rem 0.75rem", display: "flex", flexDirection: "column", alignItems: "center", WebkitOverflowScrolling: "touch", width: 100 } : { position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}` }}>
-  {isMobile ? (
-    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", paddingRight: "0.25rem" }}>
-      {PORTRAIT_ARTISTS.map((artist, i) => (
-        <button key={i} onClick={() => proceed(artist.name)}
-          style={{ flexShrink: 0, width: 80, height: 100, background: "#3a3835", border: "none", borderRadius: 4, overflow: "hidden", cursor: "pointer", boxShadow: "0 4px 12px rgba(0,0,0,0.3)", padding: 0 }}>
-          <img src={`/artists/${artist.file}`} alt={artist.name}
-            style={{ width: "100%", height: "82%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
-          <div style={{ height: "18%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 3px" }}>
-            <p style={{ ...T.body, fontSize: "0.45rem", letterSpacing: "0.05em", color: "rgba(240,235,227,0.6)", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%", margin: 0 }}>{artist.name}</p>
+      {/* Right — collage on desktop, vertical scroll strip on mobile */}
+      {isMobile ? (
+        <div style={{ width: 90, borderLeft: `1px solid ${T.border}`, overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", flexShrink: 0, padding: "1rem 0.5rem", display: "flex", flexDirection: "column", gap: "0.6rem", alignItems: "center" }}>
+          {PORTRAIT_ARTISTS.map((artist, i) => (
+            <button key={i} onClick={() => proceed(artist.name)}
+              style={{ flexShrink: 0, width: 70, height: 88, background: "#3a3835", border: "none", borderRadius: 3, overflow: "hidden", cursor: "pointer", boxShadow: "0 3px 10px rgba(0,0,0,0.3)", padding: 0 }}>
+              <img src={`/artists/${artist.file}`} alt={artist.name}
+                style={{ width: "100%", height: "82%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
+              <div style={{ height: "18%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 3px" }}>
+                <p style={{ ...T.body, fontSize: "0.42rem", letterSpacing: "0.04em", color: "rgba(240,235,227,0.6)", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%", margin: 0 }}>{artist.name}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div style={{ width: "45%", position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}`, flexShrink: 0 }}>
+          <div style={{ position: "absolute", inset: "1.5rem" }}>
+            <ArtistCollage onSelect={proceed} />
           </div>
-        </button>
-      ))}
-    </div>
-  ) : (
-    <div style={{ position: "absolute", inset: "1.5rem" }}>
-      <ArtistCollage onSelect={proceed} />
-    </div>
-  )}
-</div>
+        </div>
+      )}
     </div>
   );
 }
@@ -696,13 +688,12 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef();
   const cameraRef = useRef();
-  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleFile = file => {
     if (!file) return;
-    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif|avif|svg)$/i)) {
-  setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar."); return;
-}
+    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif)$/i)) {
+      setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar."); return;
+    }
     const reader = new FileReader();
     reader.onload = e => {
       try {
@@ -717,23 +708,24 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
             setImage(compressed); setImageB64(compressed.split(",")[1]); setImageMime("image/jpeg"); setError(null);
           } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); }
         };
-        img.onerror = () => { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); };
+        img.onerror = () => { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); };
         img.src = e.target.result;
       } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); }
     };
-    reader.onerror = () => setError("This image couldn't be read — try saving it as a JPG first and uploading again.");    reader.readAsDataURL(file);
+    reader.onerror = () => setError("Could not read the image file. Please try another.");
+    reader.readAsDataURL(file);
   };
 
   const analyse = async () => {
     if (!imageB64 || !description) return;
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
     const profileCtx = `User profile — Level: ${profile.level}. Medium: ${profile.mediums.join(", ")}. Inspirations: ${[...profile.artists, ...profile.movements].join(", ")}. Subject interests: ${profile.goals.join(", ")}.`;
-    const isDeceased = targetArtist && (DECEASED_ARTISTS.has(targetArtist) || !LIVING_ARTISTS.has(targetArtist));
-const voiceInstruction = !targetArtist
-  ? `You are a masterful, deeply encouraging art mentor with encyclopaedic knowledge of art history.`
-  : LIVING_ARTISTS.has(targetArtist)
-  ? `You are a masterful mentor deeply versed in the work and teachings of ${targetArtist}. Reference their documented techniques and known philosophy, but speak as a knowledgeable mentor rather than in their voice directly.`
-  : `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. If ${targetArtist} is a historical artist who is no longer living, write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind. If you are not certain whether ${targetArtist} is living or deceased, default to the spirit voice.`;
+    const isDeceased = targetArtist && DECEASED_ARTISTS.has(targetArtist);
+    const voiceInstruction = isDeceased
+      ? `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. Write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind.`
+      : targetArtist
+        ? `You are a masterful mentor deeply versed in the work and teachings of ${targetArtist}. Reference their documented techniques and known philosophy, but speak as a knowledgeable mentor rather than in their voice directly.`
+        : `You are a masterful, deeply encouraging art mentor with encyclopaedic knowledge of art history.`;
 
     const prompt = `${voiceInstruction} ${profileCtx}
 
