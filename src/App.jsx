@@ -670,6 +670,7 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef();
   const cameraRef = useRef();
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleFile = file => {
     if (!file) return;
