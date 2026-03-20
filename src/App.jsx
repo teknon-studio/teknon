@@ -620,7 +620,7 @@ function ClassesPanel({ profile }) {
       const city = geo.address?.city || geo.address?.town || geo.address?.village || "your area";
       const location = `${city}, ${geo.address?.country || ""}`;
       setLoc(location);
-      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.
+      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
       const typeLabel = type === "schools" ? "art schools" : type === "workshops" ? "workshops and short courses" : "art schools, workshops and short courses";
       await new Promise(r => setTimeout(r, 10000));
       const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
