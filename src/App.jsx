@@ -209,7 +209,7 @@ const PORTRAIT_ARTISTS = [
   { file: "Rembrandt.jpg",  name: "Rembrandt" },
   { file: "Sargent.jpg",    name: "John Singer Sargent" },
   { file: "OKeeffe.jpg",    name: "Georgia O'Keeffe" },
-  { file: "DaVinci.jpg",    name: "Leonardo da Vinci" },
+  { file: "DaVici.jpg",    name: "Leonardo da Vinci" },
   { file: "Monet.jpg",      name: "Claude Monet" },
   { file: "Kahlo.jpg",      name: "Frida Kahlo" },
   { file: "Caravaggio.jpg", name: "Caravaggio" },
@@ -218,7 +218,7 @@ const PORTRAIT_ARTISTS = [
   { file: "Sorolla.jpg",    name: "Joaquín Sorolla" },
   { file: "VanGogh.jpg",    name: "Vincent van Gogh" },
   { file: "Vermeer.jpg",    name: "Johannes Vermeer" },
-  { file: "Zronself.jpg",   name: "Anders Zorn" },
+  { file: "Zornself.jpg",   name: "Anders Zorn" },
   { file: "Matisse.jpg",    name: "Henri Matisse" },
   { file: "Klimt.jpg",      name: "Gustav Klimt" },
   { file: "Cezanne.jpg",    name: "Paul Cézanne" },
@@ -682,6 +682,7 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
   const [description, setDescription] = useState("");
   const [struggle, setStruggle] = useState("");
   const [targetArtist, setTargetArtist] = useState(defaultMentor || "");
+  const [medium, setMedium] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState("");
   const [error, setError] = useState(null);
@@ -719,7 +720,7 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
   const analyse = async () => {
     if (!imageB64 || !description) return;
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
-    const profileCtx = `User profile — Level: ${profile.level}. Medium: ${profile.mediums.join(", ")}. Inspirations: ${[...profile.artists, ...profile.movements].join(", ")}. Subject interests: ${profile.goals.join(", ")}.`;
+    const profileCtx = medium ? `The artist is working in ${medium}.` : "";
     const isDeceased = targetArtist && DECEASED_ARTISTS.has(targetArtist);
     const voiceInstruction = isDeceased
       ? `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. Write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind.`
@@ -796,6 +797,14 @@ Provide encouraging, specific feedback:
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" style={{ display: "none" }} onChange={e => handleFile(e.target.files[0])} />
 
         {/* Artist / Style */}
+        <div style={{ marginBottom: "2.5rem" }}>
+  <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>Medium</p>
+  <select value={medium} onChange={e => setMedium(e.target.value)}
+    style={{ width: "100%", ...T.body, fontSize: "0.9rem", color: medium ? T.cream : T.muted, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", cursor: "pointer", appearance: "none", WebkitAppearance: "none" }}>
+    <option value="" style={{background:"#6b6b69"}}>Select your medium…</option>
+    {MEDIUMS.map(m => <option key={m} value={m} style={{background:"#6b6b69"}}>{m}</option>)}
+  </select>
+</div>
         <div style={{ marginBottom: "2.5rem" }}>
           <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>Artist / Style I'm aiming for</p>
           <input value={targetArtist} onChange={e => setTargetArtist(e.target.value)}
@@ -1012,7 +1021,7 @@ export default function App() {
   if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} />;
   if (page === "about") return <AboutPage onBack={() => setPage(profile ? "easel" : "mentor")} />;
-  if (!profile || editing) return <ProfileSetup onSave={saveProfile} existing={profile} onAbout={() => setPage("about")} />;
+  // Profile setup removed
   if (page === "response" && currentSession) return <ResponsePage session={currentSession} profile={profile} onBack={() => setPage("mentor")} onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
   return <EaselPage profile={profile} onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
 }
