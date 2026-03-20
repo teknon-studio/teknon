@@ -209,7 +209,7 @@ const PORTRAIT_ARTISTS = [
   { file: "Rembrandt.jpg",  name: "Rembrandt" },
   { file: "Sargent.jpg",    name: "John Singer Sargent" },
   { file: "OKeeffe.jpg",    name: "Georgia O'Keeffe" },
-  { file: "DaVici.jpg",    name: "Leonardo da Vinci" },
+  { file: "DaVici.png",    name: "Leonardo da Vinci" },
   { file: "Monet.jpg",      name: "Claude Monet" },
   { file: "Kahlo.jpg",      name: "Frida Kahlo" },
   { file: "Caravaggio.jpg", name: "Caravaggio" },
@@ -620,7 +620,7 @@ function ClassesPanel({ profile }) {
       const city = geo.address?.city || geo.address?.town || geo.address?.village || "your area";
       const location = `${city}, ${geo.address?.country || ""}`;
       setLoc(location);
-      const styleCtx = [...(profile.artists || []), ...(profile.movements || [])].join(", ");
+      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.
       const typeLabel = type === "schools" ? "art schools" : type === "workshops" ? "workshops and short courses" : "art schools, workshops and short courses";
       await new Promise(r => setTimeout(r, 10000));
       const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at ${profile.level || "developing"} level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
@@ -878,7 +878,7 @@ function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSave
     }
   }, []);
 
-  const profileCtx = `Level: ${profile.level}. Medium: ${profile.mediums.join(", ")}. Inspirations: ${[...profile.artists, ...profile.movements].join(", ")}.`;
+  const profileCtx = session.medium ? `The artist is working in ${session.medium}.` : "";
   const sendFollowUp = async () => {
     if (!followUp.trim() || chatLoading) return;
     const q = followUp.trim(); setFollowUp(""); setChatError(null);
@@ -1022,6 +1022,6 @@ export default function App() {
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} />;
   if (page === "about") return <AboutPage onBack={() => setPage(profile ? "easel" : "mentor")} />;
   // Profile setup removed
-  if (page === "response" && currentSession) return <ResponsePage session={currentSession} profile={profile} onBack={() => setPage("mentor")} onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
-  return <EaselPage profile={profile} onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
+  if (page === "response" && currentSession) return <ResponsePage session={currentSession} onBack={() => setPage("mentor")} onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
+  return <EaselPage onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
 }
