@@ -623,7 +623,7 @@ function ClassesPanel({ profile }) {
       const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.
       const typeLabel = type === "schools" ? "art schools" : type === "workshops" ? "workshops and short courses" : "art schools, workshops and short courses";
       await new Promise(r => setTimeout(r, 10000));
-      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at ${profile.level || "developing"} level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
+      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
       const c = text.replace(/```json|```/g, "").trim(); const s = c.indexOf("["), e = c.lastIndexOf("]");
       if (s !== -1) setResults(JSON.parse(c.slice(s, e + 1))); else setError("Couldn't parse results.");
     } catch (e) { setError(e.code === 1 ? "Location access denied." : `Error: ${e.message}`); }
