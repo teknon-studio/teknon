@@ -5,43 +5,90 @@ const MODEL = "claude-sonnet-4-20250514";
 const BG = "#6b6b69";
 
 const DECEASED_ARTISTS = new Set([
-  "John Singer Sargent","Rembrandt","Claude Monet","J.M.W. Turner","Edgar Degas",
-  "Vincent van Gogh","Mary Cassatt","Winslow Homer","Caravaggio","Johannes Vermeer",
-  "Francisco Goya","Paul Cézanne","Gustav Klimt","Edward Hopper","Andrew Wyeth",
-  "Joaquín Sorolla","Anders Zorn","Lucian Freud","Basquiat","Osamu Tezuka",
-  "Katsuhiro Otomo","Chuck Jones","Richard Williams","Yoshitaka Amano",
-  "Leonardo da Vinci","Michelangelo","Raphael","Titian","Gustave Courbet",
-  "Egon Schiele","Ernst Ludwig Kirchner","Käthe Kollwitz","Jacques-Louis David",
-  "William-Adolphe Bouguereau","Pablo Picasso","Henri Matisse","Paul Gauguin",
-  "Georges Seurat","Jack Kirby","Steve Ditko","Will Eisner","Moebius",
-  "Georgia O'Keeffe","Frida Kahlo","Henri de Toulouse-Lautrec","Paul Klee",
-  "Wassily Kandinsky","Salvador Dali","Francis Bacon","Isao Takahata","Satoshi Kon"
+  // 16th Century
+  "Leonardo da Vinci","Michelangelo","Raphael","Titian","El Greco",
+  "Albrecht Dürer","Pieter Bruegel the Elder","Hieronymus Bosch",
+  "Hans Holbein the Younger","Tintoretto","Paolo Veronese","Correggio",
+  // 17th Century
+  "Caravaggio","Artemisia Gentileschi","Guido Reni",
+  "Rembrandt","Johannes Vermeer","Frans Hals","Jan Steen","Pieter de Hooch",
+  "Jacob van Ruisdael","Peter Paul Rubens","Anthony van Dyck",
+  "Diego Velázquez","Francisco de Zurbarán","Bartolomé Esteban Murillo",
+  "Nicolas Poussin","Claude Lorrain","Georges de La Tour",
+  "Élisabeth Vigée Le Brun","Angelica Kauffmann","Jan Davidsz de Heem",
+  // 18th Century
+  "Jean-Antoine Watteau","François Boucher","Jean-Honoré Fragonard",
+  "Jean-Baptiste-Siméon Chardin","Jean-Baptiste Greuze","Giovanni Battista Tiepolo",
+  "William Hogarth","Thomas Gainsborough","Joshua Reynolds","George Stubbs",
+  "Jacques-Louis David","Jean-Auguste-Dominique Ingres",
+  "Francisco Goya","Giovanni Battista Piranesi","Henry Fuseli",
+  // 19th Century — Romanticism & Realism
+  "Eugène Delacroix","Théodore Géricault","Jean-François Millet",
+  "Gustave Courbet","Honoré Daumier","Rosa Bonheur",
+  "J.M.W. Turner","John Constable","John Martin","Samuel Palmer",
+  "Caspar David Friedrich","Philipp Otto Runge",
+  "Thomas Cole","Frederic Edwin Church","Albert Bierstadt","Winslow Homer",
+  "William-Adolphe Bouguereau","Alexandre Cabanel","Lawrence Alma-Tadema",
+  "Dante Gabriel Rossetti","John Everett Millais","Edward Burne-Jones","William Holman Hunt",
+  // 19th Century — Impressionism & Post-Impressionism
+  "Claude Monet","Pierre-Auguste Renoir","Edgar Degas","Camille Pissarro",
+  "Alfred Sisley","Berthe Morisot","Mary Cassatt","Gustave Caillebotte",
+  "Édouard Manet","Frédéric Bazille",
+  "Paul Cézanne","Vincent van Gogh","Paul Gauguin","Georges Seurat","Paul Signac",
+  "Henri de Toulouse-Lautrec","Odilon Redon",
+  "Joaquín Sorolla","Anders Zorn","John Singer Sargent","Ilya Repin",
+  "James McNeill Whistler","Thomas Eakins",
+  // Late 19th–Early 20th Century
+  "Gustav Klimt","Egon Schiele","Oskar Kokoschka",
+  "Édouard Vuillard","Pierre Bonnard","Maurice Denis",
+  "Auguste Rodin","Camille Claudel",
+  "Giovanni Boldini","Franz von Stuck","Max Liebermann","Lovis Corinth",
+  "Nikolai Ge","Valentin Serov","Isaac Levitan","Mikhail Vrubel",
+  "Gwen John","Walter Sickert","Augustus John",
+  "Edward Hopper","George Bellows","John Sloan","Robert Henri",
+  // Early 20th Century — Modernism
+  "Pablo Picasso","Henri Matisse","Georges Braque","Juan Gris",
+  "Wassily Kandinsky","Paul Klee","Franz Marc","August Macke",
+  "Ernst Ludwig Kirchner","Erich Heckel","Emil Nolde","Max Beckmann",
+  "Piet Mondrian","Theo van Doesburg",
+  "Kazimir Malevich","El Lissitzky","Alexander Rodchenko",
+  "Marcel Duchamp","Francis Picabia","Kurt Schwitters",
+  "Amedeo Modigliani","Chaim Soutine","Marc Chagall",
+  "Giorgio de Chirico","Carlo Carrà",
+  "Salvador Dalí","René Magritte","Max Ernst","Joan Miró","Yves Tanguy",
+  "Frida Kahlo","Diego Rivera","José Clemente Orozco","David Alfaro Siqueiros",
+  "Georgia O'Keeffe","Charles Sheeler","Charles Demuth",
+  "Grant Wood","Thomas Hart Benton","Andrew Wyeth",
+  "Tamara de Lempicka","Félix Vallotton","Käthe Kollwitz",
+  // Mid 20th Century
+  "Jackson Pollock","Willem de Kooning","Mark Rothko","Franz Kline",
+  "Arshile Gorky","Lee Krasner","Helen Frankenthaler","Joan Mitchell",
+  "Barnett Newman","Clyfford Still","Robert Motherwell","Hans Hofmann",
+  "Alberto Giacometti","Henry Moore","Barbara Hepworth",
+  "Francis Bacon","Lucian Freud","Frank Auerbach","Leon Kossoff",
+  "Andy Warhol","Roy Lichtenstein","Jasper Johns","Robert Rauschenberg",
+  "Balthus","Pierre Soulages","Nicolas de Staël",
+  "Fairfield Porter","Giorgio Morandi","Renato Guttuso",
+  "Osamu Tezuka","Katsuhiro Otomo","Yoshitaka Amano",
+  "Isao Takahata","Satoshi Kon",
+  "Jack Kirby","Steve Ditko","Will Eisner","Moebius","Bernie Wrightson",
+  "Norman Rockwell","N.C. Wyeth","Howard Pyle","J.C. Leyendecker",
+  "Basquiat","Keith Haring","Cy Twombly","Donald Judd","Dan Flavin",
+  "Richard Williams","Chuck Jones",
 ]);
 
-const MOVEMENT_ARTISTS = {
-  "Impressionism": ["Claude Monet","Edgar Degas","Mary Cassatt","Joaquín Sorolla"],
-  "Realism": ["Gustave Courbet","Winslow Homer","Edward Hopper","Andrew Wyeth","Lucian Freud","Jenny Saville","Tim Benson"],
-  "Baroque": ["Rembrandt","Caravaggio","Johannes Vermeer","Francisco Goya"],
-  "Renaissance": ["Leonardo da Vinci","Michelangelo","Raphael","Titian"],
-  "Post-Impressionism": ["Paul Cézanne","Vincent van Gogh","Paul Gauguin","Georges Seurat"],
-  "Expressionism": ["Egon Schiele","Ernst Ludwig Kirchner","Käthe Kollwitz"],
-  "Plein Air": ["John Singer Sargent","Joaquín Sorolla","Anders Zorn","Claude Monet"],
-  "Classical": ["Jacques-Louis David","William-Adolphe Bouguereau","John Singer Sargent"],
-  "Modernism": ["Pablo Picasso","Henri Matisse","Gustav Klimt","Egon Schiele"],
-  "Contemporary": ["Basquiat","Jenny Saville","Lucian Freud","Tim Benson","Kehinde Wiley"],
-  "Manga": ["Osamu Tezuka","Naoki Urasawa","Katsuhiro Otomo","Rumiko Takahashi","Yoshitaka Amano"],
-  "Anime": ["Hayao Miyazaki","Isao Takahata","Yoshitaka Amano","Satoshi Kon"],
-  "Sequential art": ["Naoki Urasawa","Alan Moore","Frank Miller","Will Eisner","Chris Ware"],
-  "Character design": ["Glen Keane","Yoshitaka Amano","Rumiko Takahashi","Craig McCracken"],
-  "Animation": ["Chuck Jones","Richard Williams","Glen Keane","Hayao Miyazaki","Isao Takahata"],
-  "Graphic novel": ["Will Eisner","Frank Miller","Alan Moore","Chris Ware","Moebius"],
-  "Comics": ["Jack Kirby","Steve Ditko","Frank Miller","Will Eisner","Moebius"],
-};
-const ALL_ARTISTS = [...new Set(Object.values(MOVEMENT_ARTISTS).flat())].sort();
-const MOVEMENTS = ["Impressionism","Realism","Baroque","Renaissance","Post-Impressionism","Expressionism","Plein Air","Classical","Modernism","Contemporary","Manga","Anime","Sequential art","Character design","Animation","Graphic novel","Comics"];
+const LIVING_ARTISTS = new Set([
+  "David Hockney","Gerhard Richter","Cindy Sherman","Jeff Koons",
+  "Damien Hirst","Tracey Emin","Anish Kapoor","Ai Weiwei",
+  "Jenny Saville","Kehinde Wiley","Cecily Brown","Lisa Yuskavage",
+  "Peter Doig","Luc Tuymans","Neo Rauch","Eric Fischl",
+  "Ellsworth Kelly","Frank Stella",
+  "Hayao Miyazaki","Naoki Urasawa","Rumiko Takahashi",
+  "Glen Keane","Craig McCracken","Bill Sienkiewicz",
+  "Tim Benson","Alan Moore","Frank Miller","Chris Ware",
+]);
+
 const MEDIUMS = ["Oil paint","Watercolour","Acrylic","Gouache","Pencil","Charcoal","Pastel","Ink","Digital","Mixed media","Brush & ink","Marker","Screen tone","Digital painting","Frame-by-frame animation"];
-const LEVELS = ["Beginner","Developing","Intermediate","Experienced","Advanced"];
-const GOALS = ["Portraiture","Figures","Landscapes","Still life","Abstraction","Urban scenes","Animals","Fantasy / imaginative","En plein air","Character design","Manga panels","Storyboarding","Sequential art","Action & movement","Creature design","Environmental design"];
 
 const storage = {
   get: (key) => { try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; } },
@@ -66,7 +113,6 @@ if (!document.getElementById("teknon-font")) {
   document.head.appendChild(style);
 }
 
-// ─── Shared design tokens ───────────────────────────────────────────
 const T = {
   body: { fontFamily: "'DM Sans', sans-serif", fontWeight: 300 },
   serif: { fontFamily: "'DM Serif Display', serif" },
@@ -80,9 +126,8 @@ const T = {
   amberMuted: "rgba(200,137,58,0.7)",
 };
 
-const divider = { height: 1, background: T.border, margin: "2rem 0" };
+const divider = { height: 1, background: "rgba(240,235,227,0.18)", margin: "2rem 0" };
 
-// ─── Logo ────────────────────────────────────────────────────────────
 function TeknonLogo({ size = "md" }) {
   const scale = size === "lg" ? 1.8 : size === "sm" ? 0.7 : 1;
   const cx = 18 * scale, cy = 18 * scale;
@@ -104,7 +149,6 @@ function TeknonLogo({ size = "md" }) {
   );
 }
 
-// ─── Pill button (outline, landing-page style) ────────────────────────
 function PillBtn({ children, onClick, disabled, style: extra }) {
   const [hover, setHover] = useState(false);
   return (
@@ -120,14 +164,6 @@ function PillBtn({ children, onClick, disabled, style: extra }) {
   );
 }
 
-// ─── Tag ─────────────────────────────────────────────────────────────
-const Tag = ({ label, selected, onClick }) => (
-  <button onClick={onClick} style={{ ...T.body, fontSize: "0.8rem" }}
-    className={`px-3 py-1 rounded-full text-sm border transition-all ${selected ? "bg-amber-800 border-amber-700 text-amber-100" : "border-stone-600 text-stone-400 hover:border-amber-700 hover:text-amber-200"}`}
-  >{label}</button>
-);
-
-// ─── Section label (sparse, uppercase) ───────────────────────────────
 const SectionLabel = ({ children }) => (
   <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "1rem" }}>
     ✦ {children}
@@ -136,8 +172,7 @@ const SectionLabel = ({ children }) => (
 
 const Hairline = () => <div style={divider} />;
 
-// ─── Header ──────────────────────────────────────────────────────────
-function Header({ onEditProfile, onAbout, sessionSaved, sessions, onLoadSession, onDeleteSession }) {
+function Header({ onAbout, sessionSaved, sessions, onLoadSession, onDeleteSession }) {
   const [sessionsOpen, setSessionsOpen] = useState(false);
   const navBtn = { ...T.body, fontSize: "0.75rem", letterSpacing: "0.08em", color: T.muted, background: "transparent", border: "none", cursor: "pointer", padding: "0.4rem 0.8rem", transition: "color 0.2s" };
   return (
@@ -156,19 +191,18 @@ function Header({ onEditProfile, onAbout, sessionSaved, sessions, onLoadSession,
               <div style={{ position: "absolute", right: 0, top: "2.8rem", width: 320, background: "rgba(85,83,80,0.98)", border: `1px solid ${T.border}`, borderRadius: 16, boxShadow: "0 20px 60px rgba(0,0,0,0.4)", zIndex: 50, overflow: "hidden" }}>
                 <div style={{ padding: "0.9rem 1.2rem", borderBottom: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.15em", color: T.muted, textTransform: "uppercase" }}>My Sessions</p>
-                  <button onClick={() => setSessionsOpen(false)} style={{ ...navBtn, fontSize: "0.8rem", color: T.muted }}>✕</button>
+                  <button onClick={() => setSessionsOpen(false)} style={{ ...navBtn, fontSize: "0.8rem" }}>✕</button>
                 </div>
                 <div style={{ maxHeight: 380, overflowY: "auto" }}>
                   {sessions.map(s => (
-                    <div key={s.id} style={{ display: "flex", alignItems: "center", gap: "0.8rem", padding: "0.9rem 1.2rem", borderBottom: `1px solid ${T.border}` }}
-                      className="group hover:bg-stone-800 transition-all">
+                    <div key={s.id} style={{ display: "flex", alignItems: "center", gap: "0.8rem", padding: "0.9rem 1.2rem", borderBottom: `1px solid ${T.border}`, cursor: "pointer" }}>
                       <img src={s.imageSrc} alt="artwork" style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8, border: `1px solid ${T.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: 0, cursor: "pointer" }} onClick={() => { onLoadSession(s); setSessionsOpen(false); }}>
+                      <div style={{ flex: 1, minWidth: 0 }} onClick={() => { onLoadSession(s); setSessionsOpen(false); }}>
                         <p style={{ ...T.body, fontSize: "0.8rem", color: T.amber, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.targetArtist || "No mentor"}</p>
                         <p style={{ ...T.body, fontSize: "0.7rem", color: T.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.description}</p>
                         <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.25)", marginTop: 2 }}>{new Date(s.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</p>
                       </div>
-                      <button onClick={() => onDeleteSession(s.id)} style={{ ...navBtn, color: "rgba(240,235,227,0.2)", fontSize: "0.75rem" }} className="opacity-0 group-hover:opacity-100">✕</button>
+                      <button onClick={() => onDeleteSession(s.id)} style={{ ...navBtn, color: "rgba(240,235,227,0.2)", fontSize: "0.75rem" }}>✕</button>
                     </div>
                   ))}
                 </div>
@@ -177,21 +211,15 @@ function Header({ onEditProfile, onAbout, sessionSaved, sessions, onLoadSession,
           </div>
         )}
         <button onClick={onAbout} style={navBtn} onMouseEnter={e => e.target.style.color = T.cream} onMouseLeave={e => e.target.style.color = T.muted}>About</button>
-        {onEditProfile && <button onClick={onEditProfile} style={{ ...navBtn, border: `1px solid ${T.border}`, borderRadius: 50 }} onMouseEnter={e => e.target.style.color = T.cream} onMouseLeave={e => e.target.style.color = T.muted}>Edit Profile</button>}
       </div>
     </div>
   );
 }
 
-// ─── Landing ─────────────────────────────────────────────────────────
 function LandingPage({ onStart }) {
   return (
     <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box", position: "relative", overflow: "hidden" }}>
-      <img
-        src="/hero.jpg"
-        alt=""
-        style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none" }}
-      />
+      <img src="/hero.jpg" alt="" style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none", maxWidth: "60vw" }} />
       <TeknonLogo size="md" />
       <div style={{ maxWidth: 560, position: "relative", zIndex: 1 }}>
         <h1 style={{ ...T.body, fontSize: "clamp(2.8rem,8vw,5.5rem)", fontWeight: 300, lineHeight: 1.05, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2rem" }}>
@@ -204,12 +232,11 @@ function LandingPage({ onStart }) {
   );
 }
 
-// ─── Mentor Select ────────────────────────────────────────────────────
 const PORTRAIT_ARTISTS = [
   { file: "Rembrandt.jpg",  name: "Rembrandt" },
   { file: "Sargent.jpg",    name: "John Singer Sargent" },
   { file: "OKeeffe.jpg",    name: "Georgia O'Keeffe" },
-  { file: "DaVici.png",    name: "Leonardo da Vinci" },
+  { file: "DaVici.jpg",     name: "Leonardo da Vinci" },
   { file: "Monet.jpg",      name: "Claude Monet" },
   { file: "Kahlo.jpg",      name: "Frida Kahlo" },
   { file: "Caravaggio.jpg", name: "Caravaggio" },
@@ -300,7 +327,6 @@ function MentorSelectPage({ onSelect }) {
   useEffect(() => { setTimeout(() => inputRef.current?.focus(), 300); }, []);
   return (
     <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "row", boxSizing: "border-box", overflow: "hidden" }}>
-      {/* Left — text, same layout as landing page */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box", minWidth: 0 }}>
         <TeknonLogo size="md" />
         <div style={{ maxWidth: 480 }}>
@@ -327,8 +353,7 @@ function MentorSelectPage({ onSelect }) {
           </div>
           <div style={{ marginTop: "2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
             <PillBtn onClick={() => proceed()} disabled={!name.trim()}>begin</PillBtn>
-            <button onClick={() => onSelect("")}
-              style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
+            <button onClick={() => onSelect("")} style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
               skip for now
             </button>
           </div>
@@ -338,14 +363,12 @@ function MentorSelectPage({ onSelect }) {
         </div>
         <div />
       </div>
-      {/* Right — collage on desktop, vertical scroll strip on mobile */}
       {isMobile ? (
         <div style={{ width: 90, borderLeft: `1px solid ${T.border}`, overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", flexShrink: 0, padding: "1rem 0.5rem", display: "flex", flexDirection: "column", gap: "0.6rem", alignItems: "center" }}>
           {PORTRAIT_ARTISTS.map((artist, i) => (
             <button key={i} onClick={() => proceed(artist.name)}
               style={{ flexShrink: 0, width: 70, height: 88, background: "#3a3835", border: "none", borderRadius: 3, overflow: "hidden", cursor: "pointer", boxShadow: "0 3px 10px rgba(0,0,0,0.3)", padding: 0 }}>
-              <img src={`/artists/${artist.file}`} alt={artist.name}
-                style={{ width: "100%", height: "82%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
+              <img src={`/artists/${artist.file}`} alt={artist.name} style={{ width: "100%", height: "82%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
               <div style={{ height: "18%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 3px" }}>
                 <p style={{ ...T.body, fontSize: "0.42rem", letterSpacing: "0.04em", color: "rgba(240,235,227,0.6)", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%", margin: 0 }}>{artist.name}</p>
               </div>
@@ -363,7 +386,6 @@ function MentorSelectPage({ onSelect }) {
   );
 }
 
-// ─── About ───────────────────────────────────────────────────────────
 function AboutPage({ onBack }) {
   return (
     <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
@@ -396,7 +418,6 @@ function AboutPage({ onBack }) {
   );
 }
 
-// ─── Quote ───────────────────────────────────────────────────────────
 function InspirationalQuote() {
   const [quote, setQuote] = useState(null);
   const quotes = [
@@ -410,6 +431,26 @@ function InspirationalQuote() {
     { text: "I found I could say things with colour and shapes that I couldn't say any other way.", author: "Georgia O'Keeffe" },
     { text: "Great things are done by a series of small things brought together.", author: "Vincent van Gogh" },
     { text: "Creativity takes courage.", author: "Henri Matisse" },
+    { text: "To draw, you must close your eyes and sing.", author: "Pablo Picasso" },
+    { text: "I saw the angel in the marble and carved until I set him free.", author: "Michelangelo" },
+    { text: "Paint what you feel, not what you see.", author: "Paul Cézanne" },
+    { text: "I paint flowers so they will not die.", author: "Frida Kahlo" },
+    { text: "If you hear a voice within you say you cannot paint, then by all means paint and that voice will be silenced.", author: "Vincent van Gogh" },
+    { text: "One must always draw, draw with the eyes, when one cannot draw with a pencil.", author: "Balthus" },
+    { text: "Colour is a power which directly influences the soul.", author: "Wassily Kandinsky" },
+    { text: "To be an artist is to believe in life.", author: "Henry Moore" },
+    { text: "I never paint dreams or nightmares. I paint my own reality.", author: "Frida Kahlo" },
+    { text: "Drawing is the honesty of the art. There is no possibility of cheating. It is either good or bad.", author: "Salvador Dalí" },
+    { text: "Art is the lie that enables us to realise the truth.", author: "Pablo Picasso" },
+    { text: "Painting is silent poetry, and poetry is painting that speaks.", author: "Plutarch" },
+    { text: "I want to make beautiful things, even if nobody cares.", author: "Saul Bass" },
+    { text: "Comics are a gateway drug to literacy.", author: "Art Spiegelman" },
+    { text: "Always carry a sketchbook. It is your visual diary.", author: "Will Eisner" },
+    { text: "Animation is not the art of drawings that move, but the art of movements that are drawn.", author: "Norman McLaren" },
+    { text: "I want to create anime that puts Japanese animation on the world stage.", author: "Hayao Miyazaki" },
+    { text: "Sculpture is the art of the intelligence.", author: "Pablo Picasso" },
+    { text: "I work with the same intensity whether the piece is large or small.", author: "Barbara Hepworth" },
+    { text: "The printmaker's line has a rawness and immediacy that no other medium can match.", author: "Käthe Kollwitz" },
   ];
   useEffect(() => { setQuote(quotes[Math.floor(Math.random() * quotes.length)]); }, []);
   if (!quote) return null;
@@ -421,111 +462,6 @@ function InspirationalQuote() {
   );
 }
 
-// ─── Profile Setup ────────────────────────────────────────────────────
-function ProfileSetup({ onSave, existing, onAbout }) {
-  const [artists, setArtists] = useState(existing?.artists || []);
-  const [movements, setMovements] = useState(existing?.movements || []);
-  const [mediums, setMediums] = useState(existing?.mediums || []);
-  const [level, setLevel] = useState(existing?.level || "");
-  const [goals, setGoals] = useState(existing?.goals || []);
-  const [customArtist, setCustomArtist] = useState("");
-  const toggle = (arr, setArr, val) => setArr(arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val]);
-  const addCustom = () => { const v = customArtist.trim(); if (v && !artists.includes(v)) setArtists([...artists, v]); setCustomArtist(""); };
-  const suggested = movements.length > 0 ? [...new Set(movements.flatMap(m => MOVEMENT_ARTISTS[m] || []))] : ALL_ARTISTS;
-  const visible = [...new Set([...suggested, ...artists.filter(a => !suggested.includes(a))])];
-  const handleMovement = m => {
-    const nxt = movements.includes(m) ? movements.filter(x => x !== m) : [...movements, m];
-    setMovements(nxt);
-    const ns = [...new Set(nxt.flatMap(mv => MOVEMENT_ARTISTS[mv] || []))];
-    if (nxt.length > 0) setArtists(prev => prev.filter(a => ns.includes(a) || !ALL_ARTISTS.includes(a)));
-  };
-  const valid = (artists.length || movements.length) && mediums.length && level && goals.length;
-
-  const inputStyle = { width: "100%", boxSizing: "border-box", ...T.body, fontSize: "0.85rem", color: T.cream, background: "transparent", border: `1px solid ${T.border}`, borderRadius: 50, padding: "0.6rem 1.2rem", outline: "none" };
-
-  return (
-    <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
-      <div style={{ padding: "1.2rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: `1px solid ${T.border}`, background: "rgba(107,107,105,0.96)" }}>
-        <TeknonLogo size="sm" />
-        <button onClick={onAbout} style={{ ...T.body, fontSize: "0.75rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer" }}>About</button>
-      </div>
-      <div style={{ maxWidth: 640, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
-        <div style={{ marginBottom: "1rem" }}>
-          <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "1rem" }}>Welcome to</p>
-          <TeknonLogo size="lg" />
-        </div>
-        <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, lineHeight: 1.8, maxWidth: 480, marginTop: "1.5rem" }}>
-          A private studio where your work is met with thoughtful, generous feedback in the spirit of the masters.
-        </p>
-        <InspirationalQuote />
-
-        <p style={{ ...T.body, fontSize: "0.8rem", color: T.muted, marginBottom: "2.5rem" }}>
-          Tell us about your artistic journey so we can tailor your mentor's guidance personally to you.
-        </p>
-
-        {/* Movements */}
-        <div style={{ marginBottom: "2.5rem" }}>
-          <SectionLabel>Movements & styles that interest you</SectionLabel>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>{MOVEMENTS.map(m => <Tag key={m} label={m} selected={movements.includes(m)} onClick={() => handleMovement(m)} />)}</div>
-        </div>
-        <Hairline />
-
-        {/* Artists */}
-        <div style={{ marginBottom: "2.5rem" }}>
-          <SectionLabel>{movements.length > 0 ? "Artists who inspire you — based on your selections" : "Artists who inspire you"}</SectionLabel>
-          {movements.length === 0 && <p style={{ ...T.body, fontSize: "0.75rem", color: T.muted, marginBottom: "0.75rem" }}>Select a movement above to see relevant artists, or browse all below.</p>}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem" }}>{visible.map(a => <Tag key={a} label={a} selected={artists.includes(a)} onClick={() => toggle(artists, setArtists, a)} />)}</div>
-          <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
-            <input value={customArtist} onChange={e => setCustomArtist(e.target.value)} onKeyDown={e => e.key === "Enter" && addCustom()} placeholder="Add another artist…" style={{ ...inputStyle, flex: 1 }} />
-            <button onClick={addCustom} style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: `1px solid ${T.border}`, borderRadius: 50, padding: "0.6rem 1.2rem", cursor: "pointer" }}>Add</button>
-          </div>
-        </div>
-        <Hairline />
-
-        {/* Medium */}
-        <div style={{ marginBottom: "2.5rem" }}>
-          <SectionLabel>Your medium</SectionLabel>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>{MEDIUMS.map(m => <Tag key={m} label={m} selected={mediums.includes(m)} onClick={() => toggle(mediums, setMediums, m)} />)}</div>
-        </div>
-        <Hairline />
-
-        {/* Level */}
-        <div style={{ marginBottom: "2.5rem" }}>
-          <SectionLabel>Skill level</SectionLabel>
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>{LEVELS.map(l => <Tag key={l} label={l} selected={level === l} onClick={() => setLevel(l)} />)}</div>
-          <p style={{ ...T.body, fontSize: "0.72rem", color: T.muted, marginTop: "0.75rem" }}>There is no wrong answer — every level is welcome here.</p>
-        </div>
-        <Hairline />
-
-        {/* Goals */}
-        <div style={{ marginBottom: "2.5rem" }}>
-          <SectionLabel>What do you love to paint / draw?</SectionLabel>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>{GOALS.map(g => <Tag key={g} label={g} selected={goals.includes(g)} onClick={() => toggle(goals, setGoals, g)} />)}</div>
-        </div>
-
-        {!valid && (
-          <div style={{ marginBottom: "1.5rem" }}>
-            <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.15em", color: T.amber, textTransform: "uppercase", marginBottom: "0.5rem" }}>Still needed:</p>
-            {!artists.length && !movements.length && <p style={{ ...T.body, fontSize: "0.8rem", color: T.muted, marginBottom: "0.3rem" }}>✕ Select at least one movement or artist</p>}
-            {!mediums.length && <p style={{ ...T.body, fontSize: "0.8rem", color: T.muted, marginBottom: "0.3rem" }}>✕ Select at least one medium</p>}
-            {!level && <p style={{ ...T.body, fontSize: "0.8rem", color: T.muted, marginBottom: "0.3rem" }}>✕ Select your skill level</p>}
-            {!goals.length && <p style={{ ...T.body, fontSize: "0.8rem", color: T.muted, marginBottom: "0.3rem" }}>✕ Select at least one subject</p>}
-          </div>
-        )}
-
-        <PillBtn onClick={() => valid && onSave({ artists, movements, mediums, level, goals })} disabled={!valid} style={{ width: "100%", textAlign: "center" }}>
-          Enter the Studio →
-        </PillBtn>
-
-        <p style={{ ...T.body, fontSize: "0.7rem", color: "rgba(240,235,227,0.25)", textAlign: "center", marginTop: "1.5rem", lineHeight: 1.8 }}>
-          Your sessions are private and belong only to you.<br />No public sharing. No judgement. Just honest, expert guidance.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// ─── Feedback renderer ────────────────────────────────────────────────
 function FeedbackBlock({ text }) {
   return text.split("\n").map((line, i) => {
     if (/^\d+\.\s\*\*/.test(line)) {
@@ -542,7 +478,6 @@ function FeedbackBlock({ text }) {
   });
 }
 
-// ─── Resource card ────────────────────────────────────────────────────
 function ResourceCard({ r }) {
   const [hover, setHover] = useState(false);
   return (
@@ -559,7 +494,6 @@ function ResourceCard({ r }) {
   );
 }
 
-// ─── Lost Button ──────────────────────────────────────────────────────
 function LostButton({ onSelect }) {
   const [open, setOpen] = useState(false);
   const opts = ["It just doesn't look right, but I can't say why", "I don't know what to work on next", "Something feels off but I can't put my finger on it", "I've lost confidence in this piece", "I keep making the same mistake and don't know how to fix it", "It looks flat or lifeless and I don't know why"];
@@ -586,7 +520,6 @@ function LostButton({ onSelect }) {
   );
 }
 
-// ─── Voice Button ─────────────────────────────────────────────────────
 function VoiceButton({ onTranscript }) {
   const [state, setState] = useState("idle");
   const recRef = useRef(null);
@@ -604,8 +537,7 @@ function VoiceButton({ onTranscript }) {
   );
 }
 
-// ─── Classes Panel ────────────────────────────────────────────────────
-function ClassesPanel({ profile }) {
+function ClassesPanel() {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("both");
   const [loading, setLoading] = useState(false);
@@ -620,10 +552,9 @@ function ClassesPanel({ profile }) {
       const city = geo.address?.city || geo.address?.town || geo.address?.village || "your area";
       const location = `${city}, ${geo.address?.country || ""}`;
       setLoc(location);
-      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
       const typeLabel = type === "schools" ? "art schools" : type === "workshops" ? "workshops and short courses" : "art schools, workshops and short courses";
       await new Promise(r => setTimeout(r, 10000));
-      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in ${styleCtx || "painting"} at developing level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
+      const text = await callAPI([{ role: "user", content: `Find 5-6 real, active ${typeLabel} near ${location} for an artist interested in painting at developing level.\n\nReturn ONLY valid JSON:\n[{"name":"...","type":"school|workshop","location":"...","description":"...","url":"...","distance":"local|regional|international"}]` }]);
       const c = text.replace(/```json|```/g, "").trim(); const s = c.indexOf("["), e = c.lastIndexOf("]");
       if (s !== -1) setResults(JSON.parse(c.slice(s, e + 1))); else setError("Couldn't parse results.");
     } catch (e) { setError(e.code === 1 ? "Location access denied." : `Error: ${e.message}`); }
@@ -641,7 +572,7 @@ function ClassesPanel({ profile }) {
       {open && (
         <div style={{ marginTop: "1.5rem" }}>
           {!results && !loading && <>
-            <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted, marginBottom: "1.25rem", lineHeight: 1.7 }}>We'll use your location to find schools and workshops suited to your style and level.</p>
+            <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted, marginBottom: "1.25rem", lineHeight: 1.7 }}>We'll use your location to find schools and workshops near you.</p>
             <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.25rem" }}>
               {[["both", "Schools & Workshops"], ["schools", "Art Schools"], ["workshops", "Workshops"]].map(([v, l]) => (
                 <button key={v} onClick={() => setType(v)} style={{ ...T.body, fontSize: "0.75rem", color: type === v ? T.cream : T.muted, background: "transparent", border: `1px solid ${type === v ? T.border : "rgba(240,235,227,0.1)"}`, borderRadius: 50, padding: "0.5rem 1rem", cursor: "pointer", transition: "all 0.2s" }}>{l}</button>
@@ -674,25 +605,25 @@ function ClassesPanel({ profile }) {
   );
 }
 
-// ─── Easel Page ───────────────────────────────────────────────────────
-function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoadSession, onDeleteSession, defaultMentor }) {
+function EaselPage({ onAbout, onAnalyse, sessions, onLoadSession, onDeleteSession, defaultMentor }) {
   const [image, setImage] = useState(null);
   const [imageB64, setImageB64] = useState(null);
   const [imageMime, setImageMime] = useState("image/jpeg");
+  const [medium, setMedium] = useState("");
   const [description, setDescription] = useState("");
   const [struggle, setStruggle] = useState("");
   const [targetArtist, setTargetArtist] = useState(defaultMentor || "");
-  const [medium, setMedium] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState("");
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef();
   const cameraRef = useRef();
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleFile = file => {
     if (!file) return;
-    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif)$/i)) {
+    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif|avif)$/i)) {
       setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar."); return;
     }
     const reader = new FileReader();
@@ -707,13 +638,13 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
             canvas.getContext("2d").drawImage(img, 0, 0, w, h);
             const compressed = canvas.toDataURL("image/jpeg", 0.82);
             setImage(compressed); setImageB64(compressed.split(",")[1]); setImageMime("image/jpeg"); setError(null);
-          } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); }
+          } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); }
         };
-        img.onerror = () => { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); };
+        img.onerror = () => { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); };
         img.src = e.target.result;
-      } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null); }
+      } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); }
     };
-    reader.onerror = () => setError("Could not read the image file. Please try another.");
+    reader.onerror = () => setError("This image couldn't be read — try saving it as a JPG first and uploading again.");
     reader.readAsDataURL(file);
   };
 
@@ -721,12 +652,11 @@ function EaselPage({ profile, onEditProfile, onAbout, onAnalyse, sessions, onLoa
     if (!imageB64 || !description) return;
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
     const profileCtx = medium ? `The artist is working in ${medium}.` : "";
-    const isDeceased = targetArtist && DECEASED_ARTISTS.has(targetArtist);
-    const voiceInstruction = isDeceased
-      ? `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. Write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind.`
-      : targetArtist
-        ? `You are a masterful mentor deeply versed in the work and teachings of ${targetArtist}. Reference their documented techniques and known philosophy, but speak as a knowledgeable mentor rather than in their voice directly.`
-        : `You are a masterful, deeply encouraging art mentor with encyclopaedic knowledge of art history.`;
+    const voiceInstruction = !targetArtist
+      ? `You are a masterful, deeply encouraging art mentor with encyclopaedic knowledge of art history.`
+      : LIVING_ARTISTS.has(targetArtist)
+      ? `You are a masterful mentor deeply versed in the work and teachings of ${targetArtist}. Reference their documented techniques and known philosophy, but speak as a knowledgeable mentor rather than in their voice directly.`
+      : `You are to write this feedback IN THE VOICE AND SPIRIT OF ${targetArtist}. If ${targetArtist} is a historical artist who is no longer living, write in first person as if you ARE ${targetArtist} speaking directly to this artist. Use what is known about ${targetArtist}'s philosophy, personality, documented teachings, letters and writings to shape your language and perspective. Make it feel like a genuine encounter with that artist's mind. If you are not certain whether ${targetArtist} is living or deceased, default to the spirit voice.`;
 
     const prompt = `${voiceInstruction} ${profileCtx}
 
@@ -752,7 +682,7 @@ Provide encouraging, specific feedback:
       const text = data.content?.filter(b => b.type === "text").map(b => b.text).join("\n");
       if (!text) throw new Error("No feedback received — please try again.");
       setLoadingStep("Opening your feedback…");
-      const s = { id: `session:${Date.now()}`, date: Date.now(), imageSrc: image, imageB64, imageMime, description, struggle, targetArtist, feedback: text, resources: null, chatHistory: [] };
+      const s = { id: `session:${Date.now()}`, date: Date.now(), imageSrc: image, imageB64, imageMime, description, struggle, targetArtist, medium, feedback: text, resources: null, chatHistory: [] };
       await onAnalyse(s);
     } catch (e) { clearTimeout(timeout); setError(`${e.message}`); setLoading(false); setLoadingStep(""); }
   };
@@ -761,17 +691,12 @@ Provide encouraging, specific feedback:
 
   return (
     <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
-      <Header onEditProfile={onEditProfile} onAbout={onAbout} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
+      <Header onAbout={onAbout} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
       <div style={{ maxWidth: 600, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
         <h2 style={{ ...T.serif, fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 300, color: T.cream, marginBottom: "0.5rem" }}>The Easel</h2>
         <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, marginBottom: "3rem", lineHeight: 1.7 }}>Upload your work and describe what you're painting — your mentor will do the rest.</p>
 
-        {/* Upload zone */}
-        <div
-          onDrop={e => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); }}
-          onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-          onDragLeave={() => setDragOver(false)}
-          onClick={() => fileRef.current.click()}
+        <div onDrop={e => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); }} onDragOver={e => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)} onClick={() => fileRef.current.click()}
           style={{ border: `1px solid ${dragOver ? T.borderHover : T.border}`, borderRadius: 16, minHeight: 260, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", overflow: "hidden", marginBottom: "1rem", transition: "border-color 0.2s", background: dragOver ? "rgba(240,235,227,0.04)" : "transparent" }}>
           {image
             ? <img src={image} alt="upload" style={{ width: "100%", height: "100%", objectFit: "contain", maxHeight: 320 }} />
@@ -796,15 +721,6 @@ Provide encouraging, specific feedback:
         </div>
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" style={{ display: "none" }} onChange={e => handleFile(e.target.files[0])} />
 
-        {/* Artist / Style */}
-        <div style={{ marginBottom: "2.5rem" }}>
-  <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>Medium</p>
-  <select value={medium} onChange={e => setMedium(e.target.value)}
-    style={{ width: "100%", ...T.body, fontSize: "0.9rem", color: medium ? T.cream : T.muted, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", cursor: "pointer", appearance: "none", WebkitAppearance: "none" }}>
-    <option value="" style={{background:"#6b6b69"}}>Select your medium…</option>
-    {MEDIUMS.map(m => <option key={m} value={m} style={{background:"#6b6b69"}}>{m}</option>)}
-  </select>
-</div>
         <div style={{ marginBottom: "2.5rem" }}>
           <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>Artist / Style I'm aiming for</p>
           <input value={targetArtist} onChange={e => setTargetArtist(e.target.value)}
@@ -812,13 +728,20 @@ Provide encouraging, specific feedback:
             style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "0.9rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none" }} />
         </div>
 
-        {/* Description */}
+        <div style={{ marginBottom: "2.5rem" }}>
+          <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>Medium <span style={{ textTransform: "none", letterSpacing: "normal", fontSize: "0.72rem" }}>(optional)</span></p>
+          <select value={medium} onChange={e => setMedium(e.target.value)}
+            style={{ width: "100%", ...T.body, fontSize: "0.9rem", color: medium ? T.cream : T.muted, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", cursor: "pointer", appearance: "none", WebkitAppearance: "none" }}>
+            <option value="" style={{ background: "#6b6b69" }}>Select your medium…</option>
+            {MEDIUMS.map(m => <option key={m} value={m} style={{ background: "#6b6b69" }}>{m}</option>)}
+          </select>
+        </div>
+
         <div style={{ marginBottom: "2.5rem" }}>
           <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>What are you painting / drawing?</p>
           <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="e.g. A portrait study in oil paint…" style={textareaStyle} />
         </div>
 
-        {/* Struggle */}
         <div style={{ marginBottom: "3rem" }}>
           <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>
             What are you struggling with? <span style={{ textTransform: "none", letterSpacing: "normal", fontSize: "0.72rem" }}>(optional)</span>
@@ -830,7 +753,6 @@ Provide encouraging, specific feedback:
           </div>
         </div>
 
-        {/* CTA */}
         <PillBtn onClick={analyse} disabled={!image || !description || loading} style={{ width: "100%", textAlign: "center", fontSize: "1rem", padding: "1rem 2rem" }}>
           {loading ? loadingStep : "Analyse My Work →"}
         </PillBtn>
@@ -851,9 +773,8 @@ Provide encouraging, specific feedback:
   );
 }
 
-// ─── Response Page ────────────────────────────────────────────────────
-function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSaveSession, sessions, onLoadSession, onDeleteSession }) {
-  const { imageSrc, imageB64, imageMime, description, struggle, targetArtist, feedback } = session;
+function ResponsePage({ session, onBack, onAbout, onSaveSession, sessions, onLoadSession, onDeleteSession }) {
+  const { imageSrc, imageB64, imageMime, description, struggle, targetArtist, medium, feedback } = session;
   const [resources, setResources] = useState(session.resources || null);
   const [resourcesLoading, setResourcesLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState(session.chatHistory || []);
@@ -878,13 +799,12 @@ function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSave
     }
   }, []);
 
-  const profileCtx = session.medium ? `The artist is working in ${session.medium}.` : "";
   const sendFollowUp = async () => {
     if (!followUp.trim() || chatLoading) return;
     const q = followUp.trim(); setFollowUp(""); setChatError(null);
     const nh = [...chatHistory, { role: "user", text: q }]; setChatHistory(nh); setChatLoading(true);
     try {
-      const ctx = `You are a masterful, encouraging art mentor. ${profileCtx} Working on: "${description}". Target: ${targetArtist || "not specified"}. Initial analysis:\n\n${feedback}\n\nAnswer with generosity and master artist wisdom.`;
+      const ctx = `You are a masterful, encouraging art mentor.${medium ? ` The artist works in ${medium}.` : ""} Working on: "${description}". Mentor: ${targetArtist || "not specified"}. Initial analysis:\n\n${feedback}\n\nAnswer with generosity and master artist wisdom.`;
       const msgs = [{ role: "user", content: [{ type: "image", source: { type: "base64", media_type: imageMime, data: imageB64 } }, { type: "text", text: ctx }] }, { role: "assistant", content: "Understood. Please ask me anything." }, ...nh.map(m => ({ role: m.role === "user" ? "user" : "assistant", content: m.text }))];
       const reply = await callAPI(msgs);
       const uh = [...nh, { role: "assistant", text: reply }]; setChatHistory(uh);
@@ -895,27 +815,26 @@ function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSave
 
   return (
     <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
-      <Header onEditProfile={onEditProfile} onAbout={onAbout} sessionSaved={true} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
+      <Header onAbout={onAbout} sessionSaved={true} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
       <div ref={topRef} style={{ maxWidth: 680, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
         <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", marginBottom: "3rem", display: "flex", alignItems: "center", gap: "0.4rem" }}
           onMouseEnter={e => e.currentTarget.style.color = T.cream} onMouseLeave={e => e.currentTarget.style.color = T.muted}>
           ← Analyse another work
         </button>
 
-        {/* Artwork + meta */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", marginBottom: "3.5rem", alignItems: "center" }}>
           <img src={imageSrc} alt="artwork" style={{ width: "100%", borderRadius: 12, border: `1px solid ${T.border}`, objectFit: "contain", maxHeight: 280, background: "#0d0d0d" }} />
           <div>
             <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>Your work</p>
             <p style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.8)", lineHeight: 1.7, marginBottom: "0.5rem" }}>{description}</p>
             {targetArtist && <p style={{ ...T.body, fontSize: "0.78rem", color: T.amber, marginBottom: "0.3rem" }}>Mentor: {targetArtist}</p>}
+            {medium && <p style={{ ...T.body, fontSize: "0.78rem", color: T.muted, marginBottom: "0.3rem" }}>Medium: {medium}</p>}
             {struggle && <p style={{ ...T.body, fontSize: "0.78rem", color: T.muted, fontStyle: "italic" }}>"{struggle}"</p>}
           </div>
         </div>
 
         <Hairline />
 
-        {/* Feedback */}
         <div style={{ marginBottom: "1rem" }}>
           <SectionLabel>Studio Analysis</SectionLabel>
           {targetArtist && (
@@ -928,22 +847,19 @@ function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSave
 
         <Hairline />
 
-        {/* Resources */}
         {(resourcesLoading || resources) && (
           <div style={{ marginBottom: "0" }}>
             <SectionLabel>Related Resources{targetArtist ? ` — ${targetArtist}` : ""}</SectionLabel>
-            {resourcesLoading && <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted }} className="animate-pulse">Finding articles, interviews & videos…</p>}
+            {resourcesLoading && <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted }}>Finding articles, interviews & videos…</p>}
             {resources && resources.map((r, i) => <ResourceCard key={i} r={r} />)}
             <Hairline />
           </div>
         )}
 
-        {/* Classes */}
-        <ClassesPanel profile={profile} />
+        <ClassesPanel />
 
         <Hairline />
 
-        {/* Follow-up chat */}
         <div>
           <SectionLabel>Ask a Follow-up Question</SectionLabel>
           {chatHistory.length > 0 && (
@@ -982,10 +898,7 @@ function ResponsePage({ session, profile, onBack, onEditProfile, onAbout, onSave
   );
 }
 
-// ─── App root ─────────────────────────────────────────────────────────
 export default function App() {
-  const [profile, setProfile] = useState(null);
-  const [editing, setEditing] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [page, setPage] = useState("landing");
   const [currentSession, setCurrentSession] = useState(null);
@@ -994,7 +907,6 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      try { const r = await storage.get("art-mentor-profile"); if (r) setProfile(JSON.parse(r.value)); } catch { }
       try {
         const r = await storage.list("session:");
         if (r?.keys?.length) {
@@ -1006,22 +918,16 @@ export default function App() {
     })();
   }, []);
 
-  const saveProfile = async p => { await storage.set("art-mentor-profile", JSON.stringify(p)); setProfile(p); setEditing(false); };
   const saveSession = async s => { try { await storage.set(s.id, JSON.stringify(s)); setSessions(prev => [s, ...prev.filter(x => x.id !== s.id)].sort((a, b) => b.date - a.date)); } catch { } };
   const deleteSession = async id => { try { await storage.delete(id); setSessions(prev => prev.filter(s => s.id !== id)); } catch { } };
-
-  const handleMentorSelect = (artist) => { setSelectedMentor(artist); setPage(profile ? "easel" : "profile"); };
-  const handleAnalyse = async s => {
-    const session = s.targetArtist ? s : { ...s, targetArtist: selectedMentor || "" };
-    await saveSession(session); setCurrentSession(session); setPage("response");
-  };
+  const handleMentorSelect = (artist) => { setSelectedMentor(artist); setPage("easel"); };
+  const handleAnalyse = async s => { const session = s.targetArtist ? s : { ...s, targetArtist: selectedMentor || "" }; await saveSession(session); setCurrentSession(session); setPage("response"); };
   const handleLoad = s => { setCurrentSession(s); setPage("response"); };
 
   if (!loaded) return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: BG, ...T.body, fontSize: "0.8rem", color: T.muted }}>Loading…</div>;
   if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} />;
-  if (page === "about") return <AboutPage onBack={() => setPage(profile ? "easel" : "mentor")} />;
-  // Profile setup removed
-  if (page === "response" && currentSession) return <ResponsePage session={currentSession} onBack={() => setPage("mentor")} onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
-  return <EaselPage onEditProfile={() => setEditing(true)} onAbout={() => setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
+  if (page === "about") return <AboutPage onBack={() => setPage("mentor")} />;
+  if (page === "response" && currentSession) return <ResponsePage session={currentSession} onBack={() => setPage("mentor")} onAbout={() => setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
+  return <EaselPage onAbout={() => setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
 }
