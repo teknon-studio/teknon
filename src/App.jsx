@@ -806,8 +806,7 @@ Format your response with these sections using ** markers:
 
   return (
     <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
-      <Header onAbout={onAbout} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
-      <div style={{ maxWidth: 600, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
+     <Header onAbout={onAbout} onLibrary={onLibrary} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />       <div style={{ maxWidth: 600, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
         <h2 style={{ ...T.serif, fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 300, color: T.cream, marginBottom: "0.5rem" }}>The Easel</h2>
         <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, marginBottom: "3rem", lineHeight: 1.7 }}>Upload your work and describe what you're painting — your mentor will do the rest.</p>
 
