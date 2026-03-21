@@ -210,7 +210,8 @@ function Header({ onAbout, sessionSaved, sessions, onLoadSession, onDeleteSessio
             )}
           </div>
         )}
-        <button onClick={onAbout} style={navBtn} onMouseEnter={e => e.target.style.color = T.cream} onMouseLeave={e => e.target.style.color = T.muted}>About</button>
+        <button onClick={onLibrary} style={navBtn} onMouseEnter={e => e.target.style.color = T.cream} onMouseLeave={e => e.target.style.color = T.muted}>Library</button>
+<button onClick={onAbout} style={navBtn} onMouseEnter={e => e.target.style.color = T.cream} onMouseLeave={e => e.target.style.color = T.muted}>About</button>
       </div>
     </div>
   );
