@@ -317,7 +317,7 @@ style={{ width: "100%", height: "96%", objectFit: "cover", objectPosition: "top"
 function MentorSelectPage({ onSelect, onLibrary }) {
   const [name, setName] = useState("");
   const [focused, setFocused] = useState(false);
-  const [isMobile] = useState(window.innerWidth < 768);
+  const [isMobile] = useState(window.innerWidth < 1024);
   const inputRef = useRef();
   const suggestions = PORTRAIT_ARTISTS.map(a => a.name);
   const filtered = name.length > 0 ? suggestions.filter(s => s.toLowerCase().includes(name.toLowerCase()) && s.toLowerCase() !== name.toLowerCase()) : [];
@@ -367,17 +367,17 @@ function MentorSelectPage({ onSelect, onLibrary }) {
         <div />
       </div>
       {isMobile ? (
-        <div style={{ width: 90, borderLeft: `1px solid ${T.border}`, overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", flexShrink: 0, padding: "1rem 0.5rem", display: "flex", flexDirection: "column", gap: "0.6rem", alignItems: "center" }}>
-          {PORTRAIT_ARTISTS.map((artist, i) => (
-            <button key={i} onClick={() => proceed(artist.name)}
-              style={{ flexShrink: 0, width: 70, height: 88, background: "#3a3835", border: "none", borderRadius: 3, overflow: "hidden", cursor: "pointer", boxShadow: "0 3px 10px rgba(0,0,0,0.3)", padding: 0 }}>
-              <img src={`/artists/${artist.file}`} alt={artist.name} style={{ width: "100%", height: "82%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
-              <div style={{ height: "18%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 3px" }}>
-                <p style={{ ...T.body, fontSize: "0.42rem", letterSpacing: "0.04em", color: "rgba(240,235,227,0.6)", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%", margin: 0 }}>{artist.name}</p>
-              </div>
-            </button>
-          ))}
-        </div>
+  <div style={{ width: "45%", borderLeft: `1px solid ${T.border}`, overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", flexShrink: 0, padding: "1rem" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
+      {PORTRAIT_ARTISTS.map((artist, i) => (
+        <button key={i} onClick={() => proceed(artist.name)}
+          style={{ width: "100%", aspectRatio: "3/4", background: "#3a3835", border: "none", borderRadius: 4, overflow: "hidden", cursor: "pointer", boxShadow: "0 3px 10px rgba(0,0,0,0.3)", padding: 0 }}>
+          <img src={`/artists/${artist.file}`} alt={artist.name}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
+        </button>
+      ))}
+    </div>
+  </div>
       ) : (
        <div style={{ width: "45%", position: "relative", overflowY: "auto", overflowX: "hidden", borderLeft: `1px solid ${T.border}`, flexShrink: 0 }}>
   <div style={{ position: "relative", width: "100%", minHeight: 1200 }}>
