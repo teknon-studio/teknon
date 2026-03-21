@@ -1045,5 +1045,5 @@ export default function App() {
   if (page === "about") return <AboutPage onBack={() => setPage(prevPage)} />;
   if (page === "library") return <LibraryPage onBack={() => setPage(prevPage)} selectedMentor={selectedMentor} />;
   if (page === "response" && currentSession) return <ResponsePage session={currentSession} onBack={() => setPage("mentor")} onAbout={() => { setPrevPage("response"); setPage("about"); }} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
-  return <EaselPage onAbout={() => { setPrevPage("easel"); setPage("about"); }} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
+  return <EaselPage onAbout={() => { setPrevPage("easel"); setPage("about"); }} onLibrary={() => { setPrevPage("easel"); setPage("library"); }} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
 }
