@@ -929,7 +929,7 @@ function ResponsePage({ session, onBack, onAbout, onSaveSession, sessions, onLoa
 
   return (
     <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
-      <Header onAbout={onAbout} sessionSaved={true} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
+      <Header onAbout={onAbout} onLibrary={onLibrary} sessionSaved={true} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
       <div ref={topRef} style={{ maxWidth: 680, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
         <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", marginBottom: "3rem", display: "flex", alignItems: "center", gap: "0.4rem" }}
           onMouseEnter={e => e.currentTarget.style.color = T.cream} onMouseLeave={e => e.currentTarget.style.color = T.muted}>
