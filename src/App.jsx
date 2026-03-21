@@ -257,28 +257,27 @@ const PORTRAIT_ARTISTS = [
 ];
 
 const COLLAGE_LAYOUT = [
-  { top:"4%",  left:"2%",  rotate:-4, size:130, zIndex:3 },
-  { top:"2%",  left:"22%", rotate:3,  size:115, zIndex:2 },
-  { top:"1%",  left:"42%", rotate:-2, size:125, zIndex:4 },
-  { top:"3%",  left:"62%", rotate:5,  size:110, zIndex:2 },
-  { top:"3%",  left:"80%", rotate:-3, size:120, zIndex:3 },
-  { top:"26%", left:"5%",  rotate:2,  size:120, zIndex:4 },
-  { top:"25%", left:"24%", rotate:-5, size:130, zIndex:3 },
-  { top:"24%", left:"45%", rotate:4,  size:115, zIndex:2 },
-  { top:"27%", left:"64%", rotate:-2, size:125, zIndex:5 },
-  { top:"25%", left:"82%", rotate:3,  size:110, zIndex:3 },
-  { top:"50%", left:"3%",  rotate:-3, size:125, zIndex:2 },
-  { top:"49%", left:"22%", rotate:5,  size:115, zIndex:4 },
-  { top:"51%", left:"42%", rotate:-4, size:130, zIndex:3 },
-  { top:"50%", left:"63%", rotate:2,  size:120, zIndex:2 },
-  { top:"52%", left:"81%", rotate:-5, size:115, zIndex:4 },
-  { top:"73%", left:"6%",  rotate:4,  size:120, zIndex:3 },
-  { top:"72%", left:"25%", rotate:-2, size:130, zIndex:2 },
-  { top:"74%", left:"44%", rotate:3,  size:115, zIndex:5 },
-  { top:"73%", left:"64%", rotate:-4, size:125, zIndex:3 },
-  { top:"75%", left:"82%", rotate:2,  size:110, zIndex:2 },
+  { top:"2%",  left:"1%",  rotate:-4, size:260, zIndex:3 },
+  { top:"1%",  left:"22%", rotate:3,  size:230, zIndex:2 },
+  { top:"0%",  left:"42%", rotate:-2, size:250, zIndex:4 },
+  { top:"2%",  left:"62%", rotate:5,  size:220, zIndex:2 },
+  { top:"1%",  left:"80%", rotate:-3, size:240, zIndex:3 },
+  { top:"34%", left:"3%",  rotate:2,  size:240, zIndex:4 },
+  { top:"33%", left:"24%", rotate:-5, size:260, zIndex:3 },
+  { top:"32%", left:"45%", rotate:4,  size:230, zIndex:2 },
+  { top:"35%", left:"64%", rotate:-2, size:250, zIndex:5 },
+  { top:"33%", left:"82%", rotate:3,  size:220, zIndex:3 },
+  { top:"66%", left:"2%",  rotate:-3, size:250, zIndex:2 },
+  { top:"65%", left:"22%", rotate:5,  size:230, zIndex:4 },
+  { top:"67%", left:"42%", rotate:-4, size:260, zIndex:3 },
+  { top:"66%", left:"63%", rotate:2,  size:240, zIndex:2 },
+  { top:"68%", left:"81%", rotate:-5, size:230, zIndex:4 },
+  { top:"99%", left:"4%",  rotate:4,  size:240, zIndex:3 },
+  { top:"98%", left:"25%", rotate:-2, size:260, zIndex:2 },
+  { top:"100%",left:"44%", rotate:3,  size:230, zIndex:5 },
+  { top:"99%", left:"64%", rotate:-4, size:250, zIndex:3 },
+  { top:"101%",left:"82%", rotate:2,  size:220, zIndex:2 },
 ];
-
 function ArtistCollage({ onSelect }) {
   const [hovered, setHovered] = useState(null);
   return (
@@ -300,10 +299,8 @@ function ArtistCollage({ onSelect }) {
             }}>
             <div style={{ width: "100%", height: "100%", background: "#3a3835", overflow: "hidden", borderRadius: 2 }}>
               <img src={`/artists/${artist.file}`} alt={artist.name}
-                style={{ width: "100%", height: "88%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
-              <div style={{ height: "12%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4px" }}>
-                <p style={{ ...T.body, fontSize: "0.55rem", letterSpacing: "0.08em", color: "rgba(240,235,227,0.6)", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%", margin: 0 }}>{artist.name}</p>
-              </div>
+              style={{ width: "100%", height: "96%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }}  
+              <div style={{ height: "4%" }} />
             </div>
             {isHov && (
               <div style={{ position: "absolute", bottom: -28, left: "50%", transform: "translateX(-50%)", whiteSpace: "nowrap", ...T.body, fontSize: "0.7rem", color: T.amber, letterSpacing: "0.06em" }}>
