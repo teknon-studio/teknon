@@ -904,7 +904,7 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
       (async () => {
         setResourcesLoading(true);
         try {
-          const text = await callAPI([{ role: "user", content: `Find 4-6 real online resources about "${targetArtist}".\n\nReturn ONLY valid JSON:\n[{"title":"...","url":"...","source":"...","type":"article|video|interview|tutorial|website","description":"one sentence"}]\n\nOnly real URLs.` }]);
+          const text = await callAPI([{ role: "user", content: `Find 4-6 real online resources that would genuinely help an artist with the specific issues raised in this feedback:\n\n${feedback}\n\nPrioritise practical tutorials, technique videos, and instructional articles that directly address the problems discussed — for example if the feedback mentions hair painting, find resources specifically about painting hair. Only include resources about ${targetArtist} if they are specifically instructional about technique. Avoid biographical articles, museum pages, or general overviews.\n\nReturn ONLY valid JSON:\n[{"title":"...","url":"...","source":"...","type":"article|video|interview|tutorial|website","description":"one sentence"}]\n\nOnly real URLs.` }]);
           const c = text.replace(/```json|```/g, "").trim(); const s = c.indexOf("["), e = c.lastIndexOf("]");
           if (s !== -1) { const r = JSON.parse(c.slice(s, e + 1)); setResources(r); onSaveSession({ ...session, resources: r }); }
         } catch { }
