@@ -463,6 +463,107 @@ function InspirationalQuote() {
   );
 }
 
+function LibraryPage({ onBack, selectedMentor }) {
+  const [question, setQuestion] = useState("");
+  const [useVoice, setUseVoice] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [entries, setEntries] = useState([]);
+  const bottomRef = useRef();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await storage.list("library:");
+        if (r?.keys?.length) {
+          const loaded = await Promise.all(r.keys.map(async k => { try { const d = await storage.get(k); return d ? JSON.parse(d.value) : null; } catch { return null; } }));
+          setEntries(loaded.filter(Boolean).sort((a, b) => a.date - b.date));
+        }
+      } catch { }
+    })();
+  }, []);
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [entries, loading]);
+
+  const ask = async () => {
+    if (!question.trim() || loading) return;
+    const q = question.trim();
+    setQuestion(""); setError(null); setLoading(true);
+    try {
+      const voiceCtx = useVoice && selectedMentor
+        ? LIVING_ARTISTS.has(selectedMentor)
+          ? `You are a knowledgeable mentor deeply versed in the work and philosophy of ${selectedMentor}. Answer drawing on their known approach and documented thinking.`
+          : `You are answering in the spirit of ${selectedMentor}. Draw on their documented writings, letters and recorded teachings. Speak with the directness of someone who spent a lifetime in the studio. No theatrical actions or affectations — just genuine, accumulated knowledge.`
+        : `You are a masterful, experienced art tutor and technician with encyclopaedic knowledge of artists' materials, techniques, art history and studio practice across all media and traditions.`;
+      const text = await callAPI([{ role: "user", content: `${voiceCtx}\n\nA student has asked the following question:\n\n"${q}"\n\nGive a thorough, practical, genuinely useful answer drawing on deep knowledge of artists' materials, techniques and art history. Be specific and direct — like a great tutor answering at the easel or in the studio. Where relevant, mention specific artists, materials, or approaches by name. Avoid generic advice.` }], true, 1500);
+      const entry = { id: `library:${Date.now()}`, date: Date.now(), question: q, answer: text, voice: useVoice && selectedMentor ? selectedMentor : null };
+      await storage.set(entry.id, JSON.stringify(entry));
+      setEntries(prev => [...prev, entry]);
+    } catch (e) { setError(`Error: ${e.message}`); }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
+      <div style={{ padding: "1.2rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(107,107,105,0.96)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.border}`, zIndex: 10 }}>
+        <TeknonLogo size="sm" />
+        <PillBtn onClick={onBack} style={{ fontSize: "0.75rem", padding: "0.5rem 1.2rem" }}>← Back</PillBtn>
+      </div>
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
+        <h2 style={{ ...T.serif, fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 300, color: T.cream, marginBottom: "0.5rem" }}>The Studio Library</h2>
+        <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, marginBottom: "3rem", lineHeight: 1.7 }}>Ask any question about materials, technique, art history or studio practice.</p>
+
+        {entries.length > 0 && (
+          <div style={{ marginBottom: "3rem" }}>
+            {entries.map((e, i) => (
+              <div key={e.id}>
+                <div style={{ marginBottom: "2rem" }}>
+                  <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.15em", color: T.amber, textTransform: "uppercase", marginBottom: "0.75rem" }}>
+                    {e.voice ? `In the spirit of ${e.voice}` : "Studio knowledge"} · {new Date(e.date).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                  </p>
+                  <p style={{ ...T.body, fontSize: "1rem", color: T.cream, marginBottom: "1.25rem", lineHeight: 1.6 }}>"{e.question}"</p>
+                  <FeedbackBlock text={e.answer} />
+                </div>
+                {i < entries.length - 1 && <Hairline />}
+              </div>
+            ))}
+            <div ref={bottomRef} />
+          </div>
+        )}
+
+        {loading && (
+          <div style={{ marginBottom: "2rem" }}>
+            <Hairline />
+            <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted, padding: "1.5rem 0" }}>Consulting the library…</p>
+          </div>
+        )}
+
+        {error && <p style={{ ...T.body, fontSize: "0.82rem", color: "#f87171", marginBottom: "1rem" }}>{error}</p>}
+
+        <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: "2rem" }}>
+          <textarea value={question} onChange={e => setQuestion(e.target.value)}
+            onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(); } }}
+            rows={3} placeholder="e.g. My burnt umber is very thick and difficult to work with — what can I do?"
+            style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "0.9rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", resize: "none", lineHeight: 1.7, marginBottom: "1.5rem" }} />
+
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              {selectedMentor && (
+                <button onClick={() => setUseVoice(v => !v)}
+                  style={{ ...T.body, fontSize: "0.78rem", color: useVoice ? T.cream : T.muted, background: "transparent", border: `1px solid ${useVoice ? T.border : "rgba(240,235,227,0.1)"}`, borderRadius: 50, padding: "0.5rem 1.1rem", cursor: "pointer", transition: "all 0.2s" }}>
+                  {useVoice ? `✦ Voice of ${selectedMentor}` : `Ask as ${selectedMentor}?`}
+                </button>
+              )}
+            </div>
+            <PillBtn onClick={ask} disabled={!question.trim() || loading} style={{ fontSize: "0.9rem", padding: "0.75rem 2rem" }}>
+              {loading ? "Searching…" : "Ask →"}
+            </PillBtn>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 function FeedbackBlock({ text }) {
   return text.split("\n").map((line, i) => {
     if (/^\d+\.\s\*\*/.test(line)) {
