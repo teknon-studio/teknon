@@ -887,7 +887,7 @@ Format your response with these sections using ** markers:
   );
 }
 
-function ResponsePage({ session, onBack, onAbout, onSaveSession, sessions, onLoadSession, onDeleteSession }) {
+function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sessions, onLoadSession, onDeleteSession }) {
   const { imageSrc, imageB64, imageMime, description, struggle, targetArtist, medium, feedback } = session;
   const [resources, setResources] = useState(session.resources || null);
   const [resourcesLoading, setResourcesLoading] = useState(false);
