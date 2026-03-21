@@ -281,7 +281,7 @@ const COLLAGE_LAYOUT = [
 function ArtistCollage({ onSelect }) {
   const [hovered, setHovered] = useState(null);
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 500 }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 1200 }}>
       {PORTRAIT_ARTISTS.map((artist, i) => {
         const pos = COLLAGE_LAYOUT[i];
         const isHov = hovered === i;
@@ -379,11 +379,11 @@ function MentorSelectPage({ onSelect, onLibrary }) {
           ))}
         </div>
       ) : (
-        <div style={{ width: "45%", position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}`, flexShrink: 0 }}>
-  <div style={{ position: "relative", width: "100%", height: "100%" }}>
+       <div style={{ width: "45%", position: "relative", overflowY: "auto", overflowX: "hidden", borderLeft: `1px solid ${T.border}`, flexShrink: 0 }}>
+  <div style={{ position: "relative", width: "100%", minHeight: 1200 }}>
     <ArtistCollage onSelect={proceed} />
   </div>
-</div>
+</div> 
       )}
     </div>
   );
