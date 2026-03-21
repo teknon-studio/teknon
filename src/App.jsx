@@ -1043,7 +1043,8 @@ export default function App() {
   if (!loaded) return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: BG, ...T.body, fontSize: "0.8rem", color: T.muted }}>Loading…</div>;
   if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} />;
-  if (page === "about") return <AboutPage onBack={() => setPage("mentor")} />;
-  if (page === "response" && currentSession) return <ResponsePage session={currentSession} onBack={() => setPage("mentor")} onAbout={() => setPage("about")} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
-  return <EaselPage onAbout={() => setPage("about")} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
+  if (page === "about") return <AboutPage onBack={() => setPage(prevPage)} />;
+  if (page === "library") return <LibraryPage onBack={() => setPage(prevPage)} selectedMentor={selectedMentor} />;
+  if (page === "response" && currentSession) return <ResponsePage session={currentSession} onBack={() => setPage("mentor")} onAbout={() => { setPrevPage("response"); setPage("about"); }} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
+  return <EaselPage onAbout={() => { setPrevPage("easel"); setPage("about"); }} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
 }
