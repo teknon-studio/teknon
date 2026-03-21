@@ -1019,6 +1019,7 @@ export default function App() {
   const [currentSession, setCurrentSession] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [selectedMentor, setSelectedMentor] = useState(null);
+  const [prevPage, setPrevPage] = useState("mentor");
 
   useEffect(() => {
     (async () => {
