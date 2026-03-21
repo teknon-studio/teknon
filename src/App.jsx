@@ -707,7 +707,7 @@ function ClassesPanel() {
   );
 }
 
-function EaselPage({ onAbout, onAnalyse, sessions, onLoadSession, onDeleteSession, defaultMentor }) {
+function EaselPage({ onAbout, onLibrary, onAnalyse, sessions, onLoadSession, onDeleteSession, defaultMentor }) {
   const [image, setImage] = useState(null);
   const [imageB64, setImageB64] = useState(null);
   const [imageMime, setImageMime] = useState("image/jpeg");
