@@ -317,7 +317,7 @@ function ArtistCollage({ onSelect }) {
   );
 }
 
-function MentorSelectPage({ onSelect }) {
+function MentorSelectPage({ onSelect, onLibrary }) {
   const [name, setName] = useState("");
   const [focused, setFocused] = useState(false);
   const [isMobile] = useState(window.innerWidth < 768);
