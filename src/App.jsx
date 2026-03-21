@@ -380,10 +380,10 @@ function MentorSelectPage({ onSelect, onLibrary }) {
         </div>
       ) : (
         <div style={{ width: "45%", position: "relative", overflow: "hidden", borderLeft: `1px solid ${T.border}`, flexShrink: 0 }}>
-          <div style={{ position: "absolute", inset: "1.5rem" }}>
-            <ArtistCollage onSelect={proceed} />
-          </div>
-        </div>
+  <div style={{ position: "relative", width: "100%", height: "100%" }}>
+    <ArtistCollage onSelect={proceed} />
+  </div>
+</div>
       )}
     </div>
   );
