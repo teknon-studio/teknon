@@ -355,8 +355,8 @@ function MentorSelectPage({ onSelect }) {
           <div style={{ marginTop: "2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
             <PillBtn onClick={() => proceed()} disabled={!name.trim()}>begin</PillBtn>
             <button onClick={() => onSelect("")} style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
-              skip for now
-            </button>
+  skip for now
+</button>
           </div>
           <p style={{ ...T.body, fontSize: "0.68rem", letterSpacing: "0.05em", color: "rgba(240,235,227,0.22)", marginTop: "1.5rem", lineHeight: 1.8 }}>
             Choose any artist — living or from history.<br />If they are no longer with us, they will speak<br />to you directly in their own voice.
