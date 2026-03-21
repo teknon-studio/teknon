@@ -299,7 +299,7 @@ function ArtistCollage({ onSelect }) {
             }}>
             <div style={{ width: "100%", height: "100%", background: "#3a3835", overflow: "hidden", borderRadius: 2 }}>
               <img src={`/artists/${artist.file}`} alt={artist.name}
-              style={{ width: "100%", height: "96%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }}  
+style={{ width: "100%", height: "96%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
               <div style={{ height: "4%" }} />
             </div>
             {isHov && (
