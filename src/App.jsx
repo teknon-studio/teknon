@@ -172,7 +172,7 @@ const SectionLabel = ({ children }) => (
 
 const Hairline = () => <div style={divider} />;
 
-function Header({ onAbout, sessionSaved, sessions, onLoadSession, onDeleteSession }) {
+function Header({ onAbout, onLibrary, sessionSaved, sessions, onLoadSession, onDeleteSession }) {
   const [sessionsOpen, setSessionsOpen] = useState(false);
   const navBtn = { ...T.body, fontSize: "0.75rem", letterSpacing: "0.08em", color: T.muted, background: "transparent", border: "none", cursor: "pointer", padding: "0.4rem 0.8rem", transition: "color 0.2s" };
   return (
