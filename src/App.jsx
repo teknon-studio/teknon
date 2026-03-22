@@ -133,7 +133,7 @@ function TeknonLogo({ size = "md" }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 4 * scale }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10 * scale }}>
-        <img src="/teknonlogo.png" alt="Teknon" style={{ height: 36 * scale, width: "auto", objectFit: "contain" }} />
+        <img src="/teknonlogo.PNG" alt="Teknon" style={{ height: 36 * scale, width: "auto", objectFit: "contain" }} />
         <span style={{ ...T.body, fontSize: 15 * scale, letterSpacing: 3.5 * scale, color: T.cream, fontWeight: 300 }}>teknon</span>
       </div>
       {size !== "sm" && <div style={{ height: 0.5, background: T.cream, opacity: 0.2, width: "100%" }} />}
