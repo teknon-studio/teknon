@@ -129,26 +129,14 @@ const T = {
 const divider = { height: 1, background: "rgba(240,235,227,0.18)", margin: "2rem 0" };
 
 function TeknonLogo({ size = "md" }) {
-  const scale = size === "lg" ? 1.8 : size === "sm" ? 0.7 : 1;
-  const cx = 18 * scale, cy = 18 * scale;
-  const lines = Array.from({ length: 48 }, (_, i) => {
-    const a = (i / 48) * Math.PI * 2;
-    return { x1: cx + Math.cos(a) * 2.5 * scale, y1: cy + Math.sin(a) * 2.5 * scale, x2: cx + Math.cos(a) * 16 * scale, y2: cy + Math.sin(a) * 16 * scale };
-  });
+  const height = size === "lg" ? 80 : size === "sm" ? 28 : 44;
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 4 * scale }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 * scale }}>
-        <svg width={36 * scale} height={36 * scale} viewBox={`0 0 ${36 * scale} ${36 * scale}`} fill="none">
-          {lines.map((l, i) => <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke={T.cream} strokeWidth={0.6 * scale} strokeLinecap="round" opacity="0.9" />)}
-          <circle cx={cx} cy={cy} r={1.5 * scale} fill={T.cream} />
-        </svg>
-        <span style={{ ...T.body, fontSize: 15 * scale, letterSpacing: 3.5 * scale, color: T.cream, fontWeight: 300 }}>teknon</span>
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <img src="/teknonlogo.PNG" alt="Teknon" style={{ height, width: "auto", objectFit: "contain" }} />
       {size !== "sm" && <div style={{ height: 0.5, background: T.cream, opacity: 0.2, width: "100%" }} />}
     </div>
   );
 }
-
 function PillBtn({ children, onClick, disabled, style: extra }) {
   const [hover, setHover] = useState(false);
   return (
