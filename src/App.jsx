@@ -129,10 +129,13 @@ const T = {
 const divider = { height: 1, background: "rgba(240,235,227,0.18)", margin: "2rem 0" };
 
 function TeknonLogo({ size = "md" }) {
-  const height = size === "lg" ? 80 : size === "sm" ? 28 : 44;
+  const scale = size === "lg" ? 1.8 : size === "sm" ? 0.7 : 1;
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <img src="/teknonlogo.PNG" alt="Teknon" style={{ height, width: "auto", objectFit: "contain" }} />
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 * scale }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 * scale }}>
+        <img src="/teknonlogo.png" alt="Teknon" style={{ height: 36 * scale, width: "auto", objectFit: "contain" }} />
+        <span style={{ ...T.body, fontSize: 15 * scale, letterSpacing: 3.5 * scale, color: T.cream, fontWeight: 300 }}>teknon</span>
+      </div>
       {size !== "sm" && <div style={{ height: 0.5, background: T.cream, opacity: 0.2, width: "100%" }} />}
     </div>
   );
