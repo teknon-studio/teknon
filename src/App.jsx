@@ -731,6 +731,9 @@ function EaselPage({ onAbout, onLibrary, onAnalyse, sessions, onLoadSession, onD
   const [loadingStep, setLoadingStep] = useState("");
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
+const [refImage, setRefImage] = useState(null);
+const [refImageB64, setRefImageB64] = useState(null);
+const refFileRef = useRef();
   const fileRef = useRef();
   const cameraRef = useRef();
   useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -761,7 +764,27 @@ function EaselPage({ onAbout, onLibrary, onAnalyse, sessions, onLoadSession, onD
     reader.onerror = () => setError("This image couldn't be read — try saving it as a JPG first and uploading again.");
     reader.readAsDataURL(file);
   };
-
+const handleRefFile = file => {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const maxSize = 1200; let w = img.width, h = img.height;
+          if (w > maxSize || h > maxSize) { if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; } else { w = Math.round(w * maxSize / h); h = maxSize; } }
+          const canvas = document.createElement("canvas"); canvas.width = w; canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL("image/jpeg", 0.82);
+          setRefImage(compressed); setRefImageB64(compressed.split(",")[1]);
+        } catch { setRefImage(e.target.result); setRefImageB64(e.target.result.split(",")[1]); }
+      };
+      img.src = e.target.result;
+    } catch { setRefImage(e.target.result); setRefImageB64(e.target.result.split(",")[1]); }
+  };
+  reader.readAsDataURL(file);
+};
   const analyse = async () => {
     if (!imageB64 || !description) return;
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
@@ -802,7 +825,12 @@ Format your response with these sections using ** markers:
 
     try {
       setLoadingStep("Consulting the masters…");
-      const res = await fetch("/api/chat", { method: "POST", headers: HEADERS, body: JSON.stringify({ model: MODEL, max_tokens: 1200, messages: [{ role: "user", content: [{ type: "image", source: { type: "base64", media_type: imageMime, data: imageB64 } }, { type: "text", text: prompt }] }] }) });
+      const imageContent = [
+  { type: "image", source: { type: "base64", media_type: imageMime, data: imageB64 } },
+  ...(refImageB64 ? [{ type: "image", source: { type: "base64", media_type: "image/jpeg", data: refImageB64 } }] : []),
+  { type: "text", text: prompt }
+];
+const res = await fetch("/api/chat", { method: "POST", headers: HEADERS, body: JSON.stringify({ model: MODEL, max_tokens: 1200, messages: [{ role: "user", content: imageContent }] }) });
       clearTimeout(timeout);
       const data = await res.json();
       if (data.error) throw new Error(`${data.error.type}: ${data.error.message}`);
@@ -846,8 +874,32 @@ Format your response with these sections using ** markers:
           </button>
         </div>
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" style={{ display: "none" }} onChange={e => handleFile(e.target.files[0])} />
+<input ref={refFileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => handleRefFile(e.target.files[0])} />
 
-        <div style={{ marginBottom: "2.5rem" }}>
+       {image && (
+  <div style={{ marginBottom: "2.5rem" }}>
+    {!refImage ? (
+      <button onClick={() => refFileRef.current.click()}
+        style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: `1px solid rgba(240,235,227,0.1)`, borderRadius: 50, padding: "0.65rem 1.4rem", cursor: "pointer", transition: "all 0.2s", display: "flex", alignItems: "center", gap: "0.5rem" }}
+        onMouseEnter={e => { e.currentTarget.style.color = T.cream; e.currentTarget.style.borderColor = T.border; }}
+        onMouseLeave={e => { e.currentTarget.style.color = T.muted; e.currentTarget.style.borderColor = "rgba(240,235,227,0.1)"; }}>
+        <span style={{ fontSize: "0.7rem" }}>+</span> Add a reference photo (optional)
+      </button>
+    ) : (
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <img src={refImage} alt="reference" style={{ width: 60, height: 60, objectFit: "cover", borderRadius: 8, border: `1px solid ${T.border}` }} />
+        <div>
+          <p style={{ ...T.body, fontSize: "0.78rem", color: T.cream, marginBottom: "0.2rem" }}>Reference photo added</p>
+          <button onClick={() => { setRefImage(null); setRefImageB64(null); }}
+            style={{ ...T.body, fontSize: "0.72rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", padding: 0 }}>
+            Remove
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+)} 
+       <div style={{ marginBottom: "2.5rem" }}>
           <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>Artist / Style I'm aiming for</p>
           <input value={targetArtist} onChange={e => setTargetArtist(e.target.value)}
             placeholder="e.g. Rembrandt, Sargent, Georgia O'Keeffe — they will speak to you directly"
