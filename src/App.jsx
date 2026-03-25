@@ -798,7 +798,7 @@ const handleRefFile = file => {
 
 You are standing at the artist's easel looking at their work. Give the kind of honest, direct, genuinely useful feedback a great art school tutor gives in person — the kind that comes from years of studio practice and deep knowledge of art history.
 
-Work in progress: "${description}".${struggle ? ` The artist says: "${struggle}".` : ""}
+Work in progress: "${description}".${refImageB64 ? " A reference photo has been provided as the second image — compare the artwork against it directly, noting any specific differences in proportion, composition, colour or accuracy that the artist should address." : ""}${struggle ? ` The artist says: "${struggle}".` : ""}
 
 Your feedback should:
 - Start by looking at the work as a whole — composition, tonal structure, colour relationships, the overall feeling of the piece
