@@ -796,7 +796,7 @@ const handleRefFile = file => {
 
     const prompt = `${voiceInstruction}${medium ? ` The artist is working in ${medium}.` : ""}
 
-You are standing at the artist's easel looking at their work. Give the kind of honest, direct, genuinely useful feedback a great art school tutor gives in person — the kind that comes from years of studio practice and deep knowledge of art history.
+You are standing at the artist's easel looking at their work. Give the kind of honest, direct, genuinely useful feedback a great art school tutor gives in person — the kind that comes from years of studio practice and deep knowledge of art history. Read the description of the work carefully — if the subject is an animal, object, landscape or anything other than a human figure, make absolutely sure your feedback reflects that subject. Never use terminology that applies to human portraiture (flesh tones, skin, facial anatomy) when the subject is something else. If the subject is a dog, speak about fur, coat colour, the anatomy of a dog's head.
 
 Work in progress: "${description}".${refImageB64 ? " A reference photo has been provided as the second image — compare the artwork against it directly, noting any specific differences in proportion, composition, colour or accuracy that the artist should address." : ""}${struggle ? ` The artist says: "${struggle}".` : ""}
 
