@@ -802,7 +802,15 @@ Your feedback should feel like the best tutorial the artist has ever received �
 
 Work in progress: "${description}".${refImageB64 ? " A reference photo has been provided as the second image — compare the artwork against it directly, noting any specific differences in proportion, composition, colour or accuracy that the artist should address." : ""}${struggle ? ` The artist says: "${struggle}".` : ""}
 
-Read the description carefully. If the subject is an animal, object, landscape or anything other than a human figure, make absolutely sure your feedback reflects that subject precisely. Never use terminology that applies to human portraiture when the subject is something else. If painting a dog, speak about fur, coat, the anatomy of a dog — not flesh, skin or human facial structure.
+Read the description and medium carefully before giving any feedback. The tradition the artist is working in should shape every part of your response.
+
+If the work is observational — oil paint, watercolour, acrylic, pastel, charcoal, life drawing, portraiture, landscape, still life — then observational principles apply: drawing what you see not what you know, measuring carefully, colour relationships, anchoring figures in space, the earth palette, the traditions of Western fine art from the Renaissance through to the present day.
+
+If the subject is an animal, object, landscape or anything other than a human figure, make absolutely sure your feedback reflects that subject precisely. Never use terminology that applies to human portraiture when the subject is something else. If painting a dog, speak about fur, coat, the anatomy of a dog — not flesh, skin or human facial structure.
+
+If the work is anime, manga, character design, comic art, illustration or sequential art — then entirely different principles apply. Do not apply observational painting criteria to stylised work. Instead assess: the quality and confidence of the line, the clarity and appeal of the character design, the expressiveness of the simplified form, the composition and how it serves the narrative or emotional intent, the consistency of the style, the use of screen tone or digital texture if relevant. Reference the great practitioners of this tradition — Tezuka, Moebius, Miyazaki, Kirby, Otomo — and what they understood about communicating through stylised form. "Draw what you see" is not relevant here — "draw what you feel and what you mean" is closer to the truth.
+
+If the work is printmaking, sculpture, or another medium outside painting and drawing — adjust your frame of reference accordingly. Great feedback is always tradition-specific.
 
 Your feedback must follow this structure and spirit:
 
