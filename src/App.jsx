@@ -820,16 +820,21 @@ Now give your feedback in these sections:
 Describe what is genuinely working in this painting — specifically and honestly. Name the things the artist may not have noticed themselves. This is not encouragement for its own sake. It is accurate observation of what has been achieved. If the fur texture is beautifully handled, say exactly that and say why. If the eyes have life in them, say so. If the composition is well judged, say so. Be as specific here as you would be about any problem.
 
 **The most important thing**
-Before you decide what the most important thing is, ask yourself these questions in this order:
+Before you decide what the most important thing is, look at the painting as a whole and ask yourself which of the following genuinely applies. These are not a rigid checklist — they are a set of lenses. Use whichever are relevant to this specific painting and ignore those that are not.
 
-First — how does the background relate to the subject? Does it support the main subject or fight it? Does the colour harmony between background and subject work? Could a different background colour make the subject sing rather than sit flatly?
+— How does the background or surrounding space relate to the subject? Does it support the main subject or fight it? Does the colour harmony work? In a portrait or animal painting, could a different background colour make the subject glow rather than sit flatly against it? In a landscape, does the sky relate well to the land? In a still life, does the surface and background support or compete with the objects?
 
-Second — are there any unresolved edges where the subject meets the canvas? Does the subject feel grounded or does it float? Are there areas where the painting feels unfinished at the edges that would benefit from a few considered marks?
+— Are there any unresolved edges — places where the subject meets the canvas or where one element meets another — that feel incomplete or unintentional? Does the subject feel grounded or does it float? A few considered marks can sometimes resolve what feels like a much larger problem.
 
-Third — is there anything compositionally incomplete — a missing element that the eye expects, an asymmetry that feels unresolved rather than intentional, a part of the subject that has been cropped or omitted that a single mark or two might address?
+— Is there anything compositionally incomplete or unresolved? An element the eye expects but doesn't find, an asymmetry that feels accidental rather than intentional, a part of the picture that draws the eye somewhere unhelpful?
 
-Fourth — and only fourth — if none of the above yield a genuine observation, consider whether there is a structural or anatomical issue. But only raise it if you can see clear, specific, unambiguous visual evidence. If you cannot point to it precisely, do not raise it.
+— Are the colour relationships working across the whole painting? Not just locally but as a complete harmony — warm against cool, light against dark, saturated against neutral?
 
+— Is there a quality of light that could be strengthened or made more consistent?
+
+— Only if genuinely relevant to this specific painting and only with clear visual evidence — is there a structural, proportional or anatomical issue? For a landscape, this lens may be irrelevant entirely. For an abstract, ignore it completely. For observational figure or animal work, only apply it if you can point to a specific, unambiguous problem.
+
+Use whichever of these lenses gives you the single most genuinely useful observation for this specific painting. If the painting is strong and close to resolved, say so and offer the most considered small thought you can. Not every painting needs a major intervention.
 Answer whichever of these questions yields the most genuinely useful observation. Say how you would approach it if it were your own painting — specifically: which part of the canvas, which colour, which mark. If the most important thing is the background colour relationship, say so. If it is an unresolved edge or a missing element that a stroke or two would resolve, say so.
 
 If the painting is accomplished and close to resolved, say so honestly and make the most useful small observation you can find. Not every painting needs a major intervention. A tutor who sees strong work and says so — then offers one small, considered thought — is more valuable than one who invents problems to justify the tutorial.
