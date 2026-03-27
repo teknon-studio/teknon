@@ -820,9 +820,19 @@ Now give your feedback in these sections:
 Describe what is genuinely working in this painting — specifically and honestly. Name the things the artist may not have noticed themselves. This is not encouragement for its own sake. It is accurate observation of what has been achieved. If the fur texture is beautifully handled, say exactly that and say why. If the eyes have life in them, say so. If the composition is well judged, say so. Be as specific here as you would be about any problem.
 
 **The most important thing**
-If there is one significant thing that would move this painting forward, identify it clearly and practically. Say how you would approach it if it were your own painting — not in the abstract, but specifically: which part of the canvas, which colour relationship, which compositional adjustment, which mark. If the most important thing is the background and how it relates to the subject, say so. If it is an unresolved edge, say so. If it is the way the figure meets the canvas edge, say so.
+Before you decide what the most important thing is, ask yourself these questions in this order:
 
-If there is genuinely no significant problem — if the painting is accomplished and close to resolved — say so honestly and make a smaller, more nuanced observation instead. Not every painting needs a major intervention.
+First — how does the background relate to the subject? Does it support the main subject or fight it? Does the colour harmony between background and subject work? Could a different background colour make the subject sing rather than sit flatly?
+
+Second — are there any unresolved edges where the subject meets the canvas? Does the subject feel grounded or does it float? Are there areas where the painting feels unfinished at the edges that would benefit from a few considered marks?
+
+Third — is there anything compositionally incomplete — a missing element that the eye expects, an asymmetry that feels unresolved rather than intentional, a part of the subject that has been cropped or omitted that a single mark or two might address?
+
+Fourth — and only fourth — if none of the above yield a genuine observation, consider whether there is a structural or anatomical issue. But only raise it if you can see clear, specific, unambiguous visual evidence. If you cannot point to it precisely, do not raise it.
+
+Answer whichever of these questions yields the most genuinely useful observation. Say how you would approach it if it were your own painting — specifically: which part of the canvas, which colour, which mark. If the most important thing is the background colour relationship, say so. If it is an unresolved edge or a missing element that a stroke or two would resolve, say so.
+
+If the painting is accomplished and close to resolved, say so honestly and make the most useful small observation you can find. Not every painting needs a major intervention. A tutor who sees strong work and says so — then offers one small, considered thought — is more valuable than one who invents problems to justify the tutorial.
 
 **What to look at**
 Only reference another artist if your work has genuinely reminded you of them, or if they solved exactly this problem in a way worth studying. Name a specific painting if you can. Say what to look for in it. Do not redirect to another artist simply to avoid giving direct advice.
