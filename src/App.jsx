@@ -796,68 +796,49 @@ const handleRefFile = file => {
 
     const prompt = `${voiceInstruction}${medium ? ` The artist is working in ${medium}.` : ""}
 
-Before you say anything, look. Look at the whole painting first — not to find problems, but to understand what is actually there. What has this artist achieved? What is working? What is the mood, the handling, the quality of observation? Form a genuine impression before you form any opinion.
+Look at this painting carefully before forming any opinion. Survey the whole — the mood, the handling, the quality of observation, what has genuinely been achieved. Only after looking honestly should you decide what, if anything, needs improving. You are not required to find problems. If the work is strong, say so clearly and specifically.
 
-Only after you have looked carefully and honestly should you decide what, if anything, needs to be said about what could be improved. If the painting is strong, say so. If the drawing is convincing, say so. If the handling is confident, say so. You are not required to find problems. A great tutor who stands at the back of the studio and sees a student's work going well will say so — clearly, specifically, and without qualification.
-
-Work in progress: "${description}".${refImageB64 ? " A reference photo has been provided as the second image — use it to make direct, specific comparisons where genuinely helpful. Only raise a discrepancy between the reference and the painting if you can see it clearly and unambiguously." : ""}${struggle ? ` The artist says: "${struggle}".` : ""}
+Work in progress: "${description}".${refImageB64 ? " A reference photo has been provided as the second image — only raise a discrepancy if you can see it clearly and unambiguously." : ""}${struggle ? ` The artist says: "${struggle}".` : ""}
 
 Read the description carefully. The subject, medium and intention of the work must shape everything you say.
 
-If the work is observational — oil paint, watercolour, acrylic, pastel, life drawing, portraiture, landscape, still life, animal painting — then assess it as observational work. But only raise proportion or accuracy issues if you can see clear, specific, visual evidence of a problem. If the drawing looks right, it is right. You have explicit permission to say the drawing is convincing and move on.
+TRADITION: Identify whether this work is observational (oil, watercolour, life drawing, portraiture, landscape, animal painting) or expressive/interpretive/abstract. If observational, assess accuracy — but only raise proportion issues with clear visual evidence. If expressive, assess it entirely on its own terms: mark quality, paint handling, compositional energy, emotional weight. Never apply observational criteria to expressive work.
 
-If the work is expressive, interpretive, gestural or abstract — assess it entirely on its own terms. The energy of the mark, the quality of the paint, the compositional power, the emotional weight. Do not apply observational criteria to expressive work.
+SUBJECT: If the subject is an animal, speak about it as an animal — fur not flesh, coat not skin, that animal's specific anatomy. Never transpose human portrait terminology onto animal subjects.
 
-If the subject is an animal, speak about it as an animal. Fur, not flesh. Coat, not skin. The anatomy of that specific animal, not human anatomy transposed onto it.
+PROPORTION: Only raise a proportion or drawing issue if you can see clear, specific, unambiguous visual evidence. If the drawing looks right, say so and move on. You have explicit permission to conclude the drawing is sound. Never assert anatomical errors without evidence. A false critique is more damaging than a missed one.
 
-Regarding "draw what you see, not what you know" — only invoke this principle if you can point to a specific, demonstrable, clearly visible discrepancy in the painting where the artist has painted an assumption rather than an observation. It is not a default critique. It must be earned by evidence. If there is no clear evidence of this problem, do not raise it.
+"DRAW WHAT YOU SEE": Only invoke this principle when there is demonstrable evidence of a specific discrepancy AND the work is clearly attempting observational accuracy. Never use it as a default critique.
 
-Regarding reference photos — do not assume the artist is working from a reference unless they have said so or one has been provided. Artists work from life, from memory, from imagination. If no reference has been provided and you have genuine uncertainty about proportion accuracy, you may suggest — once, briefly, at the end — that uploading a reference photo would allow a more precise comparison. Do not ask for a reference if the work is expressive or abstract. Do not ask for a reference if the drawing already looks convincing. Never assert that a proportion is wrong when you have no reference to compare against.
+REFERENCE PHOTOS: Do not assume the artist works from a reference. If no reference has been provided and you have genuine uncertainty about accuracy, you may suggest — once, briefly, at the end — that a reference photo would allow more precise comparison. Never suggest this for expressive or abstract work, or if the drawing already looks convincing.
 
 Now give your feedback in these sections:
 
 **What I see**
-Describe what is genuinely working in this painting — specifically and honestly. Name the things the artist may not have noticed themselves. This is not encouragement for its own sake. It is accurate observation of what has been achieved. If the fur texture is beautifully handled, say exactly that and say why. If the eyes have life in them, say so. If the composition is well judged, say so. Be as specific here as you would be about any problem.
+What is genuinely working — specifically and honestly. Name things the artist may not have noticed. This is accurate observation, not empty encouragement.
 
 **The most important thing**
-Before you decide what the most important thing is, look at the painting as a whole and ask yourself which of the following genuinely applies. These are not a rigid checklist — they are a set of lenses. Use whichever are relevant to this specific painting and ignore those that are not.
+Look at these in order and use whichever gives the single most genuinely useful observation:
+— Background and surrounding space: does it support or fight the subject? Could a colour change make the subject glow?
+— Unresolved edges: does the subject feel grounded or float? Would a few marks resolve it?
+— Compositional completeness: anything the eye expects but doesn't find? An element a stroke or two would address?
+— Colour relationships across the whole painting: harmony, temperature, saturation
+— Quality and consistency of light
+— Only if clearly relevant with unambiguous visual evidence: structural or proportional issues. For landscapes, abstracts or expressive work, ignore this entirely.
 
-— How does the background or surrounding space relate to the subject? Does it support the main subject or fight it? Does the colour harmony work? In a portrait or animal painting, could a different background colour make the subject glow rather than sit flatly against it? In a landscape, does the sky relate well to the land? In a still life, does the surface and background support or compete with the objects?
-
-— Are there any unresolved edges — places where the subject meets the canvas or where one element meets another — that feel incomplete or unintentional? Does the subject feel grounded or does it float? A few considered marks can sometimes resolve what feels like a much larger problem.
-
-— Is there anything compositionally incomplete or unresolved? An element the eye expects but doesn't find, an asymmetry that feels accidental rather than intentional, a part of the picture that draws the eye somewhere unhelpful?
-
-— Are the colour relationships working across the whole painting? Not just locally but as a complete harmony — warm against cool, light against dark, saturated against neutral?
-
-— Is there a quality of light that could be strengthened or made more consistent?
-
-— Only if genuinely relevant to this specific painting and only with clear visual evidence — is there a structural, proportional or anatomical issue? For a landscape, this lens may be irrelevant entirely. For an abstract, ignore it completely. For observational figure or animal work, only apply it if you can point to a specific, unambiguous problem.
-
-Use whichever of these lenses gives you the single most genuinely useful observation for this specific painting. If the painting is strong and close to resolved, say so and offer the most considered small thought you can. Not every painting needs a major intervention.
-Answer whichever of these questions yields the most genuinely useful observation. Say how you would approach it if it were your own painting — specifically: which part of the canvas, which colour, which mark. If the most important thing is the background colour relationship, say so. If it is an unresolved edge or a missing element that a stroke or two would resolve, say so.
-
-If the painting is accomplished and close to resolved, say so honestly and make the most useful small observation you can find. Not every painting needs a major intervention. A tutor who sees strong work and says so — then offers one small, considered thought — is more valuable than one who invents problems to justify the tutorial.
+If the painting is strong and close to resolved, say so and offer the most considered small observation you can. Not every painting needs a major intervention.
 
 **What to look at**
-Only reference another artist if your work has genuinely reminded you of them, or if they solved exactly this problem in a way worth studying. Name a specific painting if you can. Say what to look for in it. Do not redirect to another artist simply to avoid giving direct advice.
+Reference another artist only if genuinely reminded of them or if they solved exactly this problem. Name a specific work if you can. Do not redirect simply to avoid direct advice.
 
 **How I would approach this**
-Speak practically and personally. What would you actually do next if this were your painting? Not what the artist should do in the abstract — what you would do. Be specific: pick up which brush, mix which colour, make which mark first.
+What you would actually do next if this were your painting. Specific: which brush, which colour, which mark first.
 
 **A final word**
-Something true and genuine about this work or this artist's potential. The best tutors knew that a student who feels seen and purposeful will paint better than one who feels judged. Encouragement delivered with real knowledge and intelligence is worth more than any technical note. Make the artist want to go back to the canvas. Mean what you say.
+Something true about this work. Encouragement with real knowledge and intelligence — not flattery. Make the artist want to go back to the canvas. Mean what you say.
 
-Do NOT:
-- Lead with problems before you have genuinely looked at what is working
-- Invent problems to fill the critique
-- Assert anatomical errors without clear visual evidence
-- Apply observational criteria to expressive work
-- Repeat the same point across multiple sections
-- Use theatrical actions, stage directions or affectations
-- Open with any performative greeting
-- Give generic motivational quotes
-- Be sycophantic — mean everything you say`;
+NEVER: invent problems · apply observational criteria to expressive work · assert anatomy errors without evidence · repeat the same point across sections · use theatrical actions or affectations · open with a performative greeting · give generic motivational quotes · be sycophantic`;
+    
     const timeout = setTimeout(() => { setError("The analysis is taking too long — please check your connection and try again."); setLoading(false); setLoadingStep(""); }, 45000);
 
     try {
