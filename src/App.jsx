@@ -99,7 +99,7 @@ const storage = {
   list: (prefix) => { try { const keys = Object.keys(localStorage).filter(k => k.startsWith(prefix)); return { keys }; } catch { return { keys: [] }; } }
 };
 
-const callAPI = async (messages, tools = true, maxTokens = 4000) => {
+const callAPI = async (messages, tools = true, maxTokens = 1500) => {
   const body = { model: MODEL, max_tokens: maxTokens, messages };
   if (tools) body.tools = [{ type: "web_search_20250305", name: "web_search" }];
   const res = await fetch("/api/chat", { method: "POST", headers: HEADERS, body: JSON.stringify(body) });
@@ -1231,7 +1231,7 @@ useEffect(() => {
     setAnalysisCount(newCount);
     localStorage.setItem("teknon-analysis-count", newCount.toString());
     // First analysis always free
-    if (true) {
+    if (newCount === 1 || subscription?.active) {
       await saveSession(session); setCurrentSession(session); setPage("response");
     } else {
       // Save session but show paywall
