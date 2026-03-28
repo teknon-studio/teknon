@@ -559,6 +559,7 @@ function LibraryPage({ onBack, selectedMentor }) {
   const [error, setError] = useState(null);
   const [entries, setEntries] = useState([]);
   const bottomRef = useRef();
+const topRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -572,8 +573,8 @@ function LibraryPage({ onBack, selectedMentor }) {
     })();
   }, []);
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [entries, loading]);
-
+  useEffect(() => { topRef.current?.scrollIntoView({ behavior: "smooth" }); }, [entries]);
+  
   const ask = async () => {
     if (!question.trim() || loading) return;
     const q = question.trim();
@@ -603,7 +604,7 @@ function LibraryPage({ onBack, selectedMentor }) {
         <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, marginBottom: "3rem", lineHeight: 1.7 }}>Ask any question about materials, technique, art history or studio practice.</p>
 
         {entries.length > 0 && (
-          <div style={{ marginBottom: "3rem" }}>
+  <div style={{ marginBottom: "3rem" }} ref={topRef}>
             {entries.map((e, i) => (
               <div key={e.id}>
                 <div style={{ marginBottom: "2rem" }}>
