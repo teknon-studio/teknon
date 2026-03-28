@@ -632,7 +632,7 @@ function LibraryPage({ onBack, selectedMentor }) {
         <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: "2rem" }}>
           <textarea value={question} onChange={e => setQuestion(e.target.value)}
             onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(); } }}
-            rows={3} placeholder="e.g. My oil are very thick and difficult to work with — what can I do?"
+            rows={3} placeholder="e.g. My oils are very thick and difficult to work with — what can I do?"
             style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "0.9rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", resize: "none", lineHeight: 1.7, marginBottom: "1.5rem" }} />
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
