@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     // Find customer by email
     const searchRes = await fetch(
       `https://api.stripe.com/v1/customers/search?query=email:'${encodeURIComponent(email)}'`,
-      { headers: { "Authorization": `Bearer ${process.env.STRIPE_SECRET_KEY}` } }
+      { headers: { "Authorization": `Bearer ${process.env.VERCEL_ENV === "production" ? process.env.STRIPE_SECRET_KEY : process.env.STRIPE_SECRET_KEY_TEST}`,} }
     );
     const searchData = await searchRes.json();
     if (!searchData.data?.length) return res.status(200).json({ active: false, tier: null });
@@ -22,14 +22,14 @@ export default async function handler(req, res) {
     // Get active subscriptions
     const subRes = await fetch(
       `https://api.stripe.com/v1/subscriptions?customer=${customerId}&status=active`,
-      { headers: { "Authorization": `Bearer ${process.env.STRIPE_SECRET_KEY}` } }
+      { headers: { "Authorization": `Bearer ${process.env.VERCEL_ENV === "production" ? process.env.STRIPE_SECRET_KEY : process.env.STRIPE_SECRET_KEY_TEST}`,} }
     );
     const subData = await subRes.json();
 
     // Also check trialing
     const trialRes = await fetch(
       `https://api.stripe.com/v1/subscriptions?customer=${customerId}&status=trialing`,
-      { headers: { "Authorization": `Bearer ${process.env.STRIPE_SECRET_KEY}` } }
+      { headers: { "Authorization": `Bearer ${process.env.VERCEL_ENV === "production" ? process.env.STRIPE_SECRET_KEY : process.env.STRIPE_SECRET_KEY_TEST}`,} }
     );
     const trialData = await trialRes.json();
 
