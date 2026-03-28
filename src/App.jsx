@@ -88,6 +88,8 @@ const LIVING_ARTISTS = new Set([
   "Tim Benson","Alan Moore","Frank Miller","Chris Ware",
 ]);
 
+const PUBLISHABLE_KEY = "pk_live_51Pfm8URx0s8BAK67OMPGXIi8twIsWZ7l5H2keJbAhhlD2pmGeJ7BAE0golYD7YunJ6UcVjzkg52nPY5RIIEijdhB00DFMhwdbD";
+
 const MEDIUMS = ["Oil paint","Watercolour","Acrylic","Gouache","Pencil","Charcoal","Pastel","Ink","Digital","Mixed media","Brush & ink","Marker","Screen tone","Digital painting","Frame-by-frame animation"];
 
 const storage = {
@@ -204,6 +206,79 @@ function Header({ onAbout, onLibrary, sessionSaved, sessions, onLoadSession, onD
         <button onClick={onLibrary} style={navBtn} onMouseEnter={e => e.target.style.color = T.cream} onMouseLeave={e => e.target.style.color = T.muted}>Library</button>
 <button onClick={onAbout} style={navBtn} onMouseEnter={e => e.target.style.color = T.cream} onMouseLeave={e => e.target.style.color = T.muted}>About</button>
       </div>
+    </div>
+  );
+}
+
+function PaywallPage({ onBack, firstAnalysisDone }) {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(null);
+  const [error, setError] = useState(null);
+
+  const checkout = async (priceKey) => {
+    if (!email.trim()) { setError("Please enter your email address first."); return; }
+    setLoading(priceKey); setError(null);
+    try {
+      const origin = window.location.origin;
+      const res = await fetch("/api/create-checkout", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceKey, email: email.trim(), successUrl: `${origin}?subscribed=true`, cancelUrl: `${origin}?cancelled=true` })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      window.location.href = data.url;
+    } catch (e) { setError(e.message); setLoading(null); }
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: BG, color: T.cream, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
+      <TeknonLogo size="md" />
+      <div style={{ maxWidth: 520 }}>
+        {firstAnalysisDone && (
+          <p style={{ ...T.body, fontSize: "0.75rem", letterSpacing: "0.1em", color: T.amber, textTransform: "uppercase", marginBottom: "1.5rem" }}>
+            Your first analysis is complete
+          </p>
+        )}
+        <h1 style={{ ...T.body, fontSize: "clamp(2rem,5vw,3.5rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "1rem" }}>
+          continue your<br />practice
+        </h1>
+        <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, lineHeight: 1.8, marginBottom: "2.5rem" }}>
+          7 days free — then choose your plan. Cancel any time.
+        </p>
+
+        <input value={email} onChange={e => setEmail(e.target.value)}
+          placeholder="your email address"
+          style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", marginBottom: "2rem" }} />
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
+          {[
+            { key: "studio_monthly", label: "Studio", price: "£9.99 / month", desc: "Unlimited analyses · Full session history · Studio Library" },
+            { key: "studio_annual",  label: "Studio", price: "£89 / year", desc: "Save two months · Everything in Studio monthly" },
+            { key: "master_monthly", label: "Master", price: "£19.99 / month", desc: "Everything in Studio · ElevenLabs voice when launched" },
+            { key: "master_annual",  label: "Master", price: "£179 / year", desc: "Save two months · Everything in Master monthly" },
+          ].map(plan => (
+            <button key={plan.key} onClick={() => checkout(plan.key)} disabled={!!loading}
+              style={{ ...T.body, textAlign: "left", background: "transparent", border: `1px solid ${T.border}`, borderRadius: 12, padding: "1.1rem 1.4rem", cursor: loading ? "default" : "pointer", transition: "all 0.2s", opacity: loading && loading !== plan.key ? 0.4 : 1 }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.borderColor = T.borderHover; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.25rem" }}>
+                <span style={{ ...T.body, fontSize: "0.9rem", color: T.cream, fontWeight: 400 }}>{plan.label}</span>
+                <span style={{ ...T.body, fontSize: "0.9rem", color: T.amber }}>{loading === plan.key ? "Redirecting…" : plan.price}</span>
+              </div>
+              <p style={{ ...T.body, fontSize: "0.75rem", color: T.muted, margin: 0 }}>{plan.desc}</p>
+            </button>
+          ))}
+        </div>
+
+        {error && <p style={{ ...T.body, fontSize: "0.8rem", color: "#f87171", marginBottom: "1rem" }}>{error}</p>}
+
+        <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
+          ← go back
+        </button>
+      </div>
+      <p style={{ ...T.body, fontSize: "0.68rem", color: "rgba(240,235,227,0.22)", lineHeight: 1.8 }}>
+        Secure payment by Stripe · Cancel any time · No commitment
+      </p>
     </div>
   );
 }
@@ -1100,10 +1175,39 @@ export default function App() {
   const [currentSession, setCurrentSession] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [selectedMentor, setSelectedMentor] = useState(null);
+const [subscription, setSubscription] = useState(null); // null = unknown, false = none, {tier, trialing} = active
+const [analysisCount, setAnalysisCount] = useState(0);
+const [userEmail, setUserEmail] = useState(null);
   const [prevPage, setPrevPage] = useState("mentor");
 
-  useEffect(() => {
+useEffect(() => {
     (async () => {
+      // Check for successful Stripe redirect
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("subscribed") === "true") {
+        window.history.replaceState({}, "", window.location.pathname);
+        const savedEmail = localStorage.getItem("teknon-email");
+        if (savedEmail) {
+          try {
+            const res = await fetch("/api/verify-subscription", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: savedEmail }) });
+            const data = await res.json();
+            if (data.active) { setSubscription({ tier: data.tier, trialing: data.trialing }); setUserEmail(savedEmail); }
+          } catch {}
+        }
+      }
+      // Restore email and check subscription
+      const savedEmail = localStorage.getItem("teknon-email");
+      if (savedEmail) {
+        setUserEmail(savedEmail);
+        try {
+          const res = await fetch("/api/verify-subscription", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: savedEmail }) });
+          const data = await res.json();
+          setSubscription(data.active ? { tier: data.tier, trialing: data.trialing } : false);
+        } catch { setSubscription(false); }
+      } else { setSubscription(false); }
+      // Restore analysis count
+      const count = parseInt(localStorage.getItem("teknon-analysis-count") || "0");
+      setAnalysisCount(count);
       try {
         const r = await storage.list("session:");
         if (r?.keys?.length) {
@@ -1118,11 +1222,24 @@ export default function App() {
   const saveSession = async s => { try { await storage.set(s.id, JSON.stringify(s)); setSessions(prev => [s, ...prev.filter(x => x.id !== s.id)].sort((a, b) => b.date - a.date)); } catch { } };
   const deleteSession = async id => { try { await storage.delete(id); setSessions(prev => prev.filter(s => s.id !== id)); } catch { } };
   const handleMentorSelect = (artist) => { setSelectedMentor(artist); setPage("easel"); };
-  const handleAnalyse = async s => { const session = s.targetArtist ? s : { ...s, targetArtist: selectedMentor || "" }; await saveSession(session); setCurrentSession(session); setPage("response"); };
+  const handleAnalyse = async s => {
+    const session = s.targetArtist ? s : { ...s, targetArtist: selectedMentor || "" };
+    const newCount = analysisCount + 1;
+    setAnalysisCount(newCount);
+    localStorage.setItem("teknon-analysis-count", newCount.toString());
+    // First analysis always free
+    if (newCount === 1 || subscription?.active) {
+      await saveSession(session); setCurrentSession(session); setPage("response");
+    } else {
+      // Save session but show paywall
+      await saveSession(session); setCurrentSession(session); setPage("paywall");
+    }
+  };  
   const handleLoad = s => { setCurrentSession(s); setPage("response"); };
 
   if (!loaded) return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: BG, ...T.body, fontSize: "0.8rem", color: T.muted }}>Loading…</div>;
   if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} />;
+  if (page === "paywall") return <PaywallPage onBack={() => setPage("easel")} firstAnalysisDone={analysisCount >= 1} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} onLibrary={() => { setPrevPage("mentor"); setPage("library"); }} />;
   if (page === "about") return <AboutPage onBack={() => setPage(prevPage)} />;
   if (page === "library") return <LibraryPage onBack={() => setPage(prevPage)} selectedMentor={selectedMentor} />;
