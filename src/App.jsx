@@ -296,7 +296,12 @@ function LandingPage({ onStart }) {
         <p style={{ ...T.body, fontSize: "clamp(1rem,2.5vw,1.4rem)", fontWeight: 300, color: "rgba(240,235,227,0.6)", letterSpacing: "0.01em", marginBottom: "2rem", lineHeight: 1.4 }}>great advice at a fraction of the price</p>
         <PillBtn onClick={onStart}>get started</PillBtn>
         
-<p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: T.cream, marginTop: "1.2rem" }}>master wisdom · no trolls · no judgement</p>
+<p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: "rgba(240,235,227,0.3)", marginTop: "1.2rem" }}>master wisdom · no trolls · no judgement</p>
+<p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.2)", marginTop: "0.75rem" }}>
+  <a href="/privacy.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Privacy Policy</a>
+  {" · "}
+  <a href="/terms.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Terms of Service</a>
+</p>
       </div>
     </div>
   );
