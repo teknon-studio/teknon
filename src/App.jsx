@@ -294,7 +294,7 @@ function LandingPage({ onStart }) {
         </h1>
         <PillBtn onClick={onStart}>get started</PillBtn>
         <p style={{ ...T.body, fontSize: "clamp(1rem,2.5vw,1.4rem)", fontWeight: 300, color: "rgba(240,235,227,0.6)", letterSpacing: "0.01em", marginBottom: "2rem", lineHeight: 1.4 }}>great advice doesn't need to come at a great price</p>
-<PillBtn onClick={onStart}>get started</PillBtn>
+
 <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: "rgba(240,235,227,0.3)", marginTop: "1.2rem" }}>master wisdom · private studio · no judgement</p>
       </div>
     </div>
