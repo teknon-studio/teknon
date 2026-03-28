@@ -438,7 +438,7 @@ function MentorSelectPage({ onSelect, onLibrary }) {
           </div>
           <div style={{ marginTop: "2rem", display: "flex", alignItems: "center", gap: "1rem" }}>
             <PillBtn onClick={() => proceed()} disabled={!name.trim()}>begin</PillBtn>
-            <button onClick={() => onSelect("")} style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
+            <button onClick={() => onSelect("")} style={{ ...T.body, fontSize: "0.8rem", color: T.cream, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
   skip for now
 </button>
           </div>
