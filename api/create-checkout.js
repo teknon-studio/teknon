@@ -6,10 +6,10 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const PRICES = {
-    studio_monthly:  "price_1TEvpZRx0s8BAK67R01iIqWz",
-    studio_annual:   "price_1TEvsORx0s8BAK67VPN8KCrV",
-    master_monthly:  "price_1TEvteRx0s8BAK67xt9isV8w",
-    master_annual:   "price_1TEvupRx0s8BAK67UhIwnaJR",
+    studio_monthly:  "price_1TFwFIRx0s8BAK67ZBwY5xxX",
+    studio_annual:   "price_1TFwIBRx0s8BAK67CUYBr6Os",
+    master_monthly:  "price_1TFwIYRx0s8BAK67mGTzwr9h",
+    master_annual:   "price_1TFwIvRx0s8BAK67riWbt61q",
   };
 
   try {
