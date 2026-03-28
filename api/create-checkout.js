@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+        "Authorization": `Bearer ${process.env.VERCEL_ENV === "production" ? process.env.STRIPE_SECRET_KEY : process.env.STRIPE_SECRET_KEY_TEST}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: params.toString(),
