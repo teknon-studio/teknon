@@ -445,7 +445,7 @@ function MentorSelectPage({ onSelect, onLibrary }) {
          <p style={{ ...T.body, fontSize: "0.68rem", letterSpacing: "0.05em", color: T.cream, marginTop: "1.5rem", lineHeight: 1.8 }}>
   Choose any artist — living or from history.<br />If they are no longer with us, they will speak<br />to you directly in their own voice.
 </p>
-<button onClick={onLibrary} style={{ ...T.body, fontSize: "0.78rem", color: T.orange, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.06em", marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.4rem", padding: 0 }}
+<button onClick={onLibrary} style={{ ...T.body, fontSize: "0.78rem", color: T.amber, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.06em", marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.4rem", padding: 0 }}
   onMouseEnter={e => e.currentTarget.style.color = T.cream}
   onMouseLeave={e => e.currentTarget.style.color = T.muted}>
   Explore the Studio Library →
