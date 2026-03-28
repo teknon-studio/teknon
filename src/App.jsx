@@ -124,7 +124,7 @@ const T = {
   faint: "rgba(240,235,227,0.2)",
   border: "rgba(240,235,227,0.18)",
   borderHover: "rgba(240,235,227,0.6)",
-  amber: "#c8893a",
+  amber: "#e09840",
   amberMuted: "rgba(200,137,58,0.7)",
 };
 
@@ -158,7 +158,7 @@ function PillBtn({ children, onClick, disabled, style: extra }) {
 }
 
 const SectionLabel = ({ children }) => (
-  <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "1rem" }}>
+  <p style={{ ...T.body, fontSize: "0.82rem", letterSpacing: "0.12em", color: T.amber, textTransform: "uppercase", marginBottom: "1rem" }}>
     ✦ {children}
   </p>
 );
@@ -658,11 +658,11 @@ function FeedbackBlock({ text }) {
     if (/^\d+\.\s\*\*/.test(line)) {
       const p = line.replace(/^\d+\.\s\*\*/, "").split("**");
       return <div key={i} style={{ marginTop: "1.75rem" }}>
-        <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.amber, textTransform: "uppercase", marginBottom: "0.5rem" }}>{p[0]}</p>
+        <p style={{ ...T.body, fontSize: "0.82rem", letterSpacing: "0.12em", color: T.amber, textTransform: "uppercase", marginBottom: "0.5rem" }}>{p[0]}</p>
         {p[1] && <p style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.75)", lineHeight: 1.8 }}>{p[1].replace(/^[\s—–-]+/, "")}</p>}
       </div>;
     }
-    if (line.startsWith("**") && line.endsWith("**")) return <p key={i} style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.amber, textTransform: "uppercase", marginTop: "1.75rem", marginBottom: "0.5rem" }}>{line.replace(/\*\*/g, "")}</p>;
+    if (line.startsWith("**") && line.endsWith("**")) return <p key={i} style={{ ...T.body, fontSize: "0.82rem", letterSpacing: "0.12em", color: T.amber, textTransform: "uppercase", marginTop: "1.75rem", marginBottom: "0.5rem" }}>{line.replace(/\*\*/g, "")}</p>;
     if (line.startsWith("- ") || line.startsWith("• ")) return <p key={i} style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.72)", lineHeight: 1.8, paddingLeft: "1rem" }}>– {line.replace(/^[-•]\s/, "").replace(/\*\*/g, "")}</p>;
     if (line.trim() === "") return <div key={i} style={{ height: "0.5rem" }} />;
     return <p key={i} style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.72)", lineHeight: 1.8 }}>{line.replace(/\*\*/g, "")}</p>;
