@@ -1190,25 +1190,24 @@ useEffect(() => {
       const params = new URLSearchParams(window.location.search);
       if (params.get("subscribed") === "true") {
         window.history.replaceState({}, "", window.location.pathname);
-        const savedEmail = localStorage.getItem("teknon-email");
-        if (savedEmail) {
-          try {
-            const res = await fetch("/api/verify-subscription", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: savedEmail }) });
-            const data = await res.json();
-            if (data.active) { setSubscription({ tier: data.tier, trialing: data.trialing }); setUserEmail(savedEmail); }
-          } catch {}
-        }
       }
-      // Restore email and check subscription
+      // Always check subscription on load if email exists
       const savedEmail = localStorage.getItem("teknon-email");
       if (savedEmail) {
         setUserEmail(savedEmail);
         try {
           const res = await fetch("/api/verify-subscription", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: savedEmail }) });
           const data = await res.json();
-          setSubscription(data.active ? { tier: data.tier, trialing: data.trialing } : false);
+          if (data.active) {
+            setSubscription({ tier: data.tier, trialing: data.trialing });
+          } else {
+            setSubscription(false);
+          }
         } catch { setSubscription(false); }
-      } else { setSubscription(false); }
+      } else {
+        setSubscription(false);
+      }
+      
       // Restore analysis count
       const count = parseInt(localStorage.getItem("teknon-analysis-count") || "0");
       setAnalysisCount(count);
@@ -1232,7 +1231,7 @@ useEffect(() => {
     setAnalysisCount(newCount);
     localStorage.setItem("teknon-analysis-count", newCount.toString());
     // First analysis always free
-    if (newCount === 1 || subscription?.active) {
+    if (newCount === 1 || subscription?.tier) {
       await saveSession(session); setCurrentSession(session); setPage("response");
     } else {
       // Save session but show paywall
