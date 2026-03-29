@@ -329,7 +329,12 @@ function SharedFeedbackPage({ onStart }) {
         <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.15em", color: T.muted, textTransform: "uppercase", marginBottom: "1.5rem" }}>Shared from Teknon</p>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", marginBottom: "3.5rem", alignItems: "center" }}>
-          <img src={session.imageSrc} alt="artwork" style={{ width: "100%", borderRadius: 12, border: `1px solid ${T.border}`, objectFit: "contain", maxHeight: 280, background: "#0d0d0d" }} />
+          {session.imageSrc
+  ? <img src={session.imageSrc} alt="artwork" style={{ width: "100%", borderRadius: 12, border: `1px solid ${T.border}`, objectFit: "contain", maxHeight: 280, background: "#0d0d0d" }} />
+  : <div style={{ width: "100%", height: 200, borderRadius: 12, border: `1px solid ${T.border}`, background: "#0d0d0d", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <p style={{ ...T.body, fontSize: "0.8rem", color: T.muted }}>Image not available in shared view</p>
+    </div>
+}
           <div>
             <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>The work</p>
             <p style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.8)", lineHeight: 1.7, marginBottom: "0.5rem" }}>{session.description}</p>
@@ -1169,6 +1174,16 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
   const shareSession = () => {
     try {
       const shareData = { imageSrc: session.imageSrc, description, targetArtist, feedback };
+      const json = JSON.stringify(shareData);
+      if (json.length > 50000) {
+        const shareDataSmall = { imageSrc: null, description, targetArtist, feedback };
+        const encoded = encodeURIComponent(btoa(JSON.stringify(shareDataSmall)));
+        const url = `${window.location.origin}?share=${encoded}`;
+        navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+        return;
+      }
       const encoded = encodeURIComponent(btoa(JSON.stringify(shareData)));
       const url = `${window.location.origin}?share=${encoded}`;
       navigator.clipboard.writeText(url);
