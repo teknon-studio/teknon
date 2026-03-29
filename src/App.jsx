@@ -1336,6 +1336,10 @@ useEffect(() => {
   const handleLoad = s => { setCurrentSession(s); setPage("response"); };
 
   if (!loaded) return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: BG, ...T.body, fontSize: "0.8rem", color: T.muted }}>Loading…</div>;
+  // Check for shared feedback link
+  if (new URLSearchParams(window.location.search).get("share")) {
+    return <SharedFeedbackPage onStart={() => { window.history.replaceState({}, "", window.location.pathname); setPage("mentor"); }} />;
+  }
   if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} />;
   if (page === "paywall") return <PaywallPage onBack={() => setPage("easel")} firstAnalysisDone={analysisCount >= 1} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} onLibrary={() => { setPrevPage("mentor"); setPage("library"); }} />;
