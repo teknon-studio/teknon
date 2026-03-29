@@ -1223,7 +1223,7 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
         <div style={{ marginBottom: "1rem" }}>
           <SectionLabel>Studio Analysis</SectionLabel>
           {targetArtist && (
-            <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.muted, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
+            <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.cream, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
               Your feedback inspired by the accumulated records of {targetArtist}'s writings and works
             </p>
           )}
