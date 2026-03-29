@@ -99,6 +99,20 @@ const storage = {
   list: (prefix) => { try { const keys = Object.keys(localStorage).filter(k => k.startsWith(prefix)); return { keys }; } catch { return { keys: [] }; } }
 };
 
+const checkDailyLimit = (tier) => {
+  const today = new Date().toDateString();
+  const key = `teknon-daily-${today}`;
+  const count = parseInt(localStorage.getItem(key) || "0");
+  const limits = { free: 1, studio: 10, master: 20 };
+  const limit = limits[tier] || 1;
+  return { count, limit, exceeded: count >= limit, key };
+};
+
+const incrementDailyCount = (key) => {
+  const count = parseInt(localStorage.getItem(key) || "0");
+  localStorage.setItem(key, (count + 1).toString());
+};
+
 const callAPI = async (messages, tools = true, maxTokens = 1500) => {
   const body = { model: MODEL, max_tokens: maxTokens, messages };
   if (tools) body.tools = [{ type: "web_search_20250305", name: "web_search" }];
@@ -880,7 +894,7 @@ function ClassesPanel() {
   );
 }
 
-function EaselPage({ onAbout, onLibrary, onAnalyse, sessions, onLoadSession, onDeleteSession, defaultMentor }) {
+function EaselPage({ onAbout, onLibrary, onAnalyse, sessions, onLoadSession, onDeleteSession, defaultMentor, subscription, analysisCount }) {
   const [image, setImage] = useState(null);
   const [imageB64, setImageB64] = useState(null);
   const [imageMime, setImageMime] = useState("image/jpeg");
@@ -948,6 +962,18 @@ const handleRefFile = file => {
 };
   const analyse = async () => {
     if (!imageB64 || !description) return;
+
+    // Check daily rate limit
+    const tier = subscription?.tier || (analysisCount === 0 ? "free" : null);
+    if (tier) {
+      const { exceeded, limit, key, count } = checkDailyLimit(tier);
+      if (exceeded) {
+        setError(`You've reached your daily limit of ${limit} ${limit === 1 ? "analysis" : "analyses"}. Come back tomorrow — your mentor will be waiting.`);
+        return;
+      }
+      incrementDailyCount(key);
+    }
+
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
     const voiceInstruction = !targetArtist
       ? `You are a masterful, deeply experienced art tutor with encyclopaedic knowledge of art history and a lifetime of studio practice.`
@@ -1361,5 +1387,5 @@ useEffect(() => {
   if (page === "about") return <AboutPage onBack={() => setPage(prevPage)} />;
   if (page === "library") return <LibraryPage onBack={() => setPage(prevPage)} selectedMentor={selectedMentor} />;
   if (page === "response" && currentSession) return <ResponsePage session={currentSession} onBack={() => setPage("mentor")} onAbout={() => { setPrevPage("response"); setPage("about"); }} onLibrary={() => { setPrevPage("response"); setPage("library"); }} onSaveSession={saveSession} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} />;
-  return <EaselPage onAbout={() => { setPrevPage("easel"); setPage("about"); }} onLibrary={() => { setPrevPage("easel"); setPage("library"); }} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} />;
+  return <EaselPage onAbout={() => setPage("about")} onLibrary={() => { setPrevPage("easel"); setPage("library"); }} onAnalyse={handleAnalyse} sessions={sessions} onLoadSession={handleLoad} onDeleteSession={deleteSession} defaultMentor={selectedMentor} subscription={subscription} analysisCount={analysisCount} />;
 }
