@@ -192,19 +192,20 @@ function Header({ onAbout, onLibrary, sessionSaved, sessions, onLoadSession, onD
                       <img src={s.imageSrc} alt="artwork" style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8, border: `1px solid ${T.border}`, flexShrink: 0 }} />
                       <button onClick={() => {
   try {
-    const shareData = { imageSrc: s.imageSrc, description: s.description, targetArtist: s.targetArtist, feedback: s.feedback };
-    const encoded = encodeURIComponent(btoa(JSON.stringify(shareData)));
-    const url = `${window.location.origin}?share=${encoded}`;
-    navigator.clipboard.writeText(url);
-  } catch {}
-}} style={{ ...navBtn, color: T.amber, fontSize: "0.7rem" }}>↗</button>
-<button onClick={() => onDeleteSession(s.id)} style={{ ...navBtn, color: "rgba(240,235,227,0.2)", fontSize: "0.75rem" }}>✕</button>
-                      <p style={{ ...T.body, fontSize: "0.8rem", color: T.amber, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.targetArtist || "No mentor"}</p>
+    <p style={{ ...T.body, fontSize: "0.8rem", color: T.amber, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.targetArtist || "No mentor"}</p>
                         <p style={{ ...T.body, fontSize: "0.7rem", color: T.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.description}</p>
                         <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.25)", marginTop: 2 }}>{new Date(s.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</p>
                       </div>
+                      <button onClick={() => {
+                        try {
+                          const shareData = { imageSrc: s.imageSrc, description: s.description, targetArtist: s.targetArtist, feedback: s.feedback };
+                          const encoded = encodeURIComponent(btoa(JSON.stringify(shareData)));
+                          const url = `${window.location.origin}?share=${encoded}`;
+                          navigator.clipboard.writeText(url);
+                        } catch {}
+                      }} style={{ ...navBtn, color: T.amber, fontSize: "0.7rem" }}>↗</button>
                       <button onClick={() => onDeleteSession(s.id)} style={{ ...navBtn, color: "rgba(240,235,227,0.2)", fontSize: "0.75rem" }}>✕</button>
-                    </div>
+    </div>
                   ))}
                 </div>
               </div>
