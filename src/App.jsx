@@ -190,8 +190,16 @@ function Header({ onAbout, onLibrary, sessionSaved, sessions, onLoadSession, onD
                   {sessions.map(s => (
                     <div key={s.id} style={{ display: "flex", alignItems: "center", gap: "0.8rem", padding: "0.9rem 1.2rem", borderBottom: `1px solid ${T.border}`, cursor: "pointer" }}>
                       <img src={s.imageSrc} alt="artwork" style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8, border: `1px solid ${T.border}`, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: 0 }} onClick={() => { onLoadSession(s); setSessionsOpen(false); }}>
-                        <p style={{ ...T.body, fontSize: "0.8rem", color: T.amber, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.targetArtist || "No mentor"}</p>
+                      <button onClick={() => {
+  try {
+    const shareData = { imageSrc: s.imageSrc, description: s.description, targetArtist: s.targetArtist, feedback: s.feedback };
+    const encoded = encodeURIComponent(btoa(JSON.stringify(shareData)));
+    const url = `${window.location.origin}?share=${encoded}`;
+    navigator.clipboard.writeText(url);
+  } catch {}
+}} style={{ ...navBtn, color: T.amber, fontSize: "0.7rem" }}>↗</button>
+<button onClick={() => onDeleteSession(s.id)} style={{ ...navBtn, color: "rgba(240,235,227,0.2)", fontSize: "0.75rem" }}>✕</button>
+                      <p style={{ ...T.body, fontSize: "0.8rem", color: T.amber, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.targetArtist || "No mentor"}</p>
                         <p style={{ ...T.body, fontSize: "0.7rem", color: T.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.description}</p>
                         <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.25)", marginTop: 2 }}>{new Date(s.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</p>
                       </div>
@@ -283,7 +291,71 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
     </div>
   );
 }
+function SharedFeedbackPage({ onStart }) {
+  const [session, setSession] = useState(null);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const data = params.get("share");
+      if (!data) { setError("No shared feedback found."); return; }
+      const decoded = JSON.parse(atob(decodeURIComponent(data)));
+      setSession(decoded);
+    } catch { setError("This link appears to be invalid or has expired."); }
+  }, []);
+
+  if (error) return (
+    <div style={{ minHeight: "100vh", background: BG, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+      <TeknonLogo size="md" />
+      <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, marginTop: "2rem" }}>{error}</p>
+      <div style={{ marginTop: "2rem" }}><PillBtn onClick={onStart}>Try Teknon →</PillBtn></div>
+    </div>
+  );
+
+  if (!session) return (
+    <div style={{ minHeight: "100vh", background: BG, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted }}>Loading…</p>
+    </div>
+  );
+
+  return (
+    <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
+      <div style={{ padding: "1.2rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(107,107,105,0.96)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.border}`, zIndex: 10 }}>
+        <TeknonLogo size="sm" />
+        <PillBtn onClick={onStart} style={{ fontSize: "0.75rem", padding: "0.5rem 1.4rem" }}>Get your own feedback →</PillBtn>
+      </div>
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
+        <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.15em", color: T.muted, textTransform: "uppercase", marginBottom: "1.5rem" }}>Shared from Teknon</p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", marginBottom: "3.5rem", alignItems: "center" }}>
+          <img src={session.imageSrc} alt="artwork" style={{ width: "100%", borderRadius: 12, border: `1px solid ${T.border}`, objectFit: "contain", maxHeight: 280, background: "#0d0d0d" }} />
+          <div>
+            <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.18em", color: T.muted, textTransform: "uppercase", marginBottom: "0.75rem" }}>The work</p>
+            <p style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.8)", lineHeight: 1.7, marginBottom: "0.5rem" }}>{session.description}</p>
+            {session.targetArtist && <p style={{ ...T.body, fontSize: "0.78rem", color: T.amber }}>Mentor: {session.targetArtist}</p>}
+          </div>
+        </div>
+
+        <Hairline />
+
+        <div style={{ marginBottom: "3rem" }}>
+          <SectionLabel>Studio Analysis{session.targetArtist ? ` — in the spirit of ${session.targetArtist}` : ""}</SectionLabel>
+          <FeedbackBlock text={session.feedback} />
+        </div>
+
+        <Hairline />
+
+        <div style={{ textAlign: "center", padding: "3rem 0" }}>
+          <p style={{ ...T.body, fontSize: "1rem", color: T.cream, marginBottom: "0.5rem" }}>Get feedback on your own work</p>
+          <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted, marginBottom: "2rem", lineHeight: 1.7 }}>Choose from 30+ master artists as your mentor — from Rembrandt to Frida Kahlo</p>
+          <PillBtn onClick={onStart}>Try Teknon free →</PillBtn>
+          <p style={{ ...T.body, fontSize: "0.7rem", color: "rgba(240,235,227,0.25)", marginTop: "1rem" }}>master wisdom · private studio · no judgement</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 function LandingPage({ onStart }) {
   return (
     <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box", position: "relative", overflow: "hidden" }}>
@@ -1097,10 +1169,28 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
     <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
       <Header onAbout={onAbout} onLibrary={onLibrary} sessionSaved={true} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
       <div ref={topRef} style={{ maxWidth: 680, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
-        <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", marginBottom: "3rem", display: "flex", alignItems: "center", gap: "0.4rem" }}
-          onMouseEnter={e => e.currentTarget.style.color = T.cream} onMouseLeave={e => e.currentTarget.style.color = T.muted}>
-          ← Analyse another work
-        </button>
+        const [copied, setCopied] = useState(false);
+const shareSession = () => {
+  try {
+    const shareData = { imageSrc: session.imageSrc, description, targetArtist, feedback };
+    const encoded = encodeURIComponent(btoa(JSON.stringify(shareData)));
+    const url = `${window.location.origin}?share=${encoded}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  } catch { alert("Couldn't copy link — please try again."); }
+};
+
+<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "3rem" }}>
+  <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
+    onMouseEnter={e => e.currentTarget.style.color = T.cream} onMouseLeave={e => e.currentTarget.style.color = T.muted}>
+    ← Analyse another work
+  </button>
+  <button onClick={shareSession}
+    style={{ ...T.body, fontSize: "0.78rem", color: copied ? T.amber : T.muted, background: "transparent", border: `1px solid ${copied ? T.amberMuted : "rgba(240,235,227,0.1)"}`, borderRadius: 50, padding: "0.5rem 1.2rem", cursor: "pointer", transition: "all 0.2s" }}>
+    {copied ? "✓ Link copied" : "Share this feedback"}
+  </button>
+</div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", marginBottom: "3.5rem", alignItems: "center" }}>
           <img src={imageSrc} alt="artwork" style={{ width: "100%", borderRadius: 12, border: `1px solid ${T.border}`, objectFit: "contain", maxHeight: 280, background: "#0d0d0d" }} />
