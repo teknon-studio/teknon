@@ -1165,32 +1165,32 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
     setChatLoading(false);
   };
 
+  const [copied, setCopied] = useState(false);
+  const shareSession = () => {
+    try {
+      const shareData = { imageSrc: session.imageSrc, description, targetArtist, feedback };
+      const encoded = encodeURIComponent(btoa(JSON.stringify(shareData)));
+      const url = `${window.location.origin}?share=${encoded}`;
+      navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch { alert("Couldn't copy link — please try again."); }
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
       <Header onAbout={onAbout} onLibrary={onLibrary} sessionSaved={true} sessions={sessions} onLoadSession={onLoadSession} onDeleteSession={onDeleteSession} />
       <div ref={topRef} style={{ maxWidth: 680, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
-        const [copied, setCopied] = useState(false);
-const shareSession = () => {
-  try {
-    const shareData = { imageSrc: session.imageSrc, description, targetArtist, feedback };
-    const encoded = encodeURIComponent(btoa(JSON.stringify(shareData)));
-    const url = `${window.location.origin}?share=${encoded}`;
-    navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  } catch { alert("Couldn't copy link — please try again."); }
-};
-
-<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "3rem" }}>
-  <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
-    onMouseEnter={e => e.currentTarget.style.color = T.cream} onMouseLeave={e => e.currentTarget.style.color = T.muted}>
-    ← Analyse another work
-  </button>
-  <button onClick={shareSession}
-    style={{ ...T.body, fontSize: "0.78rem", color: copied ? T.amber : T.muted, background: "transparent", border: `1px solid ${copied ? T.amberMuted : "rgba(240,235,227,0.1)"}`, borderRadius: 50, padding: "0.5rem 1.2rem", cursor: "pointer", transition: "all 0.2s" }}>
-    {copied ? "✓ Link copied" : "Share this feedback"}
-  </button>
-</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "3rem" }}>
+          <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
+            onMouseEnter={e => e.currentTarget.style.color = T.cream} onMouseLeave={e => e.currentTarget.style.color = T.muted}>
+            ← Analyse another work
+          </button>
+          <button onClick={shareSession}
+            style={{ ...T.body, fontSize: "0.78rem", color: copied ? T.amber : T.muted, background: "transparent", border: `1px solid ${copied ? T.amberMuted : "rgba(240,235,227,0.1)"}`, borderRadius: 50, padding: "0.5rem 1.2rem", cursor: "pointer", transition: "all 0.2s" }}>
+            {copied ? "✓ Link copied" : "Share this feedback"}
+          </button>
+        </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", marginBottom: "3.5rem", alignItems: "center" }}>
           <img src={imageSrc} alt="artwork" style={{ width: "100%", borderRadius: 12, border: `1px solid ${T.border}`, objectFit: "contain", maxHeight: 280, background: "#0d0d0d" }} />
