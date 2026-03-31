@@ -656,9 +656,12 @@ function MentorSelectPage({ onSelect, onLibrary }) {
   skip for now
 </button>
           </div>
-         <p style={{ ...T.body, fontSize: "0.68rem", letterSpacing: "0.05em", color: T.cream, marginTop: "1.5rem", lineHeight: 1.8 }}>
+         <p style={{ ...T.body, fontSize: "0.68rem", letterSpacing: "0.05em", color: "rgba(240,235,227,0.22)", marginTop: "1.5rem", lineHeight: 1.8 }}>
   Choose any artist — living or from history.<br />If they are no longer with us, they will speak<br />to you directly in their own voice.
 </p>
+<div style={{ marginTop: "2rem" }}>
+  <InspirationalQuote />
+</div>
 <button onClick={onLibrary} style={{ ...T.body, fontSize: "0.78rem", color: T.amber, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.06em", marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.4rem", padding: 0 }}
   onMouseEnter={e => e.currentTarget.style.color = T.cream}
   onMouseLeave={e => e.currentTarget.style.color = T.muted}>
@@ -759,7 +762,7 @@ function InspirationalQuote() {
   useEffect(() => { setQuote(quotes[Math.floor(Math.random() * quotes.length)]); }, []);
   if (!quote) return null;
   return (
-    <div style={{ textAlign: "center", padding: "2.5rem 1.5rem", borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, margin: "2.5rem 0" }}>
+    <div style={{ textAlign: "left", padding: "1.5rem 0", borderTop: `1px solid ${T.border}`, margin: "1rem 0" }}>
       <p style={{ ...T.script, fontSize: "1.35rem", lineHeight: 1.7, color: "rgba(240,235,227,0.75)" }}>"{quote.text}"</p>
       <p style={{ ...T.script, fontSize: "1.1rem", color: T.muted, marginTop: "0.5rem" }}>— {quote.author}</p>
     </div>
