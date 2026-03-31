@@ -275,10 +275,10 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
           {[
-            { key: "studio_monthly", label: "Studio", price: "£9.99 / month", desc: "Unlimited analyses · Full session history · Studio Library" },
-            { key: "studio_annual",  label: "Studio", price: "£89 / year", desc: "Save two months · Everything in Studio monthly" },
-            { key: "master_monthly", label: "Master", price: "£19.99 / month", desc: "Everything in Studio · ElevenLabs voice when launched" },
-            { key: "master_annual",  label: "Master", price: "£179 / year", desc: "Save two months · Everything in Master monthly" },
+            { key: "studio_monthly", label: "Studio Monthly", price: "£9.99 / month", desc: "Unlimited analyses · Full session history · Studio Library" },
+            { key: "studio_annual",  label: "Studio Annual", price: "£89 / year", desc: "Save two months · Everything in Studio monthly" },
+            { key: "master_monthly", label: "Master Monthly", price: "£19.99 / month", desc: "Everything in Studio · ElevenLabs voice when launched" },
+            { key: "master_annual",  label: "Master Annual", price: "£179 / year", desc: "Save two months · Everything in Master monthly" },
           ].map(plan => (
             <button key={plan.key} onClick={() => checkout(plan.key)} disabled={!!loading}
               style={{ ...T.body, textAlign: "left", background: "transparent", border: `1px solid ${T.border}`, borderRadius: 12, padding: "1.1rem 1.4rem", cursor: loading ? "default" : "pointer", transition: "all 0.2s", opacity: loading && loading !== plan.key ? 0.4 : 1 }}
@@ -657,7 +657,7 @@ function MentorSelectPage({ onSelect, onLibrary }) {
 </button>
           </div>
          <p style={{ ...T.body, fontSize: "0.68rem", letterSpacing: "0.05em", color: "rgba(240,235,227,0.22)", marginTop: "1.5rem", lineHeight: 1.8 }}>
-  Choose any artist — living or from history.<br />If they are no longer with us, they will speak<br />to you directly in their own voice.
+  Choose any artist — living or from the past.<br />If they are no longer with us, they will speak<br />to you directly in their own voice.
 </p>
 <div style={{ marginTop: "2rem" }}>
   <InspirationalQuote />
@@ -703,7 +703,7 @@ function AboutPage({ onBack }) {
       <div style={{ maxWidth: 620, margin: "0 auto", padding: "5rem 2rem 6rem" }}>
         <div style={{ marginBottom: "4rem", textAlign: "center" }}>
           <TeknonLogo size="lg" />
-          <p style={{ ...T.body, color: T.muted, fontSize: "0.85rem", marginTop: "1rem" }}>Private guidance. Master wisdom. No judgement.</p>
+          <p style={{ ...T.body, color: T.muted, fontSize: "0.85rem", marginTop: "1rem" }}>Master wisdom. No Trolls. No judgement.</p>
         </div>
         {[
           { title: "The name", body: ["Teknon (τέκνον) is an ancient Greek word meaning child, offspring — but also a term used to describe the relationship between a teacher and their student. In the classical tradition, a pupil was the teacher's teknon: someone whose mind was being nourished, whose character was being shaped, who was being brought into their fullest creative self.", "Its root is closely related to tektōn — the craftsman, the maker, the one who carves and moulds. From this root we get the word architect. Together, these words describe something essential: the creative child being guided by a master who has walked the same difficult path."] },
