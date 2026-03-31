@@ -375,7 +375,116 @@ function SharedFeedbackPage({ onStart }) {
     </div>
   );
 }
-function LandingPage({ onStart }) {
+function MyStudioPage({ onBack, sessions }) {
+  const [themes, setThemes] = useState(null);
+  const [themesLoading, setThemesLoading] = useState(false);
+  const [compareA, setCompareA] = useState(null);
+  const [compareB, setCompareB] = useState(null);
+
+  useEffect(() => {
+    if (sessions.length < 3) return;
+    const lastThemeCount = parseInt(localStorage.getItem("teknon-themes-count") || "0");
+    if (sessions.length - lastThemeCount < 3) {
+      const saved = localStorage.getItem("teknon-themes");
+      if (saved) setThemes(JSON.parse(saved));
+      return;
+    }
+    generateThemes();
+  }, []);
+
+  const generateThemes = async () => {
+    setThemesLoading(true);
+    try {
+      const feedbacks = sessions.slice(0, 10).map((s, i) =>
+        `Session ${i + 1} (${s.targetArtist || "No mentor"}, ${new Date(s.date).toLocaleDateString("en-GB")}): ${s.feedback?.slice(0, 500) || ""}`
+      ).join("\n\n");
+      const text = await callAPI([{ role: "user", content: `You are analysing a series of art mentor feedback sessions for a single artist. Identify 3-4 recurring themes, patterns or areas that come up consistently across these sessions. Be specific and personal — not generic advice. Write each theme as a short, direct observation of 1-2 sentences.\n\nSessions:\n${feedbacks}\n\nReturn ONLY valid JSON:\n[{"theme":"...","observation":"..."}]` }], false, 800);
+      const c = text.replace(/```json|```/g, "").trim();
+      const s = c.indexOf("["), e = c.lastIndexOf("]");
+      if (s !== -1) {
+        const parsed = JSON.parse(c.slice(s, e + 1));
+        setThemes(parsed);
+        localStorage.setItem("teknon-themes", JSON.stringify(parsed));
+        localStorage.setItem("teknon-themes-count", sessions.length.toString());
+      }
+    } catch { }
+    setThemesLoading(false);
+  };
+
+  const sorted = [...sessions].sort((a, b) => b.date - a.date);
+
+  return (
+    <div style={{ minHeight: "100vh", background: BG, color: T.cream }}>
+      <div style={{ padding: "1.2rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(107,107,105,0.96)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.border}`, zIndex: 10 }}>
+        <TeknonLogo size="sm" />
+        <PillBtn onClick={onBack} style={{ fontSize: "0.75rem", padding: "0.5rem 1.2rem" }}>← Back</PillBtn>
+      </div>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "4rem 2rem 6rem" }}>
+        <h2 style={{ ...T.serif, fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 300, color: T.cream, marginBottom: "0.5rem" }}>My Studio</h2>
+        <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, marginBottom: "3rem", lineHeight: 1.7 }}>Your artistic journey — {sessions.length} {sessions.length === 1 ? "session" : "sessions"} recorded.</p>
+
+        {/* Recurring Themes */}
+        {sessions.length >= 3 && (
+          <div style={{ marginBottom: "3rem" }}>
+            <SectionLabel>Recurring Themes in Your Feedback</SectionLabel>
+            {themesLoading && <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted }} className="animate-pulse">Analysing your sessions…</p>}
+            {themes && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {themes.map((t, i) => (
+                  <div key={i} style={{ padding: "1.2rem 1.5rem", border: `1px solid ${T.border}`, borderRadius: 12 }}>
+                    <p style={{ ...T.body, fontSize: "0.78rem", letterSpacing: "0.1em", color: T.amber, textTransform: "uppercase", marginBottom: "0.4rem" }}>{t.theme}</p>
+                    <p style={{ ...T.body, fontSize: "0.88rem", color: "rgba(240,235,227,0.75)", lineHeight: 1.7 }}>{t.observation}</p>
+                  </div>
+                ))}
+                <button onClick={generateThemes} style={{ ...T.body, fontSize: "0.75rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", textAlign: "left", padding: 0 }}>
+                  Refresh analysis →
+                </button>
+              </div>
+            )}
+            {sessions.length >= 3 && !themes && !themesLoading && (
+              <button onClick={generateThemes} style={{ ...T.body, fontSize: "0.82rem", color: T.muted, background: "transparent", border: `1px solid ${T.border}`, borderRadius: 50, padding: "0.65rem 1.4rem", cursor: "pointer" }}>
+                Analyse my sessions →
+              </button>
+            )}
+            <Hairline />
+          </div>
+        )}
+
+        {sessions.length < 3 && (
+          <div style={{ marginBottom: "3rem", padding: "1.5rem", border: `1px solid ${T.border}`, borderRadius: 12 }}>
+            <p style={{ ...T.body, fontSize: "0.85rem", color: T.muted, lineHeight: 1.7 }}>Complete {3 - sessions.length} more {3 - sessions.length === 1 ? "session" : "sessions"} to unlock recurring theme analysis.</p>
+          </div>
+        )}
+
+        {/* Timeline */}
+        <SectionLabel>Session Timeline</SectionLabel>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {sorted.map((s, i) => (
+            <div key={s.id} style={{ display: "grid", gridTemplateColumns: "80px 1fr", gap: "1.5rem", alignItems: "start" }}>
+              <div style={{ textAlign: "right" }}>
+                <p style={{ ...T.body, fontSize: "0.7rem", color: T.muted, lineHeight: 1.6 }}>
+                  {new Date(s.date).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                </p>
+                <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.25)" }}>
+                  {new Date(s.date).getFullYear()}
+                </p>
+              </div>
+              <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start", paddingBottom: "1.5rem", borderBottom: i < sorted.length - 1 ? `1px solid ${T.border}` : "none" }}>
+                <img src={s.imageSrc} alt="artwork" style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 8, border: `1px solid ${T.border}`, flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {s.targetArtist && <p style={{ ...T.body, fontSize: "0.78rem", color: T.amber, marginBottom: "0.2rem" }}>{s.targetArtist}</p>}
+                  <p style={{ ...T.body, fontSize: "0.85rem", color: "rgba(240,235,227,0.8)", marginBottom: "0.4rem", lineHeight: 1.5 }}>{s.description}</p>
+                  {s.feedback && <p style={{ ...T.body, fontSize: "0.75rem", color: T.muted, lineHeight: 1.6 }}>{s.feedback.replace(/\*\*/g, "").slice(0, 120)}…</p>}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+function LandingPage({ onStart, onMyStudio }) {
   return (
     <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box", position: "relative", overflow: "hidden" }}>
       <img src="/hero.jpg" alt="" style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none", maxWidth: "60vw" }} />
@@ -386,6 +495,14 @@ function LandingPage({ onStart }) {
         </h1>
         <p style={{ ...T.body, fontSize: "clamp(1rem,2.5vw,1.4rem)", fontWeight: 300, color: "rgba(240,235,227,0.6)", letterSpacing: "0.01em", marginBottom: "2rem", lineHeight: 1.4 }}>great advice at a fraction of the price</p>
         <PillBtn onClick={onStart}>get started</PillBtn>
+{onMyStudio && (
+  <button onClick={onMyStudio}
+    style={{ ...T.body, fontSize: "0.78rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em", marginTop: "0.75rem", display: "block" }}
+    onMouseEnter={e => e.currentTarget.style.color = T.cream}
+    onMouseLeave={e => e.currentTarget.style.color = T.muted}>
+    My Studio →
+  </button>
+)}
         
 <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: T.cream, marginTop: "1.2rem" }}>master wisdom · no trolls · no judgement</p>
 <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.2)", marginTop: "0.75rem" }}>
@@ -1381,7 +1498,8 @@ useEffect(() => {
   if (new URLSearchParams(window.location.search).get("share")) {
     return <SharedFeedbackPage onStart={() => { window.history.replaceState({}, "", window.location.pathname); setPage("mentor"); }} />;
   }
-  if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} />;
+  if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} onMyStudio={sessions.length > 0 && subscription?.tier ? () => setPage("mystudio") : null} />;
+  if (page === "mystudio") return <MyStudioPage onBack={() => setPage("landing")} sessions={sessions} />;
   if (page === "paywall") return <PaywallPage onBack={() => setPage("easel")} firstAnalysisDone={analysisCount >= 1} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} onLibrary={() => { setPrevPage("mentor"); setPage("library"); }} />;
   if (page === "about") return <AboutPage onBack={() => setPage(prevPage)} />;
