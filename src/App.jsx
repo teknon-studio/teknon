@@ -507,8 +507,10 @@ function LandingPage({ onStart, onMyStudio }) {
 <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: T.cream, marginTop: "1.2rem" }}>master wisdom · no trolls · no judgement</p>
 <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.2)", marginTop: "0.75rem" }}>
   <a href="/privacy.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Privacy Policy</a>
-  {" · "}
-  <a href="/terms.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Terms of Service</a>
+{" · "}
+<a href="/terms.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Terms of Service</a>
+{" · "}
+<a href="mailto:teknonapp@gmail.com" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Contact</a>
 </p>
       </div>
     </div>
@@ -718,7 +720,11 @@ function AboutPage({ onBack }) {
           </div>
         ))}
         <div style={{ textAlign: "center", marginTop: "3rem" }}>
-          <PillBtn onClick={onBack}>Enter the Studio →</PillBtn>
+  <PillBtn onClick={onBack}>Enter the Studio →</PillBtn>
+  <p style={{ ...T.body, fontSize: "0.75rem", color: T.muted, marginTop: "1.5rem" }}>
+    Questions or feedback? <a href="mailto:teknonapp@gmail.com" style={{ color: T.amber, textDecoration: "none" }}>thorneycroft.r@gmail.com</a>
+  </p>
+</div>
         </div>
       </div>
     </div>
