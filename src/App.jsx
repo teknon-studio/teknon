@@ -722,7 +722,7 @@ function AboutPage({ onBack }) {
         <div style={{ textAlign: "center", marginTop: "3rem" }}>
   <PillBtn onClick={onBack}>Enter the Studio →</PillBtn>
   <p style={{ ...T.body, fontSize: "0.75rem", color: T.muted, marginTop: "1.5rem" }}>
-    Questions or feedback? <a href="mailto:teknonapp@gmail.com" style={{ color: T.amber, textDecoration: "none" }}>thorneycroft.r@gmail.com</a>
+    Questions or feedback? <a href="mailto:teknonapp@gmail.com" style={{ color: T.amber, textDecoration: "none" }}>teknonapp.r@gmail.com</a>
   </p>
 </div>
         </div>
