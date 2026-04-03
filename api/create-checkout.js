@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     params.append("mode", "subscription");
     params.append("line_items[0][price]", priceId);
     params.append("line_items[0][quantity]", "1");
-    params.append("subscription_data[trial_period_days]", "7");
+    params.append("subscription_data[trial_period_days]", "1");
     params.append("success_url", successUrl);
     params.append("cancel_url", cancelUrl);
     params.append("allow_promotion_codes", "true");
