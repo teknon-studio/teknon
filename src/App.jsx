@@ -1492,6 +1492,16 @@ useEffect(() => {
     setAnalysisCount(newCount);
     localStorage.setItem("teknon-analysis-count", newCount.toString());
     // First analysis always free
+    const trialAnalysisKey = "teknon-trial-count";
+    const trialCount = parseInt(localStorage.getItem(trialAnalysisKey) || "0");
+    if (subscription?.trialing) {
+      const newTrialCount = trialCount + 1;
+      localStorage.setItem(trialAnalysisKey, newTrialCount.toString());
+      if (newTrialCount > 7) {
+        setCurrentSession(null);
+        alert("Your 7 free trial analyses are complete. Your subscription is now active.");
+      }
+    }
     if (newCount <= 3 || subscription?.tier) {
       await saveSession(session); setCurrentSession(session); setPage("response");
     } else {
