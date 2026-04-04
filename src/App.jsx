@@ -266,7 +266,7 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
           continue your<br />practice
         </h1>
         <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, lineHeight: 1.8, marginBottom: "2.5rem" }}>
-  7 more free analyses when you subscribe — no payment taken until you've used them. Cancel any time.
+  Choose your plan and continue your practice. Cancel any time.
 </p>
 
         <input value={email} onChange={e => setEmail(e.target.value)}
