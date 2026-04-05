@@ -259,7 +259,7 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
       <div style={{ maxWidth: 520 }}>
         {firstAnalysisDone && (
   <p style={{ ...T.body, fontSize: "0.75rem", letterSpacing: "0.1em", color: T.amber, textTransform: "uppercase", marginBottom: "1.5rem" }}>
-    You've used your 3 free analyses
+    You've used your free analyses
   </p>
 )}
         <h1 style={{ ...T.body, fontSize: "clamp(2rem,5vw,3.5rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "1rem" }}>
@@ -1495,7 +1495,7 @@ useEffect(() => {
     setAnalysisCount(newCount);
     localStorage.setItem("teknon-analysis-count", newCount.toString());
     // First analysis always free
-    if (newCount <= 3 || subscription?.tier) {
+    if (newCount <= 1 || subscription?.tier) {
       await saveSession(session); setCurrentSession(session); setPage("response");
     } else {
       // Save session but show paywall
@@ -1511,7 +1511,7 @@ useEffect(() => {
   }
   if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} onMyStudio={sessions.length > 0 && subscription?.tier ? () => setPage("mystudio") : null} />;
   if (page === "mystudio") return <MyStudioPage onBack={() => setPage("landing")} sessions={sessions} />;
-  if (page === "paywall") return <PaywallPage onBack={() => setPage("easel")} firstAnalysisDone={analysisCount >= 3} />;
+  if (page === "paywall") return <PaywallPage onBack={() => setPage("easel")} firstAnalysisDone={analysisCount >= 1} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} onLibrary={() => { setPrevPage("mentor"); setPage("library"); }} />;
   if (page === "about") return <AboutPage onBack={() => setPage(prevPage)} />;
   if (page === "library") return <LibraryPage onBack={() => setPage(prevPage)} selectedMentor={selectedMentor} />;
