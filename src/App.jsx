@@ -103,7 +103,7 @@ const checkDailyLimit = (tier) => {
   const today = new Date().toDateString();
   const key = `teknon-daily-${today}`;
   const count = parseInt(localStorage.getItem(key) || "0");
-  const limits = { free: 1, studio: 10, master: 20 };
+  const limits = { free: 1, studio: 8, master: 8 };
   const limit = limits[tier] || 1;
   return { count, limit, exceeded: count >= limit, key };
 };
@@ -275,10 +275,10 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
           {[
-            { key: "studio_monthly", label: "Studio Monthly", price: "£9.99 / month", desc: "Unlimited analyses · Full session history · Studio Library" },
-            { key: "studio_annual",  label: "Studio Annual", price: "£89 / year", desc: "Save two months · Everything in Studio monthly" },
-            { key: "master_monthly", label: "Master Monthly", price: "£19.99 / month", desc: "Everything in Studio · ElevenLabs voice when launched" },
-            { key: "master_annual",  label: "Master Annual", price: "£179 / year", desc: "Save two months · Everything in Master monthly" },
+            { key: "studio_monthly", label: "Studio Monthly", price: "£9.99 / month", desc: "Up to 8 analyses per day · Full session history · Studio Library" },
+{ key: "studio_annual",  label: "Studio Annual", price: "£89 / year", desc: "Save two months · Up to 8 analyses per day · Full session history" },
+{ key: "master_monthly", label: "Master Monthly", price: "£19.99 / month", desc: "Up to 8 analyses per day · Everything in Studio · ElevenLabs voice when launched" },
+{ key: "master_annual",  label: "Master Annual", price: "£179 / year", desc: "Save two months · Everything in Master · ElevenLabs voice when launched" },
           ].map(plan => (
             <button key={plan.key} onClick={() => checkout(plan.key)} disabled={!!loading}
               style={{ ...T.body, textAlign: "left", background: "transparent", border: `1px solid ${T.border}`, borderRadius: 12, padding: "1.1rem 1.4rem", cursor: loading ? "default" : "pointer", transition: "all 0.2s", opacity: loading && loading !== plan.key ? 0.4 : 1 }}
@@ -1277,8 +1277,11 @@ const res = await fetch("/api/chat", { method: "POST", headers: HEADERS, body: J
         {error && <p style={{ ...T.body, fontSize: "0.82rem", color: "#f87171", textAlign: "center", marginTop: "1rem" }}>{error}</p>}
 
         <p style={{ ...T.body, fontSize: "0.7rem", color: "rgba(240,235,227,0.25)", textAlign: "center", marginTop: "2.5rem", lineHeight: 1.8 }}>
-          ✦ Teknon is a companion to your creative journey, not a replacement for the irreplaceable.<br />Nothing substitutes a one-to-one lesson with a practising artist.
-        </p>
+  ✦ Teknon is a companion to your creative journey, not a replacement for the irreplaceable.<br />Nothing substitutes a one-to-one lesson with a practising artist.
+</p>
+<p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.2)", textAlign: "center", marginTop: "0.5rem" }}>
+  Up to 8 analyses per day · resets at midnight
+</p>
       </div>
     </div>
   );
