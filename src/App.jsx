@@ -103,7 +103,7 @@ const checkDailyLimit = (tier) => {
   const today = new Date().toDateString();
   const key = `teknon-daily-${today}`;
   const count = parseInt(localStorage.getItem(key) || "0");
-  const limits = { free: 1, studio: 8, master: 8 };
+  const limits = { free: 0, studio: 8, master: 8 };
   const limit = limits[tier] || 1;
   return { count, limit, exceeded: count >= limit, key };
 };
