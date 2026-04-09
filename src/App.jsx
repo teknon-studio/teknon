@@ -1506,7 +1506,7 @@ useEffect(() => {
     setAnalysisCount(newCount);
     localStorage.setItem("teknon-analysis-count", newCount.toString());
     // First analysis always free
-    if (newCount <= 1 || subscription?.tier) {
+    if (newCount <= 1 || subscription?.tier === "master" || subscription?.tier === "studio") {
       await saveSession(session); setCurrentSession(session); setPage("response");
     } else {
       // Save session but show paywall
