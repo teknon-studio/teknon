@@ -100,25 +100,19 @@ const storage = {
 };
 
 const checkDailyLimit = (tier) => {
-  if (tier === "free") {
-    const used = localStorage.getItem("teknon-free-used") === "true";
-    return { count: used ? 1 : 0, limit: 1, exceeded: used, key: "teknon-free-used" };
-  }
   const today = new Date().toDateString();
   const key = `teknon-daily-${today}`;
   const count = parseInt(localStorage.getItem(key) || "0");
-  const limits = { studio: 8, master: 8 };
-  const limit = limits[tier] || 8;
+  const limits = { free: 0, studio: 8, master: 8 };
+  const limit = limits[tier] || 1;
   return { count, limit, exceeded: count >= limit, key };
 };
+
 const incrementDailyCount = (key) => {
-  if (key === "teknon-free-used") {
-    localStorage.setItem("teknon-free-used", "true");
-    return;
-  }
   const count = parseInt(localStorage.getItem(key) || "0");
   localStorage.setItem(key, (count + 1).toString());
 };
+
 const callAPI = async (messages, tools = true, maxTokens = 1500) => {
   const body = { model: MODEL, max_tokens: maxTokens, messages };
   if (tools) body.tools = [{ type: "web_search_20250305", name: "web_search" }];
@@ -238,7 +232,65 @@ function Header({ onAbout, onLibrary, sessionSaved, sessions, onLoadSession, onD
   );
 }
 
-<div style={{ display: "flex", gap: "0.75rem"
+function PaywallPage({ onBack, firstAnalysisDone }) {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(null);
+  const [error, setError] = useState(null);
+
+  const checkout = async (priceKey) => {
+    if (!email.trim()) { setError("Please enter your email address first."); return; }
+    setLoading(priceKey); setError(null);
+    localStorage.setItem("teknon-email", email.trim());
+    try {
+      const origin = window.location.origin;
+      const res = await fetch("/api/create-checkout", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceKey, email: email.trim(), successUrl: `${origin}?subscribed=true`, cancelUrl: `${origin}?cancelled=true` })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      window.location.href = data.url;
+    } catch (e) { setError(e.message); setLoading(null); }
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: BG, color: T.cream, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
+      <TeknonLogo size="md" />
+      <div style={{ maxWidth: 520 }}>
+        {firstAnalysisDone && (
+  <p style={{ ...T.body, fontSize: "0.75rem", letterSpacing: "0.1em", color: T.amber, textTransform: "uppercase", marginBottom: "1.5rem" }}>
+    You've used your free analyses
+  </p>
+)}
+        <h1 style={{ ...T.body, fontSize: "clamp(2rem,5vw,3.5rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "1rem" }}>
+          continue your<br />practice
+        </h1>
+        <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, lineHeight: 1.8, marginBottom: "2.5rem" }}>
+  Choose your plan and continue your practice. Cancel any time.
+</p>
+
+        <input value={email} onChange={e => setEmail(e.target.value)}
+          placeholder="your email address"
+          style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", marginBottom: "2rem" }} />
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
+          {[
+            { key: "studio_monthly", label: "Studio Monthly", price: "£9.99 / month", desc: "Up to 8 analyses per day · Full session history · Studio Library" },
+{ key: "studio_annual",  label: "Studio Annual", price: "£89 / year", desc: "Save two months · Up to 8 analyses per day · Full session history" },
+{ key: "master_monthly", label: "Master Monthly", price: "£19.99 / month", desc: "Up to 8 analyses per day · Everything in Studio · ElevenLabs voice when launched" },
+{ key: "master_annual",  label: "Master Annual", price: "£179 / year", desc: "Save two months · Everything in Master · ElevenLabs voice when launched" },
+          ].map(plan => (
+            <button key={plan.key} onClick={() => checkout(plan.key)} disabled={!!loading}
+              style={{ ...T.body, textAlign: "left", background: "transparent", border: `1px solid ${T.border}`, borderRadius: 12, padding: "1.1rem 1.4rem", cursor: loading ? "default" : "pointer", transition: "all 0.2s", opacity: loading && loading !== plan.key ? 0.4 : 1 }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.borderColor = T.borderHover; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.25rem" }}>
+                <span style={{ ...T.body, fontSize: "0.9rem", color: T.cream, fontWeight: 400 }}>{plan.label}</span>
+                <span style={{ ...T.body, fontSize: "0.9rem", color: T.amber }}>{loading === plan.key ? "Redirecting…" : plan.price}</span>
+              </div>
+              <p style={{ ...T.body, fontSize: "0.75rem", color: T.muted, margin: 0 }}>{plan.desc}</p>
+            </button>
+          ))}
         </div>
 
         {error && <p style={{ ...T.body, fontSize: "0.8rem", color: "#f87171", marginBottom: "1rem" }}>{error}</p>}
@@ -256,30 +308,6 @@ function Header({ onAbout, onLibrary, sessionSaved, sessions, onLoadSession, onD
 function SharedFeedbackPage({ onStart }) {
   const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
-  const [verifying, setVerifying] = useState(false);
-
-  const verifyEmail = async () => {
-    if (!email.trim()) { setError("Please enter your email address first."); return; }
-    setVerifying(true); setError(null);
-    localStorage.setItem("teknon-email", email.trim());
-    try {
-      const res = await fetch("/api/verify-subscription", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() })
-      });
-      const data = await res.json();
-      if (data.active) {
-        window.location.reload();
-        return;
-      }
-    } catch { }
-    setVerifying(false);
-  };
-
-  const checkout = async (priceKey) => {
-    if (!email.trim()) { setError("Please enter your email address first."); return; }
-    setLoading(priceKey); setError(null);
-    localStorage.setItem("teknon-email", email.trim());
 
   useEffect(() => {
     try {
@@ -1072,14 +1100,12 @@ const handleRefFile = file => {
     }
 
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
-    const GENRE_KEYWORDS = /\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i;
-const isGenreNotArtist = targetArtist && GENRE_KEYWORDS.test(targetArtist);
-
-const voiceInstruction = !targetArtist || isGenreNotArtist
-      ? `You are a masterful, deeply experienced art tutor with encyclopaedic knowledge of art history and a lifetime of studio practice.${isGenreNotArtist ? ` The artist is working in the ${targetArtist} tradition — assess the work entirely on the conventions, standards and visual language of that genre.` : ""}`
+    const voiceInstruction = !targetArtist
+      ? `You are a masterful, deeply experienced art tutor with encyclopaedic knowledge of art history and a lifetime of studio practice.`
       : LIVING_ARTISTS.has(targetArtist)
       ? `You are a masterful mentor with deep knowledge of ${targetArtist}'s working methods, documented philosophy and artistic concerns. Draw on what is known about how they think and work.`
       : `You are giving feedback in the spirit of ${targetArtist}. Draw directly on their documented writings, letters, interviews, and recorded teachings. Speak with the directness and authority of someone who has spent a lifetime painting. Do NOT perform or roleplay — no theatrical actions, no forced period language, no affectations. Simply think and speak as they would have done when standing at a student's easel.`;
+
     const prompt = `${voiceInstruction}${medium ? ` The artist is working in ${medium}.` : ""}
 
 Look at this painting carefully before forming any opinion. Survey the whole — the mood, the handling, the quality of observation, what has genuinely been achieved. Only after looking honestly should you decide what, if anything, needs improving. You are not required to find problems. If the work is strong, say so clearly and specifically.
@@ -1115,8 +1141,8 @@ Look at these in order and use whichever gives the single most genuinely useful 
 If the painting is strong and close to resolved, say so and offer the most considered small observation you can. Not every painting needs a major intervention.
 
 **What to look at**
-If you are acting as a neutral genre mentor rather than a named artist, ground your references in well-known works within that genre or tradition — do not refer to your own works, your own teachers, or your own lineage, as you have none in this context. Reference specific published works or artists within that genre only where genuinely useful.
-If the user has chosen you as their specific mentor, refer primarily to your OWN work as the reference.
+If the user has chosen you as their specific mentor, refer primarily to your OWN work as the reference. Say something like "look at how I handled this in [specific painting of yours]" or "in my portrait of [subject] you can see how I approached exactly this problem." Make it personal and specific — name one of your actual works and say precisely what to look for in it.
+
 Where it feels natural and genuinely relevant, draw on what YOUR OWN teacher taught you. If you were taught by a known master, invoke their voice: "my teacher [name] always said..." or "this is something [name] drummed into me early on." This is the transmission of knowledge down through generations — the tutor tree. Only do this when it genuinely adds something, not as a formula.
 
 Only reference a third party artist — someone other than yourself or your own teachers — if there is a very specific and compelling reason that cannot be addressed by your own work or your own lineage. This should be rare.
@@ -1353,11 +1379,11 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
 
         <div style={{ marginBottom: "1rem" }}>
           <SectionLabel>Studio Analysis</SectionLabel>
-          {targetArtist && !/\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i.test(targetArtist) && (
-  <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.cream, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
-    Your feedback inspired by the accumulated records of {targetArtist}'s writings and works
-  </p>
-)}
+          {targetArtist && (
+            <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.cream, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
+              Your feedback inspired by the accumulated records of {targetArtist}'s writings and works
+            </p>
+          )}
           <FeedbackBlock text={feedback} />
         </div>
 
@@ -1472,7 +1498,7 @@ useEffect(() => {
     setAnalysisCount(newCount);
     localStorage.setItem("teknon-analysis-count", newCount.toString());
     // First analysis always free
-    if (newCount <= 1 || subscription?.tier === "master" || subscription?.tier === "studio") {
+    if (newCount <= 1 || subscription?.tier) {
       await saveSession(session); setCurrentSession(session); setPage("response");
     } else {
       // Save session but show paywall
