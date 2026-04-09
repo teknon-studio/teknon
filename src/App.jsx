@@ -1381,11 +1381,11 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
 
         <div style={{ marginBottom: "1rem" }}>
           <SectionLabel>Studio Analysis</SectionLabel>
-          {targetArtist && (
-            <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.cream, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
-              Your feedback inspired by the accumulated records of {targetArtist}'s writings and works
-            </p>
-          )}
+          {targetArtist && !/\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i.test(targetArtist) && (
+  <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.cream, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
+    Your feedback inspired by the accumulated records of {targetArtist}'s writings and works
+  </p>
+)}
           <FeedbackBlock text={feedback} />
         </div>
 
