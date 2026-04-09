@@ -236,6 +236,25 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
+  const [verifying, setVerifying] = useState(false);
+
+  const verifyEmail = async () => {
+    if (!email.trim()) { setError("Please enter your email address first."); return; }
+    setVerifying(true); setError(null);
+    localStorage.setItem("teknon-email", email.trim());
+    try {
+      const res = await fetch("/api/verify-subscription", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() })
+      });
+      const data = await res.json();
+      if (data.active) {
+        window.location.reload();
+        return;
+      }
+    } catch { }
+    setVerifying(false);
+  };
 
   const checkout = async (priceKey) => {
     if (!email.trim()) { setError("Please enter your email address first."); return; }
