@@ -100,19 +100,25 @@ const storage = {
 };
 
 const checkDailyLimit = (tier) => {
+  if (tier === "free") {
+    const used = localStorage.getItem("teknon-free-used") === "true";
+    return { count: used ? 1 : 0, limit: 1, exceeded: used, key: "teknon-free-used" };
+  }
   const today = new Date().toDateString();
   const key = `teknon-daily-${today}`;
   const count = parseInt(localStorage.getItem(key) || "0");
-  const limits = { free: 0, studio: 8, master: 8 };
-  const limit = limits[tier] || 1;
+  const limits = { studio: 8, master: 8 };
+  const limit = limits[tier] || 8;
   return { count, limit, exceeded: count >= limit, key };
 };
-
 const incrementDailyCount = (key) => {
+  if (key === "teknon-free-used") {
+    localStorage.setItem("teknon-free-used", "true");
+    return;
+  }
   const count = parseInt(localStorage.getItem(key) || "0");
   localStorage.setItem(key, (count + 1).toString());
 };
-
 const callAPI = async (messages, tools = true, maxTokens = 1500) => {
   const body = { model: MODEL, max_tokens: maxTokens, messages };
   if (tools) body.tools = [{ type: "web_search_20250305", name: "web_search" }];
