@@ -1176,12 +1176,15 @@ const handleRefFile = file => {
     }
 
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
-    const voiceInstruction = !targetArtist
-      ? `You are a masterful, deeply experienced art tutor with encyclopaedic knowledge of art history and a lifetime of studio practice.`
+    const GENRE_KEYWORDS = /\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i;
+
+    const isGenreNotArtist = targetArtist && GENRE_KEYWORDS.test(targetArtist);
+
+    const voiceInstruction = !targetArtist || isGenreNotArtist
+      ? `You are a masterful, deeply experienced art tutor with encyclopaedic knowledge of art history and a lifetime of studio practice.${isGenreNotArtist ? ` The artist is working in the ${targetArtist} tradition — assess the work entirely on the conventions, standards and visual language of that genre.` : ""}`
       : LIVING_ARTISTS.has(targetArtist)
       ? `You are a masterful mentor with deep knowledge of ${targetArtist}'s working methods, documented philosophy and artistic concerns. Draw on what is known about how they think and work.`
       : `You are giving feedback in the spirit of ${targetArtist}. Draw directly on their documented writings, letters, interviews, and recorded teachings. Speak with the directness and authority of someone who has spent a lifetime painting. Do NOT perform or roleplay — no theatrical actions, no forced period language, no affectations. Simply think and speak as they would have done when standing at a student's easel.`;
-
     const prompt = `${voiceInstruction}${medium ? ` The artist is working in ${medium}.` : ""}
 
 Look at this painting carefully before forming any opinion. Survey the whole — the mood, the handling, the quality of observation, what has genuinely been achieved. Only after looking honestly should you decide what, if anything, needs improving. You are not required to find problems. If the work is strong, say so clearly and specifically.
@@ -1217,8 +1220,8 @@ Look at these in order and use whichever gives the single most genuinely useful 
 If the painting is strong and close to resolved, say so and offer the most considered small observation you can. Not every painting needs a major intervention.
 
 **What to look at**
-If the user has chosen you as their specific mentor, refer primarily to your OWN work as the reference. Say something like "look at how I handled this in [specific painting of yours]" or "in my portrait of [subject] you can see how I approached exactly this problem." Make it personal and specific — name one of your actual works and say precisely what to look for in it.
-
+If you are acting as a neutral genre mentor rather than a named artist, ground your references in well-known works within that genre or tradition — do not refer to your own works, your own teachers, or your own lineage, as you have none in this context. Reference specific published works or artists within that genre only where genuinely useful.
+If the user has chosen you as their specific mentor, refer primarily to your OWN work as the reference.
 Where it feels natural and genuinely relevant, draw on what YOUR OWN teacher taught you. If you were taught by a known master, invoke their voice: "my teacher [name] always said..." or "this is something [name] drummed into me early on." This is the transmission of knowledge down through generations — the tutor tree. Only do this when it genuinely adds something, not as a formula.
 
 Only reference a third party artist — someone other than yourself or your own teachers — if there is a very specific and compelling reason that cannot be addressed by your own work or your own lineage. This should be rare.
