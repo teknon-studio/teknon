@@ -1100,8 +1100,7 @@ const handleRefFile = file => {
     }
 
     setLoading(true); setError(null); setLoadingStep("Reading your painting…");
-    const GENRE_KEYWORDS = /\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept art|fantasy|sci-fi|portrait style|landscape style)\b/i;
-
+    const GENRE_KEYWORDS = /\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i;
 const isGenreNotArtist = targetArtist && GENRE_KEYWORDS.test(targetArtist);
 
 const voiceInstruction = !targetArtist || isGenreNotArtist
