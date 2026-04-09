@@ -288,10 +288,16 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
   Choose your plan and continue your practice. Cancel any time.
 </p>
 
-        <input value={email} onChange={e => setEmail(e.target.value)}
-          placeholder="your email address"
-          style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", marginBottom: "2rem" }} />
-
+        <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-end", marginBottom: "2rem" }}>
+  <input value={email} onChange={e => setEmail(e.target.value)}
+    onKeyDown={e => { if (e.key === "Enter") verifyEmail(); }}
+    placeholder="your email address"
+    style={{ flex: 1, boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none" }} />
+  <button onClick={verifyEmail} disabled={verifying}
+    style={{ ...T.body, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: T.amber, background: "transparent", border: `1px solid ${T.amber}`, borderRadius: 6, padding: "0.5rem 1rem", cursor: verifying ? "default" : "pointer", opacity: verifying ? 0.5 : 1, whiteSpace: "nowrap" }}>
+    {verifying ? "Checking…" : "Verify"}
+  </button>
+</div>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
           {[
             { key: "studio_monthly", label: "Studio Monthly", price: "£9.99 / month", desc: "Up to 8 analyses per day · Full session history · Studio Library" },
