@@ -509,7 +509,27 @@ function MyStudioPage({ onBack, sessions }) {
     </div>
   );
 }
-function LandingPage({ onStart, onMyStudio }) {
+function LandingPage({ onStart, onMyStudio, onEmailVerified }) {
+  const [showEmail, setShowEmail] = useState(false);
+  const [email, setEmail] = useState(localStorage.getItem("teknon-email") || "");
+  const [verifying, setVerifying] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleVerify = async () => {
+    if (!email.trim()) { setError("Please enter your email address."); return; }
+    setVerifying(true); setError(null);
+    localStorage.setItem("teknon-email", email.trim());
+    try {
+      const res = await fetch("/api/verify-subscription", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() })
+      });
+      const data = await res.json();
+      onEmailVerified(data.active ? { tier: data.tier, trialing: data.trialing } : false);
+    } catch { onEmailVerified(false); }
+    setVerifying(false);
+  };
+
   return (
     <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box", position: "relative", overflow: "hidden" }}>
       <img src="/hero.jpg" alt="" style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none", maxWidth: "60vw" }} />
@@ -519,29 +539,60 @@ function LandingPage({ onStart, onMyStudio }) {
           your art tutor<br />in your pocket
         </h1>
         <p style={{ ...T.body, fontSize: "clamp(1rem,2.5vw,1.4rem)", fontWeight: 300, color: "rgba(240,235,227,0.6)", letterSpacing: "0.01em", marginBottom: "2rem", lineHeight: 1.4 }}>great advice at a fraction of the price</p>
-        <PillBtn onClick={onStart}>get started</PillBtn>
-{onMyStudio && (
-  <button onClick={onMyStudio}
-    style={{ ...T.body, fontSize: "0.78rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em", marginTop: "0.75rem", display: "block" }}
-    onMouseEnter={e => e.currentTarget.style.color = T.cream}
-    onMouseLeave={e => e.currentTarget.style.color = T.muted}>
-    My Studio →
-  </button>
-)}
-        
-<p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: T.cream, marginTop: "1.2rem" }}>master wisdom · no trolls · no judgement</p>
-<p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.2)", marginTop: "0.75rem" }}>
-  <a href="/privacy.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Privacy Policy</a>
-{" · "}
-<a href="/terms.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Terms of Service</a>
-{" · "}
-<a href="mailto:teknonapp@gmail.com" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Contact</a>
-</p>
+
+        {!showEmail ? (
+          <div>
+            <PillBtn onClick={onStart}>get started</PillBtn>
+            <button onClick={() => setShowEmail(true)}
+              style={{ ...T.body, fontSize: "0.78rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em", marginTop: "0.75rem", display: "block" }}
+              onMouseEnter={e => e.currentTarget.style.color = T.cream}
+              onMouseLeave={e => e.currentTarget.style.color = T.muted}>
+              Already a subscriber? Sign in →
+            </button>
+          </div>
+        ) : (
+          <div>
+            <input value={email} onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") handleVerify(); }}
+              placeholder="your email address"
+              autoFocus
+              style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", marginBottom: "1rem" }} />
+            {error && <p style={{ ...T.body, fontSize: "0.8rem", color: "#f87171", marginBottom: "0.75rem" }}>{error}</p>}
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <PillBtn onClick={handleVerify} disabled={verifying}>
+                {verifying ? "Checking…" : "Sign in"}
+              </PillBtn>
+              <button onClick={() => { setShowEmail(false); setError(null); }}
+                style={{ ...T.body, fontSize: "0.78rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}
+                onMouseEnter={e => e.currentTarget.style.color = T.cream}
+                onMouseLeave={e => e.currentTarget.style.color = T.muted}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {onMyStudio && !showEmail && (
+          <button onClick={onMyStudio}
+            style={{ ...T.body, fontSize: "0.78rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em", marginTop: "0.75rem", display: "block" }}
+            onMouseEnter={e => e.currentTarget.style.color = T.cream}
+            onMouseLeave={e => e.currentTarget.style.color = T.muted}>
+            My Studio →
+          </button>
+        )}
+
+        <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: T.cream, marginTop: "1.2rem" }}>master wisdom · no trolls · no judgement</p>
+        <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.2)", marginTop: "0.75rem" }}>
+          <a href="/privacy.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Privacy Policy</a>
+          {" · "}
+          <a href="/terms.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Terms of Service</a>
+          {" · "}
+          <a href="mailto:teknonapp@gmail.com" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Contact</a>
+        </p>
       </div>
     </div>
   );
 }
-
 const PORTRAIT_ARTISTS = [
   { file: "Rembrandt.jpg",   name: "Rembrandt" },
   { file: "Cassatt.jpg",     name: "Mary Cassatt" },
@@ -1537,8 +1588,7 @@ useEffect(() => {
   if (new URLSearchParams(window.location.search).get("share")) {
     return <SharedFeedbackPage onStart={() => { window.history.replaceState({}, "", window.location.pathname); setPage("mentor"); }} />;
   }
-  if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} onMyStudio={sessions.length > 0 && subscription?.tier ? () => setPage("mystudio") : null} />;
-  if (page === "mystudio") return <MyStudioPage onBack={() => setPage("landing")} sessions={sessions} />;
+  if (page === "landing") return <LandingPage onStart={() => setPage("mentor")} onMyStudio={sessions.length > 0 && subscription?.tier ? () => setPage("mystudio") : null} onEmailVerified={(result) => { if (result) { setSubscription(result); setPage("mentor"); } else { setPage("mentor"); } }} />;  if (page === "mystudio") return <MyStudioPage onBack={() => setPage("landing")} sessions={sessions} />;
   if (page === "paywall") return <PaywallPage onBack={() => setPage("easel")} firstAnalysisDone={analysisCount >= 1} />;
   if (page === "mentor") return <MentorSelectPage onSelect={handleMentorSelect} onLibrary={() => { setPrevPage("mentor"); setPage("library"); }} />;
   if (page === "about") return <AboutPage onBack={() => setPage(prevPage)} />;
