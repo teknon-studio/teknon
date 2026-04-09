@@ -238,9 +238,23 @@ function Header({ onAbout, onLibrary, sessionSaved, sessions, onLoadSession, onD
   );
 }
 
-function PaywallPage({ onBack, firstAnalysisDone }) {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(null);
+<div style={{ display: "flex", gap: "0.75rem"
+        </div>
+
+        {error && <p style={{ ...T.body, fontSize: "0.8rem", color: "#f87171", marginBottom: "1rem" }}>{error}</p>}
+
+        <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
+          ← go back
+        </button>
+      </div>
+      <p style={{ ...T.body, fontSize: "0.68rem", color: "rgba(240,235,227,0.22)", lineHeight: 1.8 }}>
+        Secure payment by Stripe · Cancel any time · No commitment
+      </p>
+    </div>
+  );
+}
+function SharedFeedbackPage({ onStart }) {
+  const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
   const [verifying, setVerifying] = useState(false);
 
@@ -266,79 +280,6 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
     if (!email.trim()) { setError("Please enter your email address first."); return; }
     setLoading(priceKey); setError(null);
     localStorage.setItem("teknon-email", email.trim());
-    try {
-      const origin = window.location.origin;
-      const res = await fetch("/api/create-checkout", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceKey, email: email.trim(), successUrl: `${origin}?subscribed=true`, cancelUrl: `${origin}?cancelled=true` })
-      });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      window.location.href = data.url;
-    } catch (e) { setError(e.message); setLoading(null); }
-  };
-
-  return (
-    <div style={{ minHeight: "100vh", background: BG, color: T.cream, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box" }}>
-      <TeknonLogo size="md" />
-      <div style={{ maxWidth: 520 }}>
-        {firstAnalysisDone && (
-  <p style={{ ...T.body, fontSize: "0.75rem", letterSpacing: "0.1em", color: T.amber, textTransform: "uppercase", marginBottom: "1.5rem" }}>
-    You've used your free analyses
-  </p>
-)}
-        <h1 style={{ ...T.body, fontSize: "clamp(2rem,5vw,3.5rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "1rem" }}>
-          continue your<br />practice
-        </h1>
-        <p style={{ ...T.body, fontSize: "0.9rem", color: T.muted, lineHeight: 1.8, marginBottom: "2.5rem" }}>
-  Choose your plan and continue your practice. Cancel any time.
-</p>
-
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-end", marginBottom: "2rem" }}>
-  <input value={email} onChange={e => setEmail(e.target.value)}
-    onKeyDown={e => { if (e.key === "Enter") verifyEmail(); }}
-    placeholder="your email address"
-    style={{ flex: 1, boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none" }} />
-  <button onClick={verifyEmail} disabled={verifying}
-    style={{ ...T.body, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: T.amber, background: "transparent", border: `1px solid ${T.amber}`, borderRadius: 6, padding: "0.5rem 1rem", cursor: verifying ? "default" : "pointer", opacity: verifying ? 0.5 : 1, whiteSpace: "nowrap" }}>
-    {verifying ? "Checking…" : "Verify"}
-  </button>
-</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
-          {[
-            { key: "studio_monthly", label: "Studio Monthly", price: "£9.99 / month", desc: "Up to 8 analyses per day · Full session history · Studio Library" },
-{ key: "studio_annual",  label: "Studio Annual", price: "£89 / year", desc: "Save two months · Up to 8 analyses per day · Full session history" },
-{ key: "master_monthly", label: "Master Monthly", price: "£19.99 / month", desc: "Up to 8 analyses per day · Everything in Studio · ElevenLabs voice when launched" },
-{ key: "master_annual",  label: "Master Annual", price: "£179 / year", desc: "Save two months · Everything in Master · ElevenLabs voice when launched" },
-          ].map(plan => (
-            <button key={plan.key} onClick={() => checkout(plan.key)} disabled={!!loading}
-              style={{ ...T.body, textAlign: "left", background: "transparent", border: `1px solid ${T.border}`, borderRadius: 12, padding: "1.1rem 1.4rem", cursor: loading ? "default" : "pointer", transition: "all 0.2s", opacity: loading && loading !== plan.key ? 0.4 : 1 }}
-              onMouseEnter={e => { if (!loading) e.currentTarget.style.borderColor = T.borderHover; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.25rem" }}>
-                <span style={{ ...T.body, fontSize: "0.9rem", color: T.cream, fontWeight: 400 }}>{plan.label}</span>
-                <span style={{ ...T.body, fontSize: "0.9rem", color: T.amber }}>{loading === plan.key ? "Redirecting…" : plan.price}</span>
-              </div>
-              <p style={{ ...T.body, fontSize: "0.75rem", color: T.muted, margin: 0 }}>{plan.desc}</p>
-            </button>
-          ))}
-        </div>
-
-        {error && <p style={{ ...T.body, fontSize: "0.8rem", color: "#f87171", marginBottom: "1rem" }}>{error}</p>}
-
-        <button onClick={onBack} style={{ ...T.body, fontSize: "0.8rem", color: T.faint, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em" }}>
-          ← go back
-        </button>
-      </div>
-      <p style={{ ...T.body, fontSize: "0.68rem", color: "rgba(240,235,227,0.22)", lineHeight: 1.8 }}>
-        Secure payment by Stripe · Cancel any time · No commitment
-      </p>
-    </div>
-  );
-}
-function SharedFeedbackPage({ onStart }) {
-  const [session, setSession] = useState(null);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     try {
