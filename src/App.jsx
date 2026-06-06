@@ -708,7 +708,7 @@ function MentorSelectPage({ onSelect, onLibrary }) {
         <TeknonLogo size="md" />
         <div style={{ maxWidth: 480 }}>
           <h1 style={{ ...T.body, fontSize: "clamp(1.6rem,3.5vw,3.5rem)", fontWeight: 300, lineHeight: 1.1, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2.5rem" }}>
-            who would you like<br />to mentor you today?
+            which artist would<br />you like advice from?
           </h1>
           <div style={{ position: "relative" }}>
             <input ref={inputRef} value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && proceed()} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 150)}
