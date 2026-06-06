@@ -535,7 +535,7 @@ function LandingPage({ onStart, onMyStudio, onEmailVerified }) {
       <img src="/hero.jpg" alt="" style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none", maxWidth: "60vw" }} />
       <TeknonLogo size="md" />
       <div style={{ maxWidth: 560, position: "relative", zIndex: 1 }}>
-        <h1 style={{ ...T.body, fontSize: "clamp(2.8rem,8vw,5.5rem)", fontWeight: 300, lineHeight: 1.05, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2rem" }}>
+        <h1 style={{ ...T.body, fontSize: "clamp(1.8rem,7vw,4.5rem)", fontWeight: 300, lineHeight: 1.05, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2rem" }}>
           a thousand years of artistic wisdom<br />one upload away
         </h1>
         <p style={{ ...T.body, fontSize: "clamp(1rem,2.5vw,1.4rem)", fontWeight: 300, color: "rgba(240,235,227,0.6)", letterSpacing: "0.01em", marginBottom: "2rem", lineHeight: 1.4 }}>great advice at a fraction of the price</p>
