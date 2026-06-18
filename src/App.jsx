@@ -953,18 +953,74 @@ const topRef = useRef();
   );
 }
 function FeedbackBlock({ text }) {
-  return text.split("\n").map((line, i) => {
-    if (/^\d+\.\s\*\*/.test(line)) {
-      const p = line.replace(/^\d+\.\s\*\*/, "").split("**");
-      return <div key={i} style={{ marginTop: "1.75rem" }}>
-        <p style={{ ...T.body, fontSize: "0.82rem", letterSpacing: "0.12em", color: T.amber, textTransform: "uppercase", marginBottom: "0.5rem" }}>{p[0]}</p>
-        {p[1] && <p style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.75)", lineHeight: 1.8 }}>{p[1].replace(/^[\s—–-]+/, "")}</p>}
-      </div>;
+  const lines = text.split("\n");
+  const blocks = [];
+  let i = 0;
+  let priorityIndex = 0;
+  let priorityCount = (text.match(/^PRIORITY:/gm) || []).length;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Section header, e.g. **What I see**
+    if (line.startsWith("**") && line.endsWith("**")) {
+      blocks.push({ type: "header", text: line.replace(/\*\*/g, "") });
+      i++;
+      continue;
     }
-    if (line.startsWith("**") && line.endsWith("**")) return <p key={i} style={{ ...T.body, fontSize: "0.82rem", letterSpacing: "0.12em", color: T.amber, textTransform: "uppercase", marginTop: "1.75rem", marginBottom: "0.5rem" }}>{line.replace(/\*\*/g, "")}</p>;
-    if (line.startsWith("- ") || line.startsWith("• ")) return <p key={i} style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.72)", lineHeight: 1.8, paddingLeft: "1rem" }}>– {line.replace(/^[-•]\s/, "").replace(/\*\*/g, "")}</p>;
-    if (line.trim() === "") return <div key={i} style={{ height: "0.5rem" }} />;
-    return <p key={i} style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.72)", lineHeight: 1.8 }}>{line.replace(/\*\*/g, "")}</p>;
+
+    // Priority card
+    if (line.startsWith("PRIORITY:")) {
+      priorityIndex++;
+      const title = line.replace(/^PRIORITY:\s*/, "");
+      let body = [];
+      i++;
+      while (i < lines.length && !lines[i].startsWith("PRIORITY:") && !(lines[i].startsWith("**") && lines[i].endsWith("**"))) {
+        if (lines[i].trim() !== "") body.push(lines[i].trim());
+        i++;
+      }
+      blocks.push({ type: "priority", index: priorityIndex, total: priorityCount, title, body: body.join(" ") });
+      continue;
+    }
+
+    if (line.startsWith("- ") || line.startsWith("• ")) {
+      blocks.push({ type: "bullet", text: line.replace(/^[-•]\s/, "").replace(/\*\*/g, "") });
+      i++;
+      continue;
+    }
+
+    if (line.trim() === "") { i++; continue; }
+
+    blocks.push({ type: "para", text: line.replace(/\*\*/g, "") });
+    i++;
+  }
+
+  return blocks.map((b, idx) => {
+    if (b.type === "header") {
+      return <p key={idx} style={{ ...T.body, fontSize: "0.82rem", letterSpacing: "0.12em", color: T.amber, textTransform: "uppercase", marginTop: "1.75rem", marginBottom: "0.75rem" }}>{b.text}</p>;
+    }
+    if (b.type === "priority") {
+      const isFirst = b.index === 1;
+      return (
+        <div key={idx} style={{
+          borderLeft: `3px solid ${isFirst ? T.amber : "rgba(240,235,227,0.25)"}`,
+          borderRadius: 0,
+          padding: "1rem 1.25rem",
+          marginBottom: "0.75rem",
+          background: isFirst ? "rgba(224,152,64,0.07)" : "rgba(240,235,227,0.03)"
+        }}>
+          <p style={{ ...T.body, fontSize: "0.65rem", letterSpacing: "0.1em", color: "rgba(240,235,227,0.4)", textTransform: "uppercase", marginBottom: "0.4rem" }}>
+            Priority {b.index}{isFirst && b.total > 1 ? " — highest impact" : ""}
+          </p>
+          <p style={{ ...T.body, fontSize: "0.92rem", color: T.cream, marginBottom: "0.5rem", fontWeight: 400 }}>{b.title}</p>
+          <p style={{ ...T.body, fontSize: "0.85rem", color: "rgba(240,235,227,0.7)", lineHeight: 1.7, margin: 0 }}>{b.body}</p>
+        </div>
+      );
+    }
+    if (b.type === "bullet") {
+      return <p key={idx} style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.72)", lineHeight: 1.8, paddingLeft: "1rem" }}>– {b.text}</p>;
+    }
+    return <p key={idx} style={{ ...T.body, fontSize: "0.9rem", color: "rgba(240,235,227,0.72)", lineHeight: 1.8 }}>{b.text}</p>;
   });
 }
 
