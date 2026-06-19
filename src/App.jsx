@@ -728,7 +728,7 @@ function MentorSelectPage({ onSelect, onLibrary }) {
             {focused && filtered.length > 0 && (
               <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "rgba(80,78,74,0.97)", border: `1px solid ${T.border}`, borderRadius: 10, marginTop: 4, overflow: "hidden", zIndex: 10 }}>
                 {filtered.slice(0, 5).map((s, i) => (
-                  <button key={i} onClick={() => proceed(s)}
+                  <button key={i} onMouseDown={e => e.preventDefault()} onClick={() => proceed(s)}
                     style={{ display: "flex", alignItems: "center", gap: "0.75rem", width: "100%", textAlign: "left", padding: "0.65rem 1rem", ...T.body, fontSize: "0.9rem", color: "#d6cfc4", background: "transparent", border: "none", cursor: "pointer" }}
                     onMouseEnter={e => e.currentTarget.style.background = "rgba(240,235,227,0.06)"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
