@@ -1210,6 +1210,7 @@ const refFileRef = useRef();
         img.src = e.target.result;
       } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); }
     };
+    reader.onerror = (err) => { console.error("Teknon: FileReader error", err); setError("This image couldn't be read — try saving it as a JPG first and uploading again."); };
     reader.onerror = () => setError("This image couldn't be read — try saving it as a JPG first and uploading again.");
     reader.readAsDataURL(file);
   };
