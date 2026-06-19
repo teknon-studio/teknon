@@ -722,7 +722,7 @@ function MentorSelectPage({ onSelect, onLibrary }) {
             which artist would<br />you like advice from?
           </h1>
           <div style={{ position: "relative" }}>
-            <input ref={inputRef} value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && proceed()} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 150)}
+            <input ref={inputRef} value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && proceed()} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 250)}
               placeholder="type an artist's name…"
               style={{ width: "100%", boxSizing: "border-box", ...T.body, fontSize: "1rem", color: T.cream, background: "transparent", border: "none", borderBottom: `1px solid ${T.border}`, padding: "0.75rem 0", outline: "none", letterSpacing: "0.02em" }} />
             {focused && filtered.length > 0 && (
