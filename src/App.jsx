@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 const HEADERS = { "Content-Type": "application/json" };
-const MODEL = "claude-sonnet-4-20250514";
+const MODEL = "claude-sonnet-4-6";
 const BG = "#6b6b69";
 
 const DECEASED_ARTISTS = new Set([
