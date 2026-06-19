@@ -113,21 +113,32 @@ const incrementDailyCount = (key) => {
   localStorage.setItem(key, (count + 1).toString());
 };
 
-const callAPI = async (messages, tools = true, maxTokens = 1500) => {
+const FRIENDLY_ERROR = "Something went wrong on our end — please try again in a moment. If this keeps happening, let us know at teknonapp@gmail.com.";
+
+const callAPIOnce = async (messages, tools, maxTokens) => {
   const body = { model: MODEL, max_tokens: maxTokens, messages };
   if (tools) body.tools = [{ type: "web_search_20250305", name: "web_search" }];
   const res = await fetch("/api/chat", { method: "POST", headers: HEADERS, body: JSON.stringify(body) });
   const data = await res.json();
   if (data.error) throw new Error(`${data.error.type}: ${data.error.message}`);
-  return data.content.filter(b => b.type === "text").map(b => b.text).join("\n");
+  const text = data.content?.filter(b => b.type === "text").map(b => b.text).join("\n");
+  if (!text) throw new Error("empty_response: No text content returned");
+  return text;
 };
 
-if (!document.getElementById("teknon-font")) {
-  const style = document.createElement("style");
-  style.id = "teknon-font";
-  style.innerHTML = `@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&family=Dancing+Script:wght@600&display=swap');`;
-  document.head.appendChild(style);
-}
+const callAPI = async (messages, tools = true, maxTokens = 1500) => {
+  try {
+    return await callAPIOnce(messages, tools, maxTokens);
+  } catch (firstErr) {
+    console.error("Teknon API error (attempt 1):", firstErr);
+    try {
+      return await callAPIOnce(messages, tools, maxTokens);
+    } catch (secondErr) {
+      console.error("Teknon API error (attempt 2):", secondErr);
+      throw new Error(FRIENDLY_ERROR);
+    }
+  }
+};
 
 const T = {
   body: { fontFamily: "'DM Sans', sans-serif", fontWeight: 300 },
