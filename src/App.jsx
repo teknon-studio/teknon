@@ -1243,14 +1243,16 @@ const handleRefFile = file => {
     if (!imageB64 || !description) return;
 
     // Check daily rate limit
-    const tier = subscription?.tier || (analysisCount === 0 ? "free" : null);
-    if (tier) {
-      const { exceeded, limit, key, count } = checkDailyLimit(tier);
-      if (exceeded) {
-        setError(`You've reached your daily limit of ${limit} ${limit === 1 ? "analysis" : "analyses"}. Come back tomorrow — your mentor will be waiting.`);
-        return;
+    if (!isDevUser()) {
+      const tier = subscription?.tier || (analysisCount === 0 ? "free" : null);
+      if (tier) {
+        const { exceeded, limit, key, count } = checkDailyLimit(tier);
+        if (exceeded) {
+          setError(`You've reached your daily limit of ${limit} ${limit === 1 ? "analysis" : "analyses"}. Come back tomorrow — your mentor will be waiting.`);
+          return;
+        }
+        incrementDailyCount(key);
       }
-      incrementDailyCount(key);
     }
 
     const mentorLabel = targetArtist && !GENRE_KEYWORDS.test(targetArtist) ? targetArtist : null;
