@@ -1242,6 +1242,31 @@ const handleRefFile = file => {
   const analyse = async () => {
     if (!imageB64 || !description) return;
 
+    // For genuine first-time free users (no subscription, no prior analysis recorded locally),
+    // confirm server-side that this email/IP hasn't already claimed a free analysis.
+    if (!isDevUser() && !subscription?.tier && analysisCount === 0) {
+      try {
+        const email = localStorage.getItem("teknon-email");
+        if (email) {
+          const checkRes = await fetch("/api/check-free-analysis", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+          const checkData = await checkRes.json();
+          if (!checkData.allowed) {
+            setError("It looks like you've already used your free analysis. Choose a plan to continue.");
+            return;
+          }
+        }
+      } catch {
+        // If the check itself fails to reach the server, don't block a genuine user.
+      }
+    }
+
+    // Check daily rate limit
+    if (!isDevUser()) {
+
     // Check daily rate limit
     if (!isDevUser()) {
       const tier = subscription?.tier || (analysisCount === 0 ? "free" : null);
