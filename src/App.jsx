@@ -1264,10 +1264,7 @@ const handleRefFile = file => {
       }
     }
 
-    // Check daily rate limit
-    if (!isDevUser()) {
-
-    // Check daily rate limit
+       // Check daily rate limit
     if (!isDevUser()) {
       const tier = subscription?.tier || (analysisCount === 0 ? "free" : null);
       if (tier) {
