@@ -1310,7 +1310,7 @@ NEVER: invent problems · apply observational criteria to expressive work · ass
     const timeout = setTimeout(() => { setError("The analysis is taking too long — please check your connection and try again."); setLoading(false); setLoadingStep(""); }, 45000);
 
     try {
-      setLoadingStep("Consulting the masters…");
+      setLoadingStep(mentorLabel ? `Consulting ${mentorLabel}…` : "Consulting the masters…");
       const imageContent = [
   { type: "image", source: { type: "base64", media_type: imageMime, data: imageB64 } },
   ...(refImageB64 ? [{ type: "image", source: { type: "base64", media_type: "image/jpeg", data: refImageB64 } }] : []),
