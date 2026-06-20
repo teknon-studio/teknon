@@ -1532,7 +1532,13 @@ function ResponsePage({ session, onBack, onAbout, onLibrary, onSaveSession, sess
         <Hairline />
 
         <div style={{ marginBottom: "1rem" }}>
-          <SectionLabel>Studio Analysis</SectionLabel>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.9rem", marginBottom: "1rem" }}>
+            {targetArtist && getMentorPortrait(targetArtist) && (
+              <img src={`/artists/${getMentorPortrait(targetArtist)}`} alt={targetArtist}
+                style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", objectPosition: "top", border: `1px solid ${T.border}`, filter: "sepia(15%) brightness(0.92)" }} />
+            )}
+            <SectionLabel>Studio Analysis{targetArtist ? ` — ${targetArtist}` : ""}</SectionLabel>
+          </div>
           {targetArtist && !/\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i.test(targetArtist) && (
   <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.1em", color: T.cream, textTransform: "uppercase", marginBottom: "1.5rem", fontStyle: "italic" }}>
     Your feedback inspired by the accumulated records of {targetArtist}'s writings and works
