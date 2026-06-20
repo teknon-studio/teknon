@@ -1249,7 +1249,9 @@ const handleRefFile = file => {
       incrementDailyCount(key);
     }
 
-    setLoading(true); setError(null); setLoadingStep("Reading your painting…");
+    const mentorLabel = targetArtist && !GENRE_KEYWORDS_PREVIEW.test(targetArtist) ? targetArtist : null;
+setLoading(true); setError(null);
+setLoadingStep(mentorLabel ? `Looking closely at your painting…` : "Reading your painting…");
     const GENRE_KEYWORDS = /\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i;
 
     const isGenreNotArtist = targetArtist && GENRE_KEYWORDS.test(targetArtist);
