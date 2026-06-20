@@ -92,6 +92,9 @@ const PUBLISHABLE_KEY = "pk_live_51Pfm8URx0s8BAK67OMPGXIi8twIsWZ7l5H2keJbAhhlD2p
 
 const MEDIUMS = ["Oil paint","Watercolour","Acrylic","Gouache","Pencil","Charcoal","Pastel","Ink","Digital","Mixed media","Brush & ink","Marker","Screen tone","Digital painting","Frame-by-frame animation"];
 
+const DEV_EMAIL = "thorneycroft.r@gmail.com"; // must match the bypass email in verify-subscription.js
+const isDevUser = () => (localStorage.getItem("teknon-email") || "").trim().toLowerCase() === DEV_EMAIL.toLowerCase();
+
 const storage = {
   get: (key) => { try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; } },
   set: (key, value) => { try { localStorage.setItem(key, value); return true; } catch { return false; } },
