@@ -91,7 +91,7 @@ const LIVING_ARTISTS = new Set([
 const PUBLISHABLE_KEY = "pk_live_51Pfm8URx0s8BAK67OMPGXIi8twIsWZ7l5H2keJbAhhlD2pmGeJ7BAE0golYD7YunJ6UcVjzkg52nPY5RIIEijdhB00DFMhwdbD";
 
 const MEDIUMS = ["Oil paint","Watercolour","Acrylic","Gouache","Pencil","Charcoal","Pastel","Ink","Digital","Mixed media","Brush & ink","Marker","Screen tone","Digital painting","Frame-by-frame animation"];
-
+const GENRE_KEYWORDS = /\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i;
 const DEV_EMAIL = "thorneycroft.r@gmail.com"; // must match the bypass email in verify-subscription.js
 const isDevUser = () => (localStorage.getItem("teknon-email") || "").trim().toLowerCase() === DEV_EMAIL.toLowerCase();
 
@@ -1258,7 +1258,7 @@ const handleRefFile = file => {
     const mentorLabel = targetArtist && !GENRE_KEYWORDS.test(targetArtist) ? targetArtist : null;
 setLoading(true); setError(null);
 setLoadingStep(mentorLabel ? `Looking closely at your painting…` : "Reading your painting…");
-    const GENRE_KEYWORDS = /\b(comic|manga|cartoon|illustration|abstract|impressionist|expressionist|surrealist|cubist|watercolour|watercolor|oil|acrylic|pastel|charcoal|sketch|digital|concept|fantasy|sci-fi|realistic|realism|portrait style|landscape style|figurative|narrative|decorative|romantic|classical|modern|contemporary|traditional|loose|tight|painterly|gestural|photorealistic|hyperrealistic|stylised|stylized|graphic|linear|tonal|monochrome|plein air|studio)\b/i;
+    
 
     const isGenreNotArtist = targetArtist && GENRE_KEYWORDS.test(targetArtist);
 
