@@ -636,6 +636,7 @@ const PORTRAIT_ARTISTS = [
   { file: "DaVici.png",      name: "Leonardo da Vinci" },
   { file: "Zornself.jpg",    name: "Anders Zorn" },
 ];
+const getMentorPortrait = (name) => PORTRAIT_ARTISTS.find(a => a.name === name)?.file || null;
 const COLLAGE_LAYOUT = [
   { top:"2%",  left:"1%",  rotate:-4, size:150, zIndex:3 },
   { top:"1%",  left:"22%", rotate:3,  size:135, zIndex:2 },
