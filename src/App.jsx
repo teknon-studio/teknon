@@ -1186,7 +1186,15 @@ const refFileRef = useRef();
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleFile = file => {
-    if (!file) return;
+    if (!file) {
+      console.warn("Teknon: handleFile called with no file (likely empty file picker selection)");
+      return;
+    }
+    console.log("Teknon: handleFile received", { name: file.name, type: file.type, sizeMB: (file.size / 1024 / 1024).toFixed(2) });
+    if (file.size > 25 * 1024 * 1024) {
+      setError("This image is quite large (over 25MB) — try saving a smaller version and uploading again.");
+      return;
+    }
     if (!file.type.startsWith("image/") && !file.name.match(/\.(jpg|jpeg|png|webp|gif|bmp|heic|tiff|tif|avif)$/i)) {
       setError("Please upload an image file — JPG, PNG, WEBP, HEIC or similar."); return;
     }
