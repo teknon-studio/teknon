@@ -1200,30 +1200,41 @@ const refFileRef = useRef();
     }
     const reader = new FileReader();
     reader.onload = e => {
+      console.log("Teknon: FileReader.onload fired, result length:", e.target.result?.length);
       try {
         const img = new Image();
         img.onload = () => {
+          console.log("Teknon: Image decoded successfully, dimensions:", img.width, "x", img.height);
           try {
             const maxSize = 1200; let w = img.width, h = img.height;
             if (w > maxSize || h > maxSize) { if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; } else { w = Math.round(w * maxSize / h); h = maxSize; } }
             const canvas = document.createElement("canvas"); canvas.width = w; canvas.height = h;
             canvas.getContext("2d").drawImage(img, 0, 0, w, h);
             const compressed = canvas.toDataURL("image/jpeg", 0.82);
+            console.log("Teknon: canvas compression succeeded, output length:", compressed.length);
             setImage(compressed); setImageB64(compressed.split(",")[1]); setImageMime("image/jpeg"); setError(null);
-          } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); }
+          } catch (canvasErr) {
+            console.error("Teknon: canvas compression FAILED, falling back to raw file", canvasErr);
+            setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null);
+          }
         };
-        img.onerror = () => {
-  console.error("Teknon: image failed to decode for canvas compression, falling back to raw file");
-  setImage(e.target.result);
-  setImageB64(e.target.result.split(",")[1]);
-  setImageMime(file.type || "image/jpeg");
-  setError(null);
-};
+        img.onerror = (imgErr) => {
+          console.error("Teknon: Image.onerror fired — browser could not decode this file as an image", imgErr);
+          setImage(e.target.result);
+          setImageB64(e.target.result.split(",")[1]);
+          setImageMime(file.type || "image/jpeg");
+          setError(null);
+        };
         img.src = e.target.result;
-      } catch { setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime("image/jpeg"); setError(null); }
+      } catch (outerErr) {
+        console.error("Teknon: unexpected error in reader.onload", outerErr);
+        setImage(e.target.result); setImageB64(e.target.result.split(",")[1]); setImageMime(file.type || "image/jpeg"); setError(null);
+      }
     };
-    reader.onerror = (err) => { console.error("Teknon: FileReader error", err); setError("This image couldn't be read — try saving it as a JPG first and uploading again."); };
-    reader.onerror = () => setError("This image couldn't be read — try saving it as a JPG first and uploading again.");
+    reader.onerror = (err) => {
+      console.error("Teknon: FileReader.onerror fired", err);
+      setError("This image couldn't be read — try saving it as a JPG first and uploading again.");
+    };
     reader.readAsDataURL(file);
   };
 const handleRefFile = file => {
