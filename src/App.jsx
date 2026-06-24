@@ -1373,6 +1373,7 @@ const res = await fetch("/api/chat", { method: "POST", headers: HEADERS, body: J
       if (!text) throw new Error("No feedback received — please try again.");
       setLoadingStep("Opening your feedback…");
       const s = { id: `session:${Date.now()}`, date: Date.now(), imageSrc: image, imageB64, imageMime, description, struggle, targetArtist, medium, feedback: text, resources: null, chatHistory: [] };
+      track("analysis_completed", { mentor: mentorLabel || "none", isFirstAnalysis: analysisCount === 0 });
       await onAnalyse(s);
     } catch (e) { clearTimeout(timeout); setError(`${e.message}`); setLoading(false); setLoadingStep(""); }
   };
