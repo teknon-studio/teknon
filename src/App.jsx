@@ -1713,7 +1713,7 @@ useEffect(() => {
     if (newCount <= 1 || subscription?.tier) {
       await saveSession(session); setCurrentSession(session); setPage("response");
     } else {
-      // Save session but show paywall
+      track("paywall_shown", { analysisCount: newCount });
       await saveSession(session); setCurrentSession(session); setPage("paywall");
     }
   };  
