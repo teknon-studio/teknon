@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { track } from "@vercel/analytics";
 
 const HEADERS = { "Content-Type": "application/json" };
 const MODEL = "claude-sonnet-4-6";
