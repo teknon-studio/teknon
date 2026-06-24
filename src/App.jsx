@@ -1698,7 +1698,10 @@ useEffect(() => {
 
   const saveSession = async s => { try { await storage.set(s.id, JSON.stringify(s)); setSessions(prev => [s, ...prev.filter(x => x.id !== s.id)].sort((a, b) => b.date - a.date)); } catch { } };
   const deleteSession = async id => { try { await storage.delete(id); setSessions(prev => prev.filter(s => s.id !== id)); } catch { } };
-  const handleMentorSelect = (artist) => { setSelectedMentor(artist); setPage("easel"); };
+  const handleMentorSelect = (artist) => {
+    track("mentor_selected", { mentor: artist || "none", isGenre: artist ? GENRE_KEYWORDS.test(artist) : false });
+    setSelectedMentor(artist); setPage("easel");
+  };
   const handleAnalyse = async s => {
     const session = s.targetArtist ? s : { ...s, targetArtist: selectedMentor || "" };
     const newCount = analysisCount + 1;
