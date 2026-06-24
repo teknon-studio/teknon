@@ -273,6 +273,7 @@ function PaywallPage({ onBack, firstAnalysisDone }) {
 
   const checkout = async (priceKey) => {
     if (!email.trim()) { setError("Please enter your email address first."); return; }
+    track("checkout_started", { plan: priceKey });
     setLoading(priceKey); setError(null);
     localStorage.setItem("teknon-email", email.trim());
     try {
