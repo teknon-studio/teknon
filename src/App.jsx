@@ -1298,8 +1298,9 @@ const handleRefFile = file => {
     }
 
     const mentorLabel = targetArtist && !GENRE_KEYWORDS.test(targetArtist) ? targetArtist : null;
+track("analysis_started", { mentor: mentorLabel || "none", isFirstAnalysis: analysisCount === 0 });
 setLoading(true); setError(null);
-setLoadingStep(mentorLabel ? `Looking closely at your painting…` : "Reading your painting…");
+setLoadingStep(mentorLabel ? `${mentorLabel} has arrived…` : "Reading your painting…");
     
 
     const isGenreNotArtist = targetArtist && GENRE_KEYWORDS.test(targetArtist);
