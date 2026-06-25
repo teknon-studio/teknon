@@ -1306,11 +1306,16 @@ setLoadingStep(mentorLabel ? `${mentorLabel} has arrived…` : "Reading your pai
 
     const isGenreNotArtist = targetArtist && GENRE_KEYWORDS.test(targetArtist);
 
+    const isRecognisedArtist = targetArtist && (DECEASED_ARTISTS.has(targetArtist) || LIVING_ARTISTS.has(targetArtist));
+    const unrecognisedNamedEntity = targetArtist && !isGenreNotArtist && !isRecognisedArtist;
+
     const voiceInstruction = !targetArtist || isGenreNotArtist
       ? `You are a masterful, deeply experienced art tutor with encyclopaedic knowledge of art history and a lifetime of studio practice.${isGenreNotArtist ? ` The artist is working in the ${targetArtist} tradition — assess the work entirely on the conventions, standards and visual language of that genre.` : ""}`
+      : unrecognisedNamedEntity
+      ? `The name "${targetArtist}" was entered as a mentor, but you do not have grounds to treat this as a real, documented artist with a genuine body of work and teachings. Do not invent a persona or fabricate a practice for this name. Instead, give the feedback as a masterful, experienced art tutor with encyclopaedic knowledge of art history and studio practice, openly and briefly noting once, plainly, that you don't have a real artistic tradition to draw on for that name, before continuing with genuinely useful feedback grounded in real art history and technique.`
       : LIVING_ARTISTS.has(targetArtist)
-      ? `You are a masterful mentor with deep knowledge of ${targetArtist}'s working methods, documented philosophy and artistic concerns. Draw on what is known about how they think and work.`
-      : `You are giving feedback in the spirit of ${targetArtist}. Draw directly on their documented writings, letters, interviews, and recorded teachings. Speak with the directness and authority of someone who has spent a lifetime painting. Do NOT perform or roleplay — no theatrical actions, no forced period language, no affectations. Simply think and speak as they would have done when standing at a student's easel.`;
+      ? `You are a masterful mentor with deep knowledge of ${targetArtist}'s working methods, documented philosophy and artistic concerns. Draw on what is genuinely known about how they think and work, and be honest in your own mind about the difference between their well-documented public statements and broader inference about their practice — favour the former where it exists.`
+      : `You are giving feedback in the spirit of ${targetArtist}. Before writing, consider honestly how much real documented material exists for this specific artist — extensive personal letters and writings (as with, for example, Van Gogh), versus very little surviving personal record (as with, for example, Vermeer). Where substantial real documented material exists, draw on it directly and specifically. Where very little survives, say so honestly rather than implying a depth of documented record that doesn't exist — you may still speak in their voice and spirit, informed by what is genuinely known of their work, era and tradition, but do not claim documented teachings you do not actually have. Speak with the directness and authority of someone who has spent a lifetime painting. Do NOT perform or roleplay — no theatrical actions, no forced period language, no affectations.`;
     const prompt = `${voiceInstruction}${medium ? ` The artist is working in ${medium}.` : ""}
 
 Look at this painting carefully before forming any opinion. Survey the whole — the mood, the handling, the quality of observation, what has genuinely been achieved. Only after looking honestly should you decide what, if anything, needs improving. You are not required to find problems. If the work is strong, say so clearly and specifically.
