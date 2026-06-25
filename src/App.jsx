@@ -1366,7 +1366,10 @@ What you would actually do next if this were your painting. Specific: which brus
 **A final word**
 Something true about this work. Encouragement with real knowledge and intelligence — not flattery. Make the artist want to go back to the canvas. Mean what you say.
 
-NEVER: invent problems · apply observational criteria to expressive work · assert anatomy errors without evidence · repeat the same point across sections · use theatrical actions or affectations · open with a performative greeting · give generic motivational quotes · be sycophantic`;
+NEVER: invent problems · apply observational criteria to expressive work · assert anatomy errors without evidence · repeat the same point across sections · use theatrical actions or affectations · open with a performative greeting · give generic motivational quotes · be sycophantic
+
+After all other sections, add one final short line, exactly in this format:
+SOURCE_BASIS: [one short honest sentence describing what this feedback was genuinely grounded in — e.g. "Drawn substantially from Van Gogh's surviving letters to Theo and documented working methods" or "Vermeer left little personal record; this draws on known characteristics of his technique and era rather than documented personal teachings" or "General art-historical and technical knowledge, as no real artistic tradition exists under this name."]`;
     
     const timeout = setTimeout(() => { setError("The analysis is taking too long — please check your connection and try again."); setLoading(false); setLoadingStep(""); }, 45000);
 
