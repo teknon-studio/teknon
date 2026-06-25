@@ -1019,6 +1019,14 @@ function FeedbackBlock({ text }) {
   }
 
   return blocks.map((b, idx) => {
+    if (b.type === "source") {
+      return (
+        <div key={idx} style={{ marginTop: "2rem", paddingTop: "1.25rem", borderTop: `1px solid ${T.border}` }}>
+          <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: "rgba(240,235,227,0.4)", textTransform: "uppercase", marginBottom: "0.3rem" }}>Source basis</p>
+          <p style={{ ...T.body, fontSize: "0.8rem", color: "rgba(240,235,227,0.55)", lineHeight: 1.6, fontStyle: "italic" }}>{b.text}</p>
+        </div>
+      );
+    }
     if (b.type === "header") {
       return <p key={idx} style={{ ...T.body, fontSize: "0.82rem", letterSpacing: "0.12em", color: T.amber, textTransform: "uppercase", marginTop: "1.75rem", marginBottom: "0.75rem" }}>{b.text}</p>;
     }
