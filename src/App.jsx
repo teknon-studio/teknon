@@ -1335,7 +1335,13 @@ Now give your feedback in these sections:
 Take in the whole painting first — composition, mood, the path the eye takes moving through it, what is genuinely working. This is a synthesis of the whole, not a checklist item. Name specific things the artist may not have noticed. Accurate observation, not empty encouragement.
 
 **PRIORITY_LIST**
-Identify 2-3 priorities, ranked by importance — the things that would most improve this painting if addressed. Consider, where genuinely relevant: background and surrounding space, unresolved edges, compositional completeness, colour relationships, quality and consistency of light, and only with unambiguous visual evidence, structural or proportional issues (never for landscapes, abstracts or expressive work).
+Identify 2-3 priorities, ranked by importance — the things that would most improve this painting if addressed. Consider, where genuinely relevant:
+— Background and surrounding space, including whether the background colour competes with or supports the subject. For portraits and figures, a background sharing the same colour family as the flesh tones often competes with the skin for attention; a more recessive, muted, or contrasting background frequently lets flesh tones read more clearly and come forward.
+— Whether dark or shadow masses (hair, deep shadow, dark clothing) are flat and undifferentiated. A single flat dark note tends to read as lifeless; look for whether value variation within that mass would give it more life and depth.
+— Compositional completeness, colour relationships, and quality and consistency of light.
+— Only with unambiguous visual evidence: structural or proportional issues (never for landscapes, abstracts or expressive work).
+
+When raising any of these, ground the observation the same way you ground everything else — in your own documented practice if you are a named mentor, or in well-established conventions of the genre if you are a neutral tutor. These are not arbitrary rules; they reflect the kind of observation a serious tutor would make standing at a student's easel, the same tradition of accumulated studio knowledge this entire feedback is built on.
 
 Format each priority EXACTLY like this, with no deviation:
 PRIORITY: [short, specific title naming the issue]
