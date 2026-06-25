@@ -976,8 +976,14 @@ function FeedbackBlock({ text }) {
   let priorityIndex = 0;
   let priorityCount = (text.match(/^PRIORITY:/gm) || []).length;
 
-  while (i < lines.length) {
+ while (i < lines.length) {
     const line = lines[i];
+
+    if (line.startsWith("SOURCE_BASIS:")) {
+      blocks.push({ type: "source", text: line.replace(/^SOURCE_BASIS:\s*/, "") });
+      i++;
+      continue;
+    }
 
     // Section header, e.g. **What I see**
     if (line.startsWith("**") && line.endsWith("**")) {
