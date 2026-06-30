@@ -710,6 +710,19 @@ style={{ width: "100%", height: "96%", objectFit: "cover", objectPosition: "top"
   );
 }
 
+function ArtistStrip() {
+  return (
+    <div style={{ display: "flex", gap: "0.7rem", overflowX: "auto", WebkitOverflowScrolling: "touch", padding: "0.5rem 0", scrollbarWidth: "none" }}>
+      {PORTRAIT_ARTISTS.map((artist, i) => (
+        <div key={i} style={{ flexShrink: 0, width: 88, aspectRatio: "3/4", background: "#3a3835", borderRadius: 4, overflow: "hidden", boxShadow: "0 3px 10px rgba(0,0,0,0.3)" }}>
+          <img src={`/artists/${artist.file}`} alt={artist.name}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block", filter: "sepia(20%) brightness(0.88)" }} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function MentorSelectPage({ onSelect, onLibrary }) {
   const [name, setName] = useState("");
   const [focused, setFocused] = useState(false);
