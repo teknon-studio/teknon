@@ -548,7 +548,7 @@ function LandingPage({ onStart, onMyStudio, onEmailVerified }) {
 
   return (
     <div style={{ width: "100%", height: "100vh", background: BG, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2.5rem 2.5rem 3rem", boxSizing: "border-box", position: "relative", overflow: "hidden" }}>
-      <img src="/hero.jpg" alt="" style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", opacity: 0.55, pointerEvents: "none", userSelect: "none", maxWidth: "60vw" }} />
+      <img src="/dali.png" alt="" style={{ position: "absolute", right: "-2%", bottom: "-2%", height: "88vh", width: "auto", objectFit: "contain", opacity: 0.55, pointerEvents: "none", userSelect: "none", maxWidth: "min(60vw, 600px)" }} />
       <TeknonLogo size="md" />
       <div style={{ maxWidth: 560, position: "relative", zIndex: 1 }}>
         <h1 style={{ ...T.body, fontSize: "clamp(1.8rem,7vw,4.5rem)", fontWeight: 300, lineHeight: 1.05, color: T.cream, letterSpacing: "-0.01em", marginBottom: "2rem" }}>
