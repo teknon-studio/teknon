@@ -558,7 +558,7 @@ function LandingPage({ onStart, onMyStudio, onEmailVerified }) {
 
         {!showEmail ? (
           <div>
-            <PillBtn onClick={onStart}>get started</PillBtn>
+            <PillBtn onClick={() => { track("landing_get_started_clicked"); onStart(); }}>get started</PillBtn>
             <button onClick={() => setShowEmail(true)}
               style={{ ...T.body, fontSize: "0.78rem", color: T.muted, background: "transparent", border: "none", cursor: "pointer", letterSpacing: "0.05em", marginTop: "0.75rem", display: "block" }}
               onMouseEnter={e => e.currentTarget.style.color = T.cream}
