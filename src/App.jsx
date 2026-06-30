@@ -596,7 +596,6 @@ function LandingPage({ onStart, onMyStudio, onEmailVerified }) {
           </button>
         )}
 
-        <p style={{ ...T.body, fontSize: "0.7rem", letterSpacing: "0.08em", color: T.cream, marginTop: "1.2rem" }}>master wisdom · no trolls · no judgement</p>
         <p style={{ ...T.body, fontSize: "0.65rem", color: "rgba(240,235,227,0.2)", marginTop: "0.75rem" }}>
           <a href="/privacy.html" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Privacy Policy</a>
           {" · "}
@@ -605,6 +604,16 @@ function LandingPage({ onStart, onMyStudio, onEmailVerified }) {
           <a href="mailto:teknonapp@gmail.com" style={{ color: "rgba(240,235,227,0.3)", textDecoration: "none" }}>Contact</a>
         </p>
       </div>
+
+      {window.innerWidth < 1024 ? (
+        <div style={{ position: "relative", zIndex: 1, marginTop: "2rem" }}>
+          <ArtistStrip />
+        </div>
+      ) : (
+        <div style={{ position: "absolute", right: "-4%", bottom: "-6%", width: "55%", height: "85vh", overflow: "hidden", pointerEvents: "none", opacity: 0.85, maskImage: "linear-gradient(to left, black 60%, transparent 100%)", WebkitMaskImage: "linear-gradient(to left, black 60%, transparent 100%)" }}>
+          <ArtistCollage onSelect={() => {}} />
+        </div>
+      )}
     </div>
   );
 }
